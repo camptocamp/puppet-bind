@@ -1,0 +1,7 @@
+# File managed by puppet
+zone <%=name%> IN {
+  type slave;
+  masters { <%= masters.collect! {|i| "#{i}" }.join('; ') -%> };
+  allow-query { any; };
+  notify yes;
+}

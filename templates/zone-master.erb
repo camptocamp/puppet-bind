@@ -1,0 +1,12 @@
+# File managed by puppet
+zone "<%=name%>" IN {
+  type master;
+  file "/etc/bind/pri/<%=name%>.conf";
+<% if zone_xfers and not zone_xfers.empty? -%>
+  allow-transfer { <%= zone_xfers.collect! {|i| "#{i}" }.join('; ') -%> };
+<% else -%>
+  allow-transfer { none; };
+<% end -%>
+  allow-query { any; };
+  notify yes;
+};
