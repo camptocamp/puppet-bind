@@ -1,3 +1,21 @@
+/*
+
+= Definition: bind::zone
+Creates a valid Bind9 zone.
+
+Arguments:
+  *$is_slave*:          Boolean. Is your zone a slave or a master? Default false
+  *$zone_ttl*:          Time period. Time to live for your zonefile (master only)
+  *$zone_contact*:      Valid contact record (master only)
+  *$zone_serial*:       Integer. Zone serial (master only)
+  *$zone_refresh*:      Time period. Time between each slave refresh (master only)
+  *$zone_retry*:        Time period. Time between each slave retry (master only)
+  *$zone_expiracy*:     Time period. Slave expiracy time (master only)
+  *$zone_ns*:           Valid NS for this zone (master only)
+  *$zone_xfers*:        IPs. Valid xfers for zone (master only)
+  *$zone_masters*:      IPs. Valid master for this zone (slave only)
+
+*/
 define bind::zone($ensure=present,
     $is_slave=false,
     $zone_ttl=false,
