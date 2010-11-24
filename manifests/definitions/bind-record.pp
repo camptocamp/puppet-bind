@@ -24,5 +24,6 @@ define bind::record($ensure=present,
     ensure  => $ensure,
     file    => "/etc/bind/pri/${zone}.conf",
     content => template("bind/default-record.erb"),
+    notify  => Service["bind9"],
   }
 }
