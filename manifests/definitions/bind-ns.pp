@@ -1,6 +1,6 @@
 /*
 
-= Definition: bind::mx
+= Definition: bind::ns
 Creates an NS record.
 
 Arguments:
