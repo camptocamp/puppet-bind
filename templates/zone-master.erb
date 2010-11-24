@@ -3,7 +3,11 @@ zone "<%=name%>" IN {
   type master;
   file "/etc/bind/pri/<%=name%>.conf";
 <% if zone_xfers and not zone_xfers.empty? -%>
-  allow-transfer { <%= zone_xfers.collect! {|i| "#{i}" }.join('; ') -%> };
+  <% if zone_xfers.is_a?(Array) -%>
+  allow-transfer { <%= zone_xfers.join('; ') -%>; };
+  <% else -%>
+  allow-transfer { <%= zone_xfers %>; };
+  <% end -%>
 <% else -%>
   allow-transfer { none; };
 <% end -%>
