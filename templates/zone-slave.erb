@@ -1,7 +1,11 @@
 # File managed by puppet
 zone <%=name%> IN {
   type slave;
-  masters { <%= masters.collect! {|i| "#{i}" }.join('; ') -%> };
+  <% if zone_masters.is_a?(Array) -%>
+  masters { <%= zone_masters.join('; ') -%>; };
+  <% else -%>
+  masters { <%= zone_masters %>; };
+  <% end -%>
   allow-query { any; };
   notify yes;
 }
