@@ -1,7 +1,7 @@
 /*
 
 = Definition: bind::aaaa
-Creates an IPv6 AAA record.
+Creates an IPv6 AAAA record.
 
 Arguments:
  *$zone*:  Bind::Zone name
