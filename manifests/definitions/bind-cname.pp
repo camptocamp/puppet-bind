@@ -12,7 +12,7 @@ Arguments:
 */
 define bind::cname($ensure=present,
     $zone,
-    $owner,
+    $owner=false,
     $host,
     $ttl=false) {
 

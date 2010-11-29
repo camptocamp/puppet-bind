@@ -14,11 +14,17 @@ Arguments:
 */
 define bind::record($ensure=present,
     $zone,
-    $owner,
+    $owner=false,
     $host,
     $record_type,
     $record_class='IN',
     $ttl=false) {
+
+  if $owner {
+    $_owner = $owner
+  } else {
+    $_owner = $name
+  }
 
   common::concatfilepart {"${zone}.${record_type}.${name}":
     ensure  => $ensure,

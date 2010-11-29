@@ -13,10 +13,16 @@ Arguments:
 */
 define bind::mx($ensure=present,
     $zone,
-    $owner,
+    $owner=false,
     $priority,
     $host,
     $ttl=false) {
+
+  if $owner {
+    $_owner = $owner
+  } else {
+    $_owner = $name
+  }
 
   common::concatfilepart{"bind.${name}":
     file    => "/etc/bind/pri/${zone}",

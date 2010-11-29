@@ -12,7 +12,7 @@ Arguments:
 */
 define bind::aaaa($ensure=present,
     $zone,
-    $owner,
+    $owner=false,
     $host,
     $ttl=false) {
 
