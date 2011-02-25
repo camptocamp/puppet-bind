@@ -72,5 +72,14 @@ define bind::zone($ensure=present,
       file   => "/etc/bind/pri/${name}.conf",
       content => template("bind/zone-header.erb"),
     }
+
+    file {"/etc/bind/pri/${name}.conf.d":
+      ensure => directory,
+      mode   => 0700,
+      purge  => true,
+      recurse => true,
+      backup  => false,
+      force   => true,
+    }
   }
 }
