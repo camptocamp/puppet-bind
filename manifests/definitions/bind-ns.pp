@@ -14,7 +14,8 @@ define bind::ns($ensure=present,
     $zone,
     $owner=false,
     $host,
-    $ttl=false) {
+    $ttl=false,
+    $order="01") {
 
   bind::record {$name:
     ensure => $ensure,
@@ -22,6 +23,7 @@ define bind::ns($ensure=present,
     owner  => $owner,
     host   => $host,
     ttl    => $ttl,
+    order  => $order,
     record_type => 'NS',
   }
 }
