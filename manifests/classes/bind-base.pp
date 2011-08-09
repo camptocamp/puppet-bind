@@ -29,4 +29,12 @@ class bind::base {
     recurse => true,
     source  => "puppet:///modules/bind/empty",
   }
+  file { "/etc/bind/named.conf.options":
+    ensure  => present,
+    owner   => root,
+    group   => bind,
+    mode    => 644,
+    notify  => Service["bind9"],
+    source  => "puppet:///modules/bind/named.conf.options.normal";
+  }
 }

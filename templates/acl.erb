@@ -1,0 +1,5 @@
+acl <%= name %> {
+<% nets.each do |net| -%>
+  <%= net %>;
+<% end -%>
+};
