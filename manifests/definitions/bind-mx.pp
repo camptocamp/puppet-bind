@@ -25,7 +25,7 @@ define bind::mx($ensure=present,
   }
 
   common::concatfilepart{"bind.${name}":
-    file    => "/etc/bind/pri/${zone}",
+    file    => "/etc/bind/pri/${zone}.conf",
     ensure  => $ensure,
     notify  => Service["bind9"],
     content => template("bind/mx-record.erb"),
