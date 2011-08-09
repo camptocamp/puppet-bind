@@ -29,7 +29,6 @@ define bind::mx($ensure=present,
     ensure  => $ensure,
     notify  => Service["bind9"],
     content => template("bind/mx-record.erb"),
-    require => Bind::Zone[$zone],
   }
 }
 
