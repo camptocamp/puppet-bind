@@ -18,7 +18,8 @@ define bind::record($ensure=present,
     $host,
     $record_type,
     $record_class='IN',
-    $ttl=false) {
+    $ttl=false,
+    $order="99") {
 
   if $owner {
     $_owner = $owner
@@ -26,7 +27,7 @@ define bind::record($ensure=present,
     $_owner = $name
   }
 
-  common::concatfilepart {"${zone}.${record_type}.${name}":
+  common::concatfilepart {"bind.${order}.${zone}.${record_type}.${name}":
     ensure  => $ensure,
     file    => "/etc/bind/pri/${zone}.conf",
     content => template("bind/default-record.erb"),

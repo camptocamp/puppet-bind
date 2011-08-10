@@ -16,7 +16,8 @@ define bind::mx($ensure=present,
     $owner=false,
     $priority,
     $host,
-    $ttl=false) {
+    $ttl=false,
+    $order="02") {
 
   if $owner {
     $_owner = $owner
@@ -24,12 +25,11 @@ define bind::mx($ensure=present,
     $_owner = $name
   }
 
-  common::concatfilepart{"bind.${name}":
-    file    => "/etc/bind/pri/${zone}",
+  common::concatfilepart{"bind.${order}.${name}":
+    file    => "/etc/bind/pri/${zone}.conf",
     ensure  => $ensure,
     notify  => Service["bind9"],
     content => template("bind/mx-record.erb"),
-    require => [Bind::Zone[$zone], Bind::A[$host]],
   }
 }
 
