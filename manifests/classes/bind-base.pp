@@ -37,4 +37,19 @@ class bind::base {
     notify  => Service["bind9"],
     source  => "puppet:///modules/bind/named.conf.options.normal";
   }
+
+  # include acls
+  common::concatfilepart { "named.local.acl":
+    ensure  => $ensure,
+    file    => "/etc/bind/named.conf.local",
+    content => "include \"/etc/bind/named.conf.acl\";\n",
+    notify  => Service["bind9"];
+  }
+  common::concatfilepart {
+    "00-bind.acls.head":
+      file    => "/etc/bind/named.conf.acl",
+      ensure  => present,
+      content => "# file managed by puppet\n",
+      notify  => Service["bind9"];
+  }
 }
