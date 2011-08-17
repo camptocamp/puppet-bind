@@ -28,52 +28,68 @@ define bind::zone($ensure=present,
     $zone_xfers=false,
     $zone_masters=false) {
 
-  common::concatfilepart {"bind.zones.${name}":
-    ensure  => $ensure,
-    notify  => Service["bind9"],
-    file    => "/etc/bind/zones/${name}.conf",
-    require => Package["bind9"],
-  }
-
-  common::concatfilepart {"named.local.zone.${name}":
-    ensure  => $ensure,
-    notify  => Service["bind9"],
-    file    => "/etc/bind/named.conf.local",
-    content => "include \"/etc/bind/zones/${name}.conf\";\n",
-    require => Package["bind9"],
-  }
-
-  if $is_slave {
-    if !$zone_masters {
-      fail "No master defined for ${name}!"
+    # define config file
+    concat {
+        "/etc/bind/zones/${name}.conf":
+            owner  => root,
+            group  => bind,
+            mode   => 644,
+            warn   => true,
+            notify => Service["bind9"];
     }
-    Common::Concatfilepart["bind.zones.${name}"] {
-      content => template("bind/zone-slave.erb"),
-    }
-## END of slave
-  } else {
-    if !$zone_contact {
-      fail "No contact defined for ${name}!"
-    }
-    if !$zone_ns {
-      fail "No ns defined for ${name}!"
-    }
-    if !$zone_serial {
-      fail "No serial defined for ${name}!"
-    }
-    if !$zone_ttl {
-      fail "No ttl defined for ${name}!"
+    # include the zone file into the named conf
+    concat::fragment {
+        "named.conf.zone.${name}":
+            target  => "/etc/bind/named.conf.local",
+            content => "include \"/etc/bind/zones/${name}.conf\";\n";
     }
 
-    Common::Concatfilepart["bind.zones.${name}"] {
-      content => template("bind/zone-master.erb"),
-    }
+    if $is_slave {
+        if !$zone_masters {
+            fail "No master defined for ${name}!"
+        }
+        # add slave config to the zone config file
+        concat::fragment {
+            "named.zone.${name}":
+                target  => "/etc/bind/zones/${name}.conf",
+                content => template("bind/zone-slave.erb");
+        }
 
-    common::concatfilepart {"bind.00.${name}":
-      ensure => $ensure,
-      file   => "/etc/bind/pri/${name}.conf",
-      content => template("bind/zone-header.erb"),
-      require => Package["bind9"],
+    ## END of slave
+    } else {
+        if !$zone_contact {
+            fail "No contact defined for ${name}!"
+        }
+        if !$zone_ns {
+            fail "No ns defined for ${name}!"
+        }
+        if !$zone_serial {
+            fail "No serial defined for ${name}!"
+        }
+        if !$zone_ttl {
+            fail "No ttl defined for ${name}!"
+        }
+
+        # add master config to the zone config file
+        concat::fragment {
+            "named.zone.${name}":
+                target  => "/etc/bind/zones/${name}.conf",
+                content => template("bind/zone-master.erb");
+        }
+
+        concat {
+            "/etc/bind/pri/${name}.conf":
+                owner  => root,
+                group  => bind,
+                mode   => 644,
+                warn   => true,
+                notify => Service["bind9"];
+        }
+        concat::fragment {
+            "named.zone.${name}.header":
+                target  => "/etc/bind/pri/${name}.conf",
+                content => template("bind/zone-header.erb"),
+                order   => 01;
+        }
     }
-  }
 }

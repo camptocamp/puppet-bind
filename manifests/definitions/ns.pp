@@ -14,16 +14,16 @@ define bind::ns($ensure=present,
     $zone,
     $owner=false,
     $host,
-    $ttl=false,
-    $order="01") {
+    $ttl=false) {
 
-  bind::record {$name:
-    ensure => $ensure,
-    zone   => $zone,
-    owner  => $owner,
-    host   => $host,
-    ttl    => $ttl,
-    order  => $order,
-    record_type => 'NS',
-  }
+    bind::record {
+        "$name":
+            ensure      => $ensure,
+            zone        => $zone,
+            owner       => $owner,
+            host        => $host,
+            ttl         => $ttl,
+            order       => 04,
+            record_type => 'NS',
+    }
 }

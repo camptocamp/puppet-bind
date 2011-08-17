@@ -16,20 +16,19 @@ define bind::mx($ensure=present,
     $owner=false,
     $priority,
     $host,
-    $ttl=false,
-    $order="02") {
+    $ttl=false) {
 
-  if $owner {
-    $_owner = $owner
-  } else {
-    $_owner = $name
-  }
+    if $owner {
+        $_owner = $owner
+    } else {
+        $_owner = $name
+    }
 
-  common::concatfilepart{"bind.${order}.${name}":
-    file    => "/etc/bind/pri/${zone}.conf",
-    ensure  => $ensure,
-    notify  => Service["bind9"],
-    content => template("bind/mx-record.erb"),
-  }
+    concat::fragment {
+        "named.zone.${zone}.${name}":
+            target  => "/etc/bind/pri/${zone}.conf",
+            content => template("bind/mx-record.erb"),
+            order   => 05;
+    }
 }
 

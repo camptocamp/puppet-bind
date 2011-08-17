@@ -19,18 +19,18 @@ define bind::record($ensure=present,
     $record_type,
     $record_class='IN',
     $ttl=false,
-    $order="99") {
+    $order=undef) {
 
-  if $owner {
-    $_owner = $owner
-  } else {
-    $_owner = $name
-  }
+    if $owner {
+      $_owner = $owner
+    } else {
+      $_owner = $name
+    }
 
-  common::concatfilepart {"bind.${order}.${zone}.${record_type}.${name}":
-    ensure  => $ensure,
-    file    => "/etc/bind/pri/${zone}.conf",
-    content => template("bind/default-record.erb"),
-    notify  => Service["bind9"],
-  }
+    concat::fragment {
+        "named.zone.${zone}.${record_type}.${name}":
+            target  => "/etc/bind/pri/${zone}.conf",
+            content => template("bind/default-record.erb"),
+            order   => $order;
+    }
 }
