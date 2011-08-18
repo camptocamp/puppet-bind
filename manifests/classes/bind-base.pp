@@ -23,7 +23,7 @@ class bind::base {
     }
 
     file {
-        ["/etc/bind/pri", "/etc/bind/zones", "/etc/bind/views"]:
+        "/etc/bind/views":
             ensure => directory,
             owner  => root,
             group  => root,
@@ -33,13 +33,6 @@ class bind::base {
             force   => true,
             recurse => true,
             source  => "puppet:///modules/bind/empty";
-        "/etc/bind/named.conf.options":
-            ensure  => present,
-            owner   => root,
-            group   => bind,
-            mode    => 644,
-            notify  => Service["bind9"],
-            source  => "puppet:///modules/bind/named.conf.options.normal";
         "/etc/bind/named.conf":
             ensure  => present,
             owner   => root,

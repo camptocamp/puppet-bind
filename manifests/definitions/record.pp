@@ -14,6 +14,7 @@ Arguments:
 */
 define bind::record($ensure=present,
     $zone,
+    $view="default",
     $owner=false,
     $host,
     $record_type,
@@ -28,8 +29,8 @@ define bind::record($ensure=present,
     }
 
     concat::fragment {
-        "named.zone.${zone}.${record_type}.${name}":
-            target  => "/etc/bind/pri/${zone}.conf",
+        "named.view.${view}.zone.${zone}.${record_type}.${name}":
+            target  => "/etc/bind/views/${view}/pri/${zone}.conf",
             content => template("bind/default-record.erb"),
             order   => $order;
     }

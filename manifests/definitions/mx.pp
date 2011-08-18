@@ -13,6 +13,7 @@ Arguments:
 */
 define bind::mx($ensure=present,
     $zone,
+    $view="default",
     $owner=false,
     $priority,
     $host,
@@ -25,8 +26,8 @@ define bind::mx($ensure=present,
     }
 
     concat::fragment {
-        "named.zone.${zone}.${name}":
-            target  => "/etc/bind/pri/${zone}.conf",
+        "named.view.${view}.zone.${zone}.${name}":
+            target  => "/etc/bind/views/${view}/pri/${zone}.conf",
             content => template("bind/mx-record.erb"),
             order   => 05;
     }

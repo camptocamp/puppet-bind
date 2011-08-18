@@ -38,18 +38,19 @@ define bind::zone($ensure=present,
 
     # define config file
     concat {
-        "/etc/bind/zones/${_name}.conf":
-            owner  => root,
-            group  => bind,
-            mode   => 644,
-            warn   => true,
-            notify => Service["bind9"];
+        "/etc/bind/views/${view}/zones/${_name}.conf":
+            owner   => root,
+            group   => bind,
+            mode    => 644,
+            warn    => true,
+            notify  => Service["bind9"],
+            require => Bind::View[$view];
     }
-    # include the zone file into the named conf
+    # include the zone file into the view conf
     concat::fragment {
         "named.conf.view.${view}.zone.${_name}":
             target  => "/etc/bind/views/${view}.conf",
-            content => "  include \"/etc/bind/zones/${_name}.conf\";\n";
+            content => "  include \"/etc/bind/views/${view}/zones/${_name}.conf\";\n";
     }
 
     if $is_slave {
@@ -59,7 +60,7 @@ define bind::zone($ensure=present,
         # add slave config to the zone config file
         concat::fragment {
             "named.zone.${_name}":
-                target  => "/etc/bind/zones/${_name}.conf",
+                target  => "/etc/bind/views/${view}/zones/${_name}.conf",
                 content => template("bind/zone-slave.erb");
         }
 
@@ -81,12 +82,12 @@ define bind::zone($ensure=present,
         # add master config to the zone config file
         concat::fragment {
             "named.zone.${_name}":
-                target  => "/etc/bind/zones/${_name}.conf",
+                target  => "/etc/bind/views/${view}/zones/${_name}.conf",
                 content => template("bind/zone-master.erb");
         }
 
         concat {
-            "/etc/bind/pri/${_name}.conf":
+            "/etc/bind/views/${view}/pri/${_name}.conf":
                 owner  => root,
                 group  => bind,
                 mode   => 644,
@@ -94,8 +95,8 @@ define bind::zone($ensure=present,
                 notify => Service["bind9"];
         }
         concat::fragment {
-            "named.zone.${_name}.header":
-                target  => "/etc/bind/pri/${_name}.conf",
+            "named.view.${view}.zone.${_name}.header":
+                target  => "/etc/bind/views/${view}/pri/${_name}.conf",
                 content => template("bind/zone-header.erb"),
                 order   => 01;
         }

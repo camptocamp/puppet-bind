@@ -1,7 +1,7 @@
 # File managed by puppet
 zone "<%=_name%>" IN {
   type master;
-  file "/etc/bind/pri/<%=_name%>.conf";
+  file "/etc/bind/views/<%= view %>/pri/<%=_name%>.conf";
 <% if zone_xfers and not zone_xfers.empty? -%>
   <% if zone_xfers.is_a?(Array) -%>
   allow-transfer { <%= zone_xfers.join('; ') -%>; };

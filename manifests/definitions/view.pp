@@ -39,4 +39,28 @@ define bind::view($match_clients = false, $match_destinations = false, $match_re
             order   => 9999;
     }
 
+    # create view directoy
+    file {
+        "/etc/bind/views/${name}":
+            ensure => directory,
+            owner  => root,
+            group  => bind,
+            mode   => 0755,
+            require => File["/etc/bind/views"],
+            purge   => true,
+            force   => true,
+            recurse => true,
+            source  => "puppet:///modules/bind/empty";
+        [ "/etc/bind/views/${name}/zones", "/etc/bind/views/${name}/pri" ]:
+            ensure => directory,
+            owner  => root,
+            group  => bind,
+            mode   => 0755,
+            require => File["/etc/bind/views/${name}"],
+            purge   => true,
+            force   => true,
+            recurse => true,
+            source  => "puppet:///modules/bind/empty";
+
+    }
 }

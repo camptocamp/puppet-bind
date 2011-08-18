@@ -12,16 +12,19 @@ Arguments:
 */
 define bind::ptr($ensure=present,
     $zone,
+    $view="default",
     $owner=false,
     $host,
     $ttl=false) {
 
-  bind::record {$name:
-    ensure => $ensure,
-    zone   => $zone,
-    owner  => $owner,
-    host   => $host,
-    ttl    => $ttl,
-    record_type => 'PTR',
-  }
+    bind::record {
+        $name:
+            ensure      => $ensure,
+            zone        => $zone,
+            view        => $view,
+            owner       => $owner,
+            host        => $host,
+            ttl         => $ttl,
+            record_type => 'PTR',
+    }
 }

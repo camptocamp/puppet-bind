@@ -12,6 +12,7 @@ Arguments:
 */
 define bind::ns($ensure=present,
     $zone,
+    $view="default",
     $owner=false,
     $host,
     $ttl=false) {
@@ -20,6 +21,7 @@ define bind::ns($ensure=present,
         "$name":
             ensure      => $ensure,
             zone        => $zone,
+            view        => $view,
             owner       => $owner,
             host        => $host,
             ttl         => $ttl,
