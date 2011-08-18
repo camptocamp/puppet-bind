@@ -1,0 +1,16 @@
+view "<%= name %>" {
+<% if match_clients -%>
+  match-clients {
+<% match_clients.each do |client| -%>
+    <%= client %>;
+<% end -%>
+  };
+<% end -%>
+<% if match_destinations -%>
+  match-destinations {
+<% match_destinations.each do |dest| -%>
+    <%= dest %>;
+<% end -%>
+  };
+<% end -%>
+  match-recursive-only <%= match_recursive_only %>;

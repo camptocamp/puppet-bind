@@ -23,7 +23,7 @@ class bind::base {
     }
 
     file {
-        ["/etc/bind/pri", "/etc/bind/zones"]:
+        ["/etc/bind/pri", "/etc/bind/zones", "/etc/bind/views"]:
             ensure => directory,
             owner  => root,
             group  => root,
@@ -40,6 +40,13 @@ class bind::base {
             mode    => 644,
             notify  => Service["bind9"],
             source  => "puppet:///modules/bind/named.conf.options.normal";
+        "/etc/bind/named.conf":
+            ensure  => present,
+            owner   => root,
+            group   => bind,
+            mode    => 644,
+            notify  => Service["bind9"],
+            source  => "puppet:///modules/bind/named.conf.${lsbdistid}.${lsbdistcodename}";
     }
 
     # include acls
@@ -79,5 +86,14 @@ class bind::base {
             warn   => true,
             force  => true,
             notify => Service["bind9"];
+    }
+    # add default view
+    bind::view {
+        "default":
+    }
+    concat::fragment {
+        "named.conf.view.default.zone.default-zones":
+            target  => "/etc/bind/views/default.conf",
+            content => "  include \"/etc/bind/named.conf.default-zones\";\n";
     }
 }

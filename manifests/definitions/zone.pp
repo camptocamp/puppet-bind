@@ -18,6 +18,7 @@ Arguments:
 */
 define bind::zone($ensure=present,
     $is_slave=false,
+    $view="default",
     $zone_ttl=false,
     $zone_contact=false,
     $zone_serial=false,
@@ -26,11 +27,18 @@ define bind::zone($ensure=present,
     $zone_expiracy="1w",
     $zone_ns=false,
     $zone_xfers=false,
-    $zone_masters=false) {
+    $zone_masters=false,
+    $zone_name=undef) {
+
+    if $zone_name {
+        $_name = $zone_name
+    } else {
+        $_name = $name
+    }
 
     # define config file
     concat {
-        "/etc/bind/zones/${name}.conf":
+        "/etc/bind/zones/${_name}.conf":
             owner  => root,
             group  => bind,
             mode   => 644,
@@ -39,55 +47,55 @@ define bind::zone($ensure=present,
     }
     # include the zone file into the named conf
     concat::fragment {
-        "named.conf.zone.${name}":
-            target  => "/etc/bind/named.conf.local",
-            content => "include \"/etc/bind/zones/${name}.conf\";\n";
+        "named.conf.view.${view}.zone.${_name}":
+            target  => "/etc/bind/views/${view}.conf",
+            content => "  include \"/etc/bind/zones/${_name}.conf\";\n";
     }
 
     if $is_slave {
         if !$zone_masters {
-            fail "No master defined for ${name}!"
+            fail "No master defined for ${_name}!"
         }
         # add slave config to the zone config file
         concat::fragment {
-            "named.zone.${name}":
-                target  => "/etc/bind/zones/${name}.conf",
+            "named.zone.${_name}":
+                target  => "/etc/bind/zones/${_name}.conf",
                 content => template("bind/zone-slave.erb");
         }
 
     ## END of slave
     } else {
         if !$zone_contact {
-            fail "No contact defined for ${name}!"
+            fail "No contact defined for ${_name}!"
         }
         if !$zone_ns {
-            fail "No ns defined for ${name}!"
+            fail "No ns defined for ${_name}!"
         }
         if !$zone_serial {
-            fail "No serial defined for ${name}!"
+            fail "No serial defined for ${_name}!"
         }
         if !$zone_ttl {
-            fail "No ttl defined for ${name}!"
+            fail "No ttl defined for ${_name}!"
         }
 
         # add master config to the zone config file
         concat::fragment {
-            "named.zone.${name}":
-                target  => "/etc/bind/zones/${name}.conf",
+            "named.zone.${_name}":
+                target  => "/etc/bind/zones/${_name}.conf",
                 content => template("bind/zone-master.erb");
         }
 
         concat {
-            "/etc/bind/pri/${name}.conf":
+            "/etc/bind/pri/${_name}.conf":
                 owner  => root,
                 group  => bind,
                 mode   => 644,
-                warn   => true,
+                warn   => "; This file is managed by Puppet. DO NOT EDIT.",
                 notify => Service["bind9"];
         }
         concat::fragment {
-            "named.zone.${name}.header":
-                target  => "/etc/bind/pri/${name}.conf",
+            "named.zone.${_name}.header":
+                target  => "/etc/bind/pri/${_name}.conf",
                 content => template("bind/zone-header.erb"),
                 order   => 01;
         }
