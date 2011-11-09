@@ -1,11 +1,15 @@
 # classes/bind-recursor.pp
 
-class bind::recursor inherits bind::base {
+class bind::recursor($forwarders) inherits bind::base {
 
-    #File["/etc/bind/named.conf.options"] {
-    #    source  => "puppet:///modules/bind/named.conf.options.recursor",
-    #    require +> Bind::Acl["recursor-acl"]
-    #}
+    file {
+        "/etc/bind/named.conf.options":
+            owner   => root,
+            group   => bind,
+            mode    => 644,
+            content => template("bind/recursor.options.erb"),
+            require => Bind::Acl["recursor-acl"];
+    }
 
     Bind::View["default"] {
         match_clients => [ "!recursor-acl", "any" ],
