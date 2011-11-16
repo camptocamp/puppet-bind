@@ -32,4 +32,11 @@ class bind::recursor($forwarders) inherits bind::base {
     Concat::Fragment["named.conf.view.default.zone.default-zones"] {
         target  => "/etc/bind/views/internal.conf"
     }
+
+    # add the allow-query part
+    concat::fragment {
+        "named.conf.view.internal.zone.allow-query":
+            target  => "/etc/bind/views/internal.conf",
+            content => "  allow-query {\n    recursor-acl;\n  };\n";
+    }
 }
