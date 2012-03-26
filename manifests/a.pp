@@ -28,15 +28,15 @@ define bind::a($ensure=present,
   }
 
   if $ptr {
-    $subnet = inline_template(<%= host.split('.')[0,3].join('.') %>) 
-    $number = inline_template(<%= host.split('.')[3] %>)
-    $fqdn = $owner
+    $subnet = inline_template("<%= host.split('.')[0,3].join('.') %>") 
+    $number = inline_template("<%= host.split('.')[3] %>")
 
-    bind::ptr {
+    bind::ptr {$host:
       ensure => $ensure,
       zone   => $subnet,
       owner  => $number,
-      host   => $fqdn,
+      host   => $owner,
       ttl    => $ttl,
     }
+  }
 }
