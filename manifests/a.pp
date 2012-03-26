@@ -8,13 +8,15 @@ Arguments:
  *$owner*: owner of the Resource Record
  *$host*:  target of the Resource Record
  *$ttl*:   Time to Live for the Resource Record. Optional.
+ *$ptr*:   create the corresponding ptr record (default=true)
 
 */
 define bind::a($ensure=present,
     $zone,
     $owner=false,
     $host,
-    $ttl=false) {
+    $ttl=false,
+    $ptr=true) {
 
   bind::record {$name:
     ensure => $ensure,
@@ -24,4 +26,17 @@ define bind::a($ensure=present,
     ttl    => $ttl,
     record_type => 'A',
   }
+
+  if $ptr {
+    $subnet = inline_template(<%= host.split('.')[0,3].join('.') %>) 
+    $number = inline_template(<%= host.split('.')[3] %>)
+    $fqdn = $owner
+
+    bind::ptr {
+      ensure => $ensure,
+      zone   => $subnet,
+      owner  => $number,
+      host   => $fqdn,
+      ttl    => $ttl,
+    }
 }
