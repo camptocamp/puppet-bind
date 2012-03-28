@@ -16,7 +16,7 @@ define bind::a($ensure=present,
     $owner=false,
     $host,
     $ttl=false,
-    $ptr=true) {
+    $ptr=false) {
 
   bind::record {$name:
     ensure => $ensure,
