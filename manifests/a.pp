@@ -28,12 +28,12 @@ define bind::a($ensure=present,
   }
 
   if $ptr {
-    $subnet = inline_template("<%= host.split('.')[0,3].join('.') %>") 
-    $number = inline_template("<%= host.split('.')[3] %>")
+    $arpa = inline_template("<%= require 'ipaddr'; IPAddr.new(host).reverse %>")
+    $arpa_zone = inline_template("<%= require 'ipaddr'; IPAddr.new(host).reverse.split('.')[1..-1].join('.') %>")
 
-    bind::ptr {$host:
+    bind::ptr {"${arpa}.":
       ensure => $ensure,
-      zone   => $subnet,
+      zone   => $arpa_zone,
       host   => $name,
       ttl    => $ttl,
     }

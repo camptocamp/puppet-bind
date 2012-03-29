@@ -14,6 +14,7 @@ Arguments:
   *$zone_ns*:           Valid NS for this zone (master only)
   *$zone_xfers*:        IPs. Valid xfers for zone (master only)
   *$zone_masters*:      IPs. Valid master for this zone (slave only)
+  *$zone_origin*:       The origin of the zone
 
 */
 define bind::zone($ensure=present,
@@ -26,7 +27,8 @@ define bind::zone($ensure=present,
     $zone_expiracy="1w",
     $zone_ns=false,
     $zone_xfers=false,
-    $zone_masters=false) {
+    $zone_masters=false,
+    $zone_origin=false) {
 
   common::concatfilepart {"bind.zones.${name}":
     ensure  => $ensure,
@@ -69,7 +71,7 @@ define bind::zone($ensure=present,
       content => template("bind/zone-master.erb"),
     }
 
-    common::concatfilepart {"bind.00.${name}":
+    common::concatfilepart {"00.bind.${name}":
       ensure => $ensure,
       file   => "/etc/bind/pri/${name}.conf",
       content => template("bind/zone-header.erb"),
