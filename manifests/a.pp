@@ -34,8 +34,7 @@ define bind::a($ensure=present,
     bind::ptr {$host:
       ensure => $ensure,
       zone   => $subnet,
-      owner  => $number,
-      host   => $owner,
+      host   => $name,
       ttl    => $ttl,
     }
   }
