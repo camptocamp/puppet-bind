@@ -8,7 +8,7 @@ Arguments:
  *$owner*: owner of the Resource Record
  *$host*:  target of the Resource Record
  *$ttl*:   Time to Live for the Resource Record. Optional.
- *$ptr*:   create the corresponding ptr record (default=true)
+ *$ptr*:   create the corresponding ptr record (default=false)
 
 */
 define bind::a($ensure=present,
