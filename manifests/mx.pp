@@ -1,22 +1,21 @@
-/*
-
-= Definition: bind::mx
-Creates an MX record.
-
-Arguments:
- *$zone*:     Bind::Zone name
- *$owner*:    owner of the Resource Record
- *$priority*: MX record priority
- *$host*:     target of the Resource Record
- *$ttl*:      Time to Live for the Resource Record. Optional.
-
-*/
-define bind::mx($ensure=present,
-    $zone,
-    $owner=false,
-    $priority,
-    $host,
-    $ttl=false) {
+# = Definition: bind::mx
+# Creates an MX record.
+#
+# Arguments:
+#  *$zone*:     Bind::Zone name
+#  *$owner*:    owner of the Resource Record
+#  *$priority*: MX record priority
+#  *$host*:     target of the Resource Record
+#  *$ttl*:      Time to Live for the Resource Record. Optional.
+#
+define bind::mx (
+  $zone,
+  $host,
+  $priority,
+  $ensure = present,
+  $owner  = false,
+  $ttl    = false
+) {
 
   if $owner {
     $_owner = $owner
@@ -24,12 +23,13 @@ define bind::mx($ensure=present,
     $_owner = $name
   }
 
-  common::concatfilepart{"bind.${name}":
-    file    => "/etc/bind/pri/${zone}",
+  concat::fragment {"bind.${name}":
     ensure  => $ensure,
-    notify  => Service["bind9"],
-    content => template("bind/mx-record.erb"),
+    target  => "/etc/bind/pri/${zone}.conf",
+    content => template('bind/mx-record.erb'),
+    notify  => Service['bind9'],
     require => [Bind::Zone[$zone], Bind::A[$host]],
   }
+
 }
 
