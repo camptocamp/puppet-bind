@@ -8,6 +8,15 @@ Please refer to Class["bind"].
 
 */
 class bind::base {
+
+  include concat::setup
+
+  concat {'/etc/bind/named.conf.local':
+    owner => root,
+    group => root,
+    mode  => '0644',
+  }
+
   package {"bind9":
     ensure => present,
   }
@@ -18,11 +27,11 @@ class bind::base {
     require => Package["bind9"],
   }
 
-  file {["/etc/bind/pri", "/etc/bind/zones"]:
-    ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => 0755,
+  file {'/etc/bind/zones':
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => 0755,
     require => Package["bind9"],
     purge   => true,
     force   => true,

@@ -3,9 +3,6 @@
 = Class: bind
 Include this class to install bind9 server on your node.
 
-Requires:
-- module common (git://github.com/camptocamp/puppet-common.git)
-
 Bind documentation:
 http://www.bind9.net/manuals
 

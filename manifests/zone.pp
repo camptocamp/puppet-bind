@@ -29,19 +29,31 @@ define bind::zone($ensure=present,
     $zone_xfers=false,
     $zone_masters=false,
     $zone_origin=false) {
+  
+  concat {"/etc/bind/pri/${name}.conf":
+    owner => root,
+    group => root,
+    mode  => '0644',
+  }
+ 
+  concat {"/etc/bind/zones/${name}.conf":
+    owner => root,
+    group => root,
+    mode  => '0644',
+  }
 
-  common::concatfilepart {"bind.zones.${name}":
+  concat::fragment {"bind.zones.${name}":
     ensure  => $ensure,
+    target  => "/etc/bind/zones/${name}.conf",
     notify  => Service["bind9"],
-    file    => "/etc/bind/zones/${name}.conf",
     require => Package["bind9"],
   }
 
-  common::concatfilepart {"named.local.zone.${name}":
+  concat::fragment {"named.local.zone.${name}":
     ensure  => $ensure,
-    notify  => Service["bind9"],
-    file    => "/etc/bind/named.conf.local",
+    target  => "/etc/bind/named.conf.local",
     content => "include \"/etc/bind/zones/${name}.conf\";\n",
+    notify  => Service["bind9"],
     require => Package["bind9"],
   }
 
@@ -49,7 +61,7 @@ define bind::zone($ensure=present,
     if !$zone_masters {
       fail "No master defined for ${name}!"
     }
-    Common::Concatfilepart["bind.zones.${name}"] {
+    Concat::Fragment["bind.zones.${name}"] {
       content => template("bind/zone-slave.erb"),
     }
 ## END of slave
@@ -67,21 +79,21 @@ define bind::zone($ensure=present,
       fail "No ttl defined for ${name}!"
     }
 
-    Common::Concatfilepart["bind.zones.${name}"] {
+    Concat::Fragment["bind.zones.${name}"] {
       content => template("bind/zone-master.erb"),
     }
 
-    common::concatfilepart {"00.bind.${name}":
-      ensure => $ensure,
-      file   => "/etc/bind/pri/${name}.conf",
+    concat::fragment {"00.bind.${name}":
+      ensure  => $ensure,
+      target  => "/etc/bind/pri/${name}.conf",
       content => template("bind/zone-header.erb"),
       require => Package["bind9"],
     }
 
     file {"/etc/bind/pri/${name}.conf.d":
-      ensure => directory,
-      mode   => 0700,
-      purge  => true,
+      ensure  => absent,
+      mode    => 0700,
+      purge   => true,
       recurse => true,
       backup  => false,
       force   => true,
