@@ -30,25 +30,6 @@ define bind::zone (
   $zone_origin   = false
 ) {
 
-  concat {"/etc/bind/pri/${name}.conf":
-    owner => root,
-    group => root,
-    mode  => '0644',
-  }
-
-  concat {"/etc/bind/zones/${name}.conf":
-    owner => root,
-    group => root,
-    mode  => '0644',
-  }
-
-  concat::fragment {"bind.zones.${name}":
-    ensure  => $ensure,
-    target  => "/etc/bind/zones/${name}.conf",
-    notify  => Service['bind9'],
-    require => Package['bind9'],
-  }
-
   concat::fragment {"named.local.zone.${name}":
     ensure  => $ensure,
     target  => '/etc/bind/named.conf.local',
@@ -57,47 +38,78 @@ define bind::zone (
     require => Package['bind9'],
   }
 
-  if $is_slave {
-    if !$zone_masters {
-      fail "No master defined for ${name}!"
-    }
-    Concat::Fragment["bind.zones.${name}"] {
-      content => template('bind/zone-slave.erb'),
-    }
+  case $ensure {
+    present: {
+      concat {"/etc/bind/pri/${name}.conf":
+        owner => root,
+        group => root,
+        mode  => '0644',
+      }
+
+      concat {"/etc/bind/zones/${name}.conf":
+        owner => root,
+        group => root,
+        mode  => '0644',
+      }
+      concat::fragment {"bind.zones.${name}":
+        ensure  => $ensure,
+        target  => "/etc/bind/zones/${name}.conf",
+        notify  => Service['bind9'],
+        require => Package['bind9'],
+      }
+
+
+      if $is_slave {
+        if !$zone_masters {
+          fail "No master defined for ${name}!"
+        }
+        Concat::Fragment["bind.zones.${name}"] {
+          content => template('bind/zone-slave.erb'),
+        }
 ## END of slave
-  } else {
-    if !$zone_contact {
-      fail "No contact defined for ${name}!"
-    }
-    if !$zone_ns {
-      fail "No ns defined for ${name}!"
-    }
-    if !$zone_serial {
-      fail "No serial defined for ${name}!"
-    }
-    if !$zone_ttl {
-      fail "No ttl defined for ${name}!"
-    }
+      } else {
+        if !$zone_contact {
+          fail "No contact defined for ${name}!"
+        }
+        if !$zone_ns {
+          fail "No ns defined for ${name}!"
+        }
+        if !$zone_serial {
+          fail "No serial defined for ${name}!"
+        }
+        if !$zone_ttl {
+          fail "No ttl defined for ${name}!"
+        }
 
-    Concat::Fragment["bind.zones.${name}"] {
-      content => template('bind/zone-master.erb'),
-    }
+        Concat::Fragment["bind.zones.${name}"] {
+          content => template('bind/zone-master.erb'),
+        }
 
-    concat::fragment {"00.bind.${name}":
-      ensure  => $ensure,
-      target  => "/etc/bind/pri/${name}.conf",
-      content => template('bind/zone-header.erb'),
-      require => Package['bind9'],
-    }
+        concat::fragment {"00.bind.${name}":
+          ensure  => $ensure,
+          target  => "/etc/bind/pri/${name}.conf",
+          content => template('bind/zone-header.erb'),
+          require => Package['bind9'],
+        }
 
-    file {"/etc/bind/pri/${name}.conf.d":
-      ensure  => absent,
-      mode    => '0700',
-      purge   => true,
-      recurse => true,
-      backup  => false,
-      force   => true,
+        file {"/etc/bind/pri/${name}.conf.d":
+          ensure  => absent,
+          mode    => '0700',
+          purge   => true,
+          recurse => true,
+          backup  => false,
+          force   => true,
+        }
+      }
     }
+    absent: {
+      file {"/etc/bind/pri/${name}.conf":
+        ensure => absent,
+      }
+      file {"/etc/bind/zones/${name}.conf":
+        ensure => absent,
+      }
+    }
+    default: {}
   }
-
 }
