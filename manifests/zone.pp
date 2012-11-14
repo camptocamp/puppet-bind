@@ -40,12 +40,6 @@ define bind::zone (
 
   case $ensure {
     present: {
-      concat {"/etc/bind/pri/${name}.conf":
-        owner => root,
-        group => root,
-        mode  => '0644',
-      }
-
       concat {"/etc/bind/zones/${name}.conf":
         owner => root,
         group => root,
@@ -80,6 +74,13 @@ define bind::zone (
         if !$zone_ttl {
           fail "No ttl defined for ${name}!"
         }
+
+        concat {"/etc/bind/pri/${name}.conf":
+          owner => root,
+          group => root,
+          mode  => '0644',
+        }
+
 
         Concat::Fragment["bind.zones.${name}"] {
           content => template('bind/zone-master.erb'),
