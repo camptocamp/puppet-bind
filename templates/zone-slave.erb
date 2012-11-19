@@ -7,5 +7,4 @@ zone <%=name%> IN {
   masters { <%= zone_masters %>; };
   <% end -%>
   allow-query { any; };
-  notify yes;
 };
