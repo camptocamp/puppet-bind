@@ -32,7 +32,6 @@ class bind::base {
     purge   => true,
     force   => true,
     recurse => true,
-    source  => 'puppet:///modules/bind/empty',
     require => Package['bind9'],
   }
 
