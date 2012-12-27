@@ -12,6 +12,7 @@ class bind::base {
     owner => root,
     group => root,
     mode  => '0644',
+    force => true,
   }
 
   package {'bind9':
