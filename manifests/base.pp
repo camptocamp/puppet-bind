@@ -12,6 +12,7 @@ class bind::base {
     owner => root,
     group => root,
     mode  => '0644',
+    force => true,
   }
 
   package {'bind9':
@@ -32,7 +33,6 @@ class bind::base {
     purge   => true,
     force   => true,
     recurse => true,
-    source  => 'puppet:///modules/bind/empty',
     require => Package['bind9'],
   }
 
