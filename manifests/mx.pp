@@ -28,7 +28,6 @@ define bind::mx (
     target  => "/etc/bind/pri/${zone}.conf",
     content => template('bind/mx-record.erb'),
     notify  => Service['bind9'],
-    require => Bind::Zone[$zone],
   }
 
 }
