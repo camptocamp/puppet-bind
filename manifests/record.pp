@@ -3,33 +3,47 @@
 # Helper to create any record you want (but NOT MX, please refer to Bind::Mx)
 #
 # Arguments:
-#  *$zone*:        Bind::Zone name
-#  *$owner*:       owner of the Resource Record
-#  *$host*:        target of the Resource Record
-#  *$record_type°:  resource record type
-#  *$record_class*: resource record class. Default "IN".
-#  *$ttl*:          Time to Live for the Resource Record. Optional.
+#  *$zone*:             Bind::Zone name
+#  *$record_type°:      Resource record type
+#  *$ptr_zone*:         PTR zone - optional
+#  *$content_template*: Allows you to do your own template, letting you
+#                       use your own hash_data content structure
+#  *$hash_data:         Hash containing data, by default in this form:
+#        {
+#          <host>         => {
+#            owner        => <owner>,
+#            ttl          => <TTL> (optional),
+#            record_class => <Class>, (optional - default IN)
+#          },
+#          <host>         => {
+#            owner        => <owner>,
+#            ttl          => <TTL> (optional),
+#            ptr          => false, (optional, default to true)
+#            record_class => <Class>, (optional - default IN)
+#          },
+#          …
+#        }
 #
 define bind::record (
   $zone,
-  $host,
+  $hash_data,
   $record_type,
-  $ensure       = present,
-  $owner        = false,
-  $record_class = 'IN',
-  $ttl          = false
+  $ensure   = present,
+  $ptr_zone = '',
+  $content_template = false
 ) {
-
-  if $owner {
-    $_owner = $owner
-  } else {
-    $_owner = $name
+  
+  $records_template = $content_template ?{
+    false   => 'bind/default-record.erb',
+    ''      => 'bind/default-record.erb',
+    true    => 'bind/default-record.erb',
+    default => $content_template,
   }
 
   concat::fragment {"${zone}.${record_type}.${name}":
     ensure  => $ensure,
     target  => "/etc/bind/pri/${zone}.conf",
-    content => template('bind/default-record.erb'),
+    content => template($records_template),
     notify  => Service['bind9'],
   }
 
