@@ -36,4 +36,15 @@ class bind::base {
     require => Package['bind9'],
   }
 
+  file {'/etc/bind/pri':
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+    purge   => true,
+    force   => true,
+    recurse => true,
+    require => Package['bind9'],
+  }
+
 }
