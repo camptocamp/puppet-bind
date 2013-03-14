@@ -19,6 +19,8 @@ define bind::a(
   $content_template = false,
 ) {
 
+  validate_hash($hash_data)
+
   if ($ptr and $zone_arpa == '') {
     fail 'You need zone_arp if you want the PTR!'
   }
