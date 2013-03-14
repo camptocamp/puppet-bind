@@ -32,7 +32,8 @@ define bind::record (
   $ptr_zone = '',
   $content_template = false
 ) {
-  
+
+  validate_hash($hash_data)
   $records_template = $content_template ?{
     false   => 'bind/default-record.erb',
     ''      => 'bind/default-record.erb',
