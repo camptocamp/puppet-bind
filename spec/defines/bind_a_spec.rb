@@ -113,6 +113,38 @@ describe 'bind::a' do
       :ptr       => false
     } }
 
-    it { should contain_bind__record('foo.example.com') }
+    it { should contain_bind__record('foo.example.com').with(
+      :ensure           => 'present',
+      :zone             => 'foo.example.com',
+      :record_type      => 'A',
+      :hash_data        => {},
+      :content_template => nil
+    ) }
+  end
+
+  context 'when using using ptr' do
+    let (:params) { {
+      :zone      => 'foo.example.com',
+      :hash_data => {},
+      :ptr       => true,
+      :zone_arpa => 'foobar.arpa'
+    } }
+
+    it { should contain_bind__record('foo.example.com').with(
+      :ensure           => 'present',
+      :zone             => 'foo.example.com',
+      :record_type      => 'A',
+      :hash_data        => {},
+      :content_template => nil
+    ) }
+    
+    it { should contain_bind__record('PTR foo.example.com').with(
+      :ensure           => 'present',
+      :zone             => 'foobar.arpa',
+      :record_type      => 'PTR',
+      :ptr_zone         => 'foo.example.com',
+      :hash_data        => {},
+      :content_template => nil
+    ) }
   end
 end
