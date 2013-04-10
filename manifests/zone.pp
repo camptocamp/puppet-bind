@@ -18,17 +18,33 @@
 define bind::zone (
   $ensure        = present,
   $is_slave      = false,
-  $zone_ttl      = false,
-  $zone_contact  = false,
-  $zone_serial   = false,
+  $zone_ttl      = '',
+  $zone_contact  = '',
+  $zone_serial   = '',
   $zone_refresh  = '3h',
   $zone_retry    = '1h',
   $zone_expiracy = '1w',
-  $zone_ns       = false,
-  $zone_xfers    = false,
-  $zone_masters  = false,
-  $zone_origin   = false
+  $zone_ns       = '',
+  $zone_xfers    = '',
+  $zone_masters  = '',
+  $zone_origin   = '',
 ) {
+
+  validate_string($ensure)
+  validate_re($ensure, ['present', 'absent'],
+              "\$ensure must be either 'present' or 'absent', got '${ensure}'")
+
+  validate_bool($is_slave)
+  validate_string($zone_ttl)
+  validate_string($zone_contact)
+  validate_string($zone_serial)
+  validate_string($zone_refresh)
+  validate_string($zone_retry)
+  validate_string($zone_expiracy)
+  validate_string($zone_ns)
+  validate_string($zone_xfers)
+  validate_string($zone_masters)
+  validate_string($zone_origin)
 
   concat::fragment {"named.local.zone.${name}":
     ensure  => $ensure,
@@ -54,33 +70,22 @@ define bind::zone (
 
 
       if $is_slave {
-        if !$zone_masters {
-          fail "No master defined for ${name}!"
-        }
+        validate_re($zone_masters, '\S+', "Wrong master value for ${name}!")
         Concat::Fragment["bind.zones.${name}"] {
           content => template('bind/zone-slave.erb'),
         }
 ## END of slave
       } else {
-        if !$zone_contact {
-          fail "No contact defined for ${name}!"
-        }
-        if !$zone_ns {
-          fail "No ns defined for ${name}!"
-        }
-        if !$zone_serial {
-          fail "No serial defined for ${name}!"
-        }
-        if !$zone_ttl {
-          fail "No ttl defined for ${name}!"
-        }
+        validate_re($zone_contact, '\S+', "Wrong contact value for ${name}!")
+        validate_re($zone_ns, '\S+', "Wrong ns value for ${name}!")
+        validate_re($zone_serial, '\d+', "Wrong serial value for ${name}!")
+        validate_re($zone_ttl, '\d+', "Wrong ttl value for ${name}!")
 
         concat {"/etc/bind/pri/${name}.conf":
           owner => root,
           group => root,
           mode  => '0644',
         }
-
 
         Concat::Fragment["bind.zones.${name}"] {
           content => template('bind/zone-master.erb'),
