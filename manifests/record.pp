@@ -33,8 +33,14 @@ define bind::record (
   $content_template = false
 ) {
 
+  validate_string($ensure)
   validate_re($ensure, ['present', 'absent'],
               "\$ensure must be either 'present' or 'absent', got '${ensure}'")
+
+  validate_string($zone)
+  validate_string($record_type)
+  validate_string($ptr_zone)
+  validate_hash($hash_data)
 
   $records_template = $content_template ?{
     false   => 'bind/default-record.erb',
