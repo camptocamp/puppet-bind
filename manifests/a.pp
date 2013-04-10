@@ -16,7 +16,7 @@ define bind::a(
   $ensure = present,
   $zone_arpa = '',
   $ptr    = true,
-  $content_template = false,
+  $content_template = undef,
 ) {
 
   validate_string($ensure)

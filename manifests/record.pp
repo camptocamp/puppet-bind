@@ -30,7 +30,7 @@ define bind::record (
   $record_type,
   $ensure   = present,
   $ptr_zone = '',
-  $content_template = false
+  $content_template = '',
 ) {
 
   validate_string($ensure)
@@ -40,12 +40,11 @@ define bind::record (
   validate_string($zone)
   validate_string($record_type)
   validate_string($ptr_zone)
+  validate_string($content_template)
   validate_hash($hash_data)
 
   $records_template = $content_template ?{
-    false   => 'bind/default-record.erb',
     ''      => 'bind/default-record.erb',
-    true    => 'bind/default-record.erb',
     default => $content_template,
   }
 

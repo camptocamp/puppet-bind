@@ -110,6 +110,20 @@ describe 'bind::record' do
     end
   end
 
+  context 'when passing wrong type for content_template' do
+    let (:params) { {
+      :zone             => 'foo.example.com',
+      :hash_data        => {},
+      :record_type      => 'CNAME',
+      :content_template => ['bar']
+    } }
+
+    it 'should fail' do
+      expect { should contain_bind__record('foo.example.com') 
+      }.to raise_error(Puppet::Error, /\["bar"\] is not a string\./)
+    end
+  end
+
   context 'when using default content_template' do
     let (:params) { {
       :zone        => 'foo.example.com',
