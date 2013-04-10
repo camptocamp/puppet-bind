@@ -76,10 +76,10 @@ define bind::zone (
         }
 ## END of slave
       } else {
-        validate_re($zone_contact, '\S+', "Wrong contact value for ${name}!")
-        validate_re($zone_ns, '\S+', "Wrong ns value for ${name}!")
-        validate_re($zone_serial, '\d+', "Wrong serial value for ${name}!")
-        validate_re($zone_ttl, '\d+', "Wrong ttl value for ${name}!")
+        validate_re($zone_contact, '^\S+$', "Wrong contact value for ${name}!")
+        validate_re($zone_ns, '^\S+$', "Wrong ns value for ${name}!")
+        validate_re($zone_serial, '^\d+$', "Wrong serial value for ${name}!")
+        validate_re($zone_ttl, '^\d+$', "Wrong ttl value for ${name}!")
 
         concat {"/etc/bind/pri/${name}.conf":
           owner => root,
