@@ -19,8 +19,15 @@ define bind::a(
   $content_template = false,
 ) {
 
+  validate_string($ensure)
   validate_re($ensure, ['present', 'absent'],
               "\$ensure must be either 'present' or 'absent', got '${ensure}'")
+
+  validate_string($zone)
+  validate_string($zone_arpa)
+  validate_hash($hash_data)
+  validate_bool($ptr)
+  validate_bool($content_template)
 
   if ($ptr and $zone_arpa == '') {
     fail 'You need zone_arp if you want the PTR!'

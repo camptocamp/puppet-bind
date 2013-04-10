@@ -31,6 +31,18 @@ describe 'bind::a' do
     end
   end
 
+  context 'when passing wrong type for zone' do
+    let (:params) { {
+      :zone      => ['foo.example.com'],
+      :hash_data => {},
+    } }
+
+    it 'should fail' do
+      expect { should contain_bind__record('foo.example.com') 
+      }.to raise_error(Puppet::Error, /\["foo.example.com"\] is not a string\./)
+    end
+  end
+
   context 'when hash_data is not specified' do
     let (:params) { {
       :zone        => 'foo.example.com',
@@ -39,6 +51,18 @@ describe 'bind::a' do
     it 'should fail' do
       expect { should contain_bind__record('foo.example.com') 
       }.to raise_error(Puppet::Error, /Must pass hash_data to Bind::A/)
+    end
+  end
+
+  context 'when passing wrong type for hash_data' do
+    let (:params) { {
+      :zone      => 'foo.example.com',
+      :hash_data => 'bar',
+    } }
+
+    it 'should fail' do
+      expect { should contain_bind__record('foo.example.com') 
+      }.to raise_error(Puppet::Error, /"bar" is not a Hash\./)
     end
   end
 
