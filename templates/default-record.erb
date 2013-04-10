@@ -1,9 +1,9 @@
 <%- @hash_data.sort.each do |host, datas| -%>
 <% if  @record_type == 'PTR' -%>
-<% if @datas.fetch('ptr',true) -%>
-<%= require 'ipaddr'; IPAddr.new(datas.fetch('owner')).reverse %>. <%= @datas.fetch('ttl', '') %> IN PTR <%= @host %>.<%= @ptr_zone %>.
+<% if datas.fetch('ptr',true) -%>
+<%= require 'ipaddr'; IPAddr.new(datas.fetch('owner')).reverse %>. <%= datas.fetch('ttl', '') %> IN PTR <%= host %>.<%= @ptr_zone %>.
 <%- end -%>
 <%- else -%>
-<%= @host %> <%= @datas.fetch('ttl', '') %> <%= @datas.fetch('record_class', 'IN') %> <%= @record_type %> <%= @datas.fetch('owner') %>
+<%= host %> <%= datas.fetch('ttl', '') %> <%= datas.fetch('record_class', 'IN') %> <%= @record_type %> <%= datas.fetch('owner') %>
 <%- end -%>
 <%- end -%>
