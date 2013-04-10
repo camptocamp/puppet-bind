@@ -43,7 +43,6 @@ define bind::zone (
   validate_string($zone_expiracy)
   validate_string($zone_ns)
   validate_string($zone_xfers)
-  validate_string($zone_masters)
   validate_string($zone_origin)
 
   concat::fragment {"named.local.zone.${name}":
@@ -70,7 +69,6 @@ define bind::zone (
 
 
       if $is_slave {
-        validate_re($zone_masters, '\S+', "Wrong master value for ${name}!")
         Concat::Fragment["bind.zones.${name}"] {
           content => template('bind/zone-slave.erb'),
         }
@@ -100,11 +98,6 @@ define bind::zone (
 
         file {"/etc/bind/pri/${name}.conf.d":
           ensure  => absent,
-          mode    => '0700',
-          purge   => true,
-          recurse => true,
-          backup  => false,
-          force   => true,
         }
       }
     }
