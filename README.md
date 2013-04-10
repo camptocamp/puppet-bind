@@ -6,9 +6,81 @@ This module is provided by [Camptocamp](http://www.camptocamp.com/)
 
 ## Classes
 
+* bind
+
+### bind
+
+This class must be declared before using the definitions in this module.
 
 ## Definitions
 
+* bind::a
+* bind::generate
+* bind::mx
+* bind::record
+* bind::zone
+
+### bind::a
+
+Creates an A record (or a series thereof).
+
+    bind::a { 'Hosts in example.com':
+      ensure    => 'present',
+      zone      => 'example.com',
+      ptr       => false,
+      hash_data => {
+        'host1' => { owner => '192.168.0.1', },
+        'host2' => { owner => '192.168.0.2', },
+      },
+    }
+
+### bind::generate
+
+Creates a $GENERATE directive for a specific zone
+
+    bind::generate {'a-records':
+      zone        => 'test.tld',
+      range       => '2-100',
+      record_type => 'A',
+      lhs         => 'dhcp-$', # creates dhcp-2.test.tld, dhcp-3.test.tld …
+      rhs         => '10.10.0.$', # creates IP 10.10.0.2, 10.10.0.3 …
+    }
+
+### bind::mx
+
+Creates an MX record.
+
+    bind::mx {'example mx 50':
+      zone     => 'example.com',
+      owner    => '@',
+      host     => 'smtp.test.ltd.',
+      priority => '50',
+    }
+
+### bind::record
+
+Creates a generic record (or a series thereof).
+
+    bind::record {'CNAME foo.example.com':
+      zone        => 'foo.example.com',
+      record_type => 'CNAME',
+      hash_data   => {
+        'ldap'      => { owner => 'ldap.internal', },
+        'voip'      => { owner => 'voip.internal', },
+      }
+    }
+
+### bind::zone
+
+Creates a zone.
+    
+    bind::zone {'test.tld':
+      zone_contact => 'contact.test.tld',
+      zone_ns      => 'ns0.test.tld',
+      zone_serial  => '2012112901',
+      zone_ttl     => '604800',
+      zone_origin  => 'test.tld',
+    }
 
 ## Contributing
 
