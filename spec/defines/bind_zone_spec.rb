@@ -32,7 +32,7 @@ describe 'bind::zone' do
 
   # Test all string parameters
   [:ensure, :zone_ttl, :zone_contact, :zone_serial, :zone_refresh,
-   :zone_retry, :zone_expiracy, :zone_ns, :zone_xfers,
+   :zone_retry, :zone_expiracy, :zone_ns,
    :zone_origin].each do |p|
     context "when passing wrong type for #{p}" do
       let (:params) { {

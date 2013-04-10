@@ -42,7 +42,6 @@ define bind::zone (
   validate_string($zone_retry)
   validate_string($zone_expiracy)
   validate_string($zone_ns)
-  validate_string($zone_xfers)
   validate_string($zone_origin)
 
   concat::fragment {"named.local.zone.${name}":
