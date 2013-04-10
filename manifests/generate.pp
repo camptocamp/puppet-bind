@@ -78,6 +78,18 @@ define bind::generate(
   $record_class='',
   $ttl='') {
 
+  validate_string($ensure)
+  validate_re($ensure, ['present', 'absent'],
+              "\$ensure must be either 'present' or 'absent', got '${ensure}'")
+
+  validate_string($zone)
+  validate_string($range)
+  validate_string($record_type)
+  validate_string($lhs)
+  validate_string($rhs)
+  validate_string($record_class)
+  validate_string($ttl)
+
   concat::fragment {"${zone}.${record_type}.${range}.generate":
     ensure  => $ensure,
     target  => "/etc/bind/pri/${zone}.conf",
