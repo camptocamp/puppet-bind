@@ -66,6 +66,32 @@ describe 'bind::a' do
     end
   end
 
+  context 'when passing wrong type for zone_arpa' do
+    let (:params) { {
+      :zone      => 'foo.example.com',
+      :hash_data => {},
+      :zone_arpa => ['bar']
+    } }
+
+    it 'should fail' do
+      expect { should contain_bind__record('foo.example.com') 
+      }.to raise_error(Puppet::Error, /\["bar"\] is not a string\./)
+    end
+  end
+
+  context 'when passing wrong type for ptr' do
+    let (:params) { {
+      :zone      => 'foo.example.com',
+      :hash_data => {},
+      :ptr       => 'false',
+    } }
+
+    it 'should fail' do
+      expect { should contain_bind__record('foo.example.com') 
+      }.to raise_error(Puppet::Error, /"false" is not a boolean\./)
+    end
+  end
+
   context 'when passing ptr without zone_arpa' do
     let (:params) { {
       :zone      => 'foo.example.com',
