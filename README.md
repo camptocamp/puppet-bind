@@ -50,12 +50,13 @@ Creates a $GENERATE directive for a specific zone
 
 Creates an MX record.
 
-    bind::mx {'example mx 50':
-      zone     => 'example.com',
+    bind::mx {'mx1':
+      zone     => 'domain.ltd',
       owner    => '@',
-      host     => 'smtp.test.ltd.',
-      priority => '50',
+      priority => 1,
+      host     => 'mail.domain.ltd',
     }
+
 
 ### bind::record
 

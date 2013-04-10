@@ -13,14 +13,23 @@ define bind::mx (
   $host,
   $priority,
   $ensure = present,
-  $owner  = false,
-  $ttl    = false
+  $owner = '',
+  $ttl = ''
 ) {
 
-  if $owner {
-    $_owner = $owner
-  } else {
-    $_owner = $name
+  validate_string($ensure)
+  validate_re($ensure, ['present', 'absent'],
+              "\$ensure must be either 'present' or 'absent', got '${ensure}'")
+
+  validate_string($zone)
+  validate_string($host)
+  validate_string($priority)
+  validate_string($owner)
+  validate_string($ttl)
+
+  $_owner = $owner ? {
+    ''      => $name,
+    default => $owner
   }
 
   concat::fragment {"bind.${name}":
