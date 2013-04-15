@@ -16,7 +16,7 @@ describe 'bind::record' do
     } }
 
     it 'should fail' do
-      expect { should contain_concat__fragment('') 
+      expect { should contain_concat__fragment('')
       }.to raise_error(Puppet::Error, /\$ensure must be either.* got 'running'/)
     end
   end
@@ -28,7 +28,7 @@ describe 'bind::record' do
     } }
 
     it 'should fail' do
-      expect { should contain_concat__fragment('') 
+      expect { should contain_concat__fragment('')
       }.to raise_error(Puppet::Error, /Must pass zone to Bind::Record/)
     end
   end
@@ -41,7 +41,7 @@ describe 'bind::record' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_concat__fragment('')
       }.to raise_error(Puppet::Error, /\["foo.example.com"\] is not a string\./)
     end
   end
@@ -53,7 +53,7 @@ describe 'bind::record' do
     } }
 
     it 'should fail' do
-      expect { should contain_concat__fragment('') 
+      expect { should contain_concat__fragment('')
       }.to raise_error(Puppet::Error, /Must pass hash_data to Bind::Record/)
     end
   end
@@ -66,7 +66,7 @@ describe 'bind::record' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_concat__fragment('') 
       }.to raise_error(Puppet::Error, /"bar" is not a Hash\./)
     end
   end
@@ -78,7 +78,7 @@ describe 'bind::record' do
     } }
 
     it 'should fail' do
-      expect { should contain_concat__fragment('') 
+      expect { should contain_concat__fragment('')
       }.to raise_error(Puppet::Error, /Must pass record_type to Bind::Record/)
     end
   end
@@ -91,7 +91,7 @@ describe 'bind::record' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_concat__fragment('')
       }.to raise_error(Puppet::Error, /\["CNAME"\] is not a string\./)
     end
   end
@@ -105,7 +105,7 @@ describe 'bind::record' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_concat__fragment('')
       }.to raise_error(Puppet::Error, /\["bar"\] is not a string\./)
     end
   end
@@ -119,7 +119,7 @@ describe 'bind::record' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_concat__fragment('')
       }.to raise_error(Puppet::Error, /\["bar"\] is not a string\./)
     end
   end
