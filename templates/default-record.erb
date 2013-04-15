@@ -2,8 +2,9 @@
 @hash_data.sort.each do |host, datas|
   raise(Puppet::ParseError, "'#{host}' is NOT a valid name") unless scope.function_bind_check_hostname([host])
   if  @record_type == 'PTR'
-    if datas.fetch('ptr',true) 
-      if host != '@'
+    if host != '@'
+      if datas.fetch('ptr',true) 
+        scope.function_validate_re([@ptr_zone, '^\S+$'])
 -%>
 <%= require 'ipaddr'; IPAddr.new(datas.fetch('owner')).reverse %>. <%= datas.fetch('ttl', '') %> IN PTR <%= host %>.<%= @ptr_zone %>.
 <%= host %> <%= datas.fetch('ttl', '') %> <%= datas.fetch('record_class', 'IN') %> <%= @record_type %> <%= datas.fetch('owner') %>

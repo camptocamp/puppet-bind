@@ -151,4 +151,149 @@ describe 'bind::record' do
       }.to raise_error(Puppet::Error, /'host 1' is NOT a valid name/)
     end
   end
+
+  context 'when passing a wrong owner in data with PTR' do
+    let (:params) { {
+      :zone       => 'foo.example.com',
+      :hash_data  => {
+        'host1'   => {
+          'owner' => 'wrong value',
+          'ptr'   => true,
+        },
+      },
+      :record_type => 'PTR',
+      :ptr_zone    => 'foo',
+    } }
+
+    it 'should fail' do
+      expect {
+        should contain_concat__fragment('')
+      }.to raise_error(Puppet::Error, /invalid address/)
+    end
+  end
+
+  context 'when passing data with PTR without ptr_zone' do
+    let (:title) { 'PTR entry' }
+    let (:params) { {
+      :zone       => 'foo.example.com',
+      :hash_data  => {
+        'host1'   => {
+          'owner' => '1.2.3.4',
+          'ptr'   => true,
+        },
+      },
+      :record_type => 'PTR',
+    } }
+
+    it 'should fail' do
+      expect {
+        should contain_concat__fragment('')
+      }.to raise_error(Puppet::Error, /"" does not match/)
+    end
+  end
+
+  context 'when passing data with PTR' do
+    let (:title) { 'PTR entry' }
+    let (:params) { {
+      :zone       => 'foo.example.com',
+      :hash_data  => {
+        'host1'   => {
+          'owner' => '1.2.3.4',
+          'ptr'   => true,
+        },
+      },
+      :record_type => 'PTR',
+      :ptr_zone    => 'foo',
+    } }
+
+    it {
+      should contain_concat__fragment('foo.example.com.PTR.PTR entry').with_content(
+        /4\.3\.2\.1\.in-addr\.arpa\.  IN PTR host1\.foo\./
+      ).with_content(
+        /host1  IN PTR 1\.2\.3\.4/
+      )
+    }
+  end
+
+  context 'when passing data with PTR and ttl' do
+    let (:title) { 'PTR entry' }
+    let (:params) { {
+      :zone       => 'foo.example.com',
+      :hash_data  => {
+        'host1'   => {
+          'owner' => '1.2.3.4',
+          'ptr'   => true,
+          'ttl'   => '60',
+        },
+      },
+      :record_type => 'PTR',
+      :ptr_zone    => 'foo',
+    } }
+
+    it {
+      should contain_concat__fragment('foo.example.com.PTR.PTR entry').with_content(
+        /4\.3\.2\.1\.in-addr\.arpa\. 60 IN PTR host1\.foo\./
+      ).with_content(
+        /host1 60 IN PTR 1\.2\.3\.4/
+      )
+    }
+  end
+
+  context 'when passing data with PTR and host=@' do
+    let (:title) { 'PTR entry' }
+    let (:params) { {
+      :zone       => 'foo.example.com',
+      :hash_data  => {
+        '@'   => {
+          'owner' => '1.2.3.4',
+          'ptr'   => true,
+        },
+      },
+      :record_type => 'PTR',
+      :ptr_zone    => 'foo',
+    } }
+
+    it {
+      should contain_concat__fragment('foo.example.com.PTR.PTR entry').with_content('')
+    }
+  end
+
+  context 'when passing data with A' do
+    let (:title) { 'A entry' }
+    let (:params) { {
+      :zone       => 'foo.example.com',
+      :hash_data  => {
+        'host1'   => {
+          'owner' => '1.2.3.4',
+        },
+      },
+      :record_type => 'A',
+    } }
+
+    it {
+      should contain_concat__fragment('foo.example.com.A.A entry').with_content(
+        /host1  IN A 1\.2\.3\.4/
+      )
+    }
+  end
+
+  context 'when passing data with A with ttl' do
+    let (:title) { 'A entry' }
+    let (:params) { {
+      :zone       => 'foo.example.com',
+      :hash_data  => {
+        'host1'   => {
+          'owner' => '1.2.3.4',
+          'ttl'   => '60',
+        },
+      },
+      :record_type => 'A',
+    } }
+
+    it {
+      should contain_concat__fragment('foo.example.com.A.A entry').with_content(
+        /host1 60 IN A 1\.2\.3\.4/
+      )
+    }
+  end
 end
