@@ -131,6 +131,24 @@ describe 'bind::record' do
       :record_type => 'CNAME'
     } }
 
-    it { should contain_concat__fragment('foo.example.com.CNAME.CNAME foo.example.com') }
+    it {
+      should contain_concat__fragment('foo.example.com.CNAME.CNAME foo.example.com')
+    }
+  end
+
+  context 'when passing a wrong hostname in data' do
+    let (:params) { {
+      :zone      => 'foo.example.com',
+      :hash_data => {
+        'host 1' => {},
+      },
+      :record_type => 'CNAME',
+    } }
+
+    it 'should fail' do
+      expect {
+        should contain_concat__fragment('foo.example.com')
+      }.to raise_error(Puppet::Error, /'host 1' is NOT a valid name/)
+    end
   end
 end
