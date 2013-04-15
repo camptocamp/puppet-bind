@@ -25,6 +25,12 @@ class bind::base {
     require => Package['bind9'],
   }
 
+  exec {'reload bind9':
+    command     => 'service bind9 reload',
+    onlyif      => 'named-checkconf -jz /etc/bind/named.conf',
+    refreshonly => true,
+  }
+
   file {'/etc/bind/zones':
     ensure  => directory,
     owner   => root,

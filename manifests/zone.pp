@@ -48,7 +48,7 @@ define bind::zone (
     ensure  => $ensure,
     target  => '/etc/bind/named.conf.local',
     content => "include \"/etc/bind/zones/${name}.conf\";\n",
-    notify  => Service['bind9'],
+    notify  => Exec['reload bind9'],
     require => Package['bind9'],
   }
 
@@ -62,7 +62,7 @@ define bind::zone (
       concat::fragment {"bind.zones.${name}":
         ensure  => $ensure,
         target  => "/etc/bind/zones/${name}.conf",
-        notify  => Service['bind9'],
+        notify  => Exec['reload bind9'],
         require => Package['bind9'],
       }
 
