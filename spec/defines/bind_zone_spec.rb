@@ -145,7 +145,7 @@ describe 'bind::zone' do
       it { should contain_concat__fragment('bind.zones.domain.tld').with(
         :ensure  => 'present',
         :target  => '/etc/bind/zones/domain.tld.conf',
-        :content => "# File managed by puppet\nzone \"domain.tld\" IN {\n  type master;\n  file \"/etc/bind/pri/domain.tld.conf\";\n  allow-transfer { none; };\n  allow-query { any; };\n  notify yes;\n  check-names warn;\n};\n"
+        :content => "# File managed by puppet\nzone \"domain.tld\" IN {\n  type master;\n  file \"/etc/bind/pri/domain.tld.conf\";\n  allow-transfer { none; };\n  allow-query { any; };\n  notify yes;\n};\n"
       ) }
       it { should contain_concat('/etc/bind/pri/domain.tld.conf').with(
         :owner => 'root',
