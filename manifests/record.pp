@@ -4,7 +4,7 @@
 #
 # Arguments:
 #  *$zone*:             Bind::Zone name
-#  *$record_type°:      Resource record type
+#  *$record_type*:      Resource record type
 #  *$ptr_zone*:         PTR zone - optional
 #  *$content_template*: Allows you to do your own template, letting you
 #                       use your own hash_data content structure
@@ -21,7 +21,7 @@
 #            ptr          => false, (optional, default to true)
 #            record_class => <Class>, (optional - default IN)
 #          },
-#          …
+#          ...
 #        }
 #
 define bind::record (
