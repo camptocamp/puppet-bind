@@ -53,6 +53,7 @@ define bind::record (
     target  => "/etc/bind/pri/${zone}.conf",
     content => template($records_template),
     notify  => Service['bind9'],
+    require => Bind::Zone[$zone],
   }
 
 }
