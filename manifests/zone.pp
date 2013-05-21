@@ -55,9 +55,10 @@ define bind::zone (
   case $ensure {
     present: {
       concat {"/etc/bind/zones/${name}.conf":
-        owner => root,
-        group => root,
-        mode  => '0644',
+        owner  => root,
+        group  => root,
+        mode   => '0644',
+        notify => Exec['reload bind9'],
       }
       concat::fragment {"bind.zones.${name}":
         ensure  => $ensure,
@@ -79,9 +80,10 @@ define bind::zone (
         validate_re($zone_ttl, '^\d+$', "Wrong ttl value for ${name}!")
 
         concat {"/etc/bind/pri/${name}.conf":
-          owner => root,
-          group => root,
-          mode  => '0644',
+          owner  => root,
+          group  => root,
+          mode   => '0644',
+          notify => Exec['reload bind9'],
         }
 
         Concat::Fragment["bind.zones.${name}"] {
