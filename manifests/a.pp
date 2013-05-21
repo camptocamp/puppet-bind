@@ -29,7 +29,7 @@ define bind::a(
   validate_bool($ptr)
 
   if ($ptr and $zone_arpa == '') {
-    fail 'You need zone_arp if you want the PTR!'
+    fail 'You need zone_arpa if you want the PTR!'
   }
 
   bind::record {$name:

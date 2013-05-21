@@ -15,7 +15,7 @@ describe 'bind::a' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_bind__record('foo.example.com')
       }.to raise_error(Puppet::Error, /\$ensure must be either.* got 'running'/)
     end
   end
@@ -26,7 +26,7 @@ describe 'bind::a' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_bind__record('foo.example.com')
       }.to raise_error(Puppet::Error, /Must pass zone to Bind::A/)
     end
   end
@@ -38,7 +38,7 @@ describe 'bind::a' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_bind__record('foo.example.com')
       }.to raise_error(Puppet::Error, /\["foo.example.com"\] is not a string\./)
     end
   end
@@ -49,7 +49,7 @@ describe 'bind::a' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_bind__record('foo.example.com')
       }.to raise_error(Puppet::Error, /Must pass hash_data to Bind::A/)
     end
   end
@@ -61,7 +61,7 @@ describe 'bind::a' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_bind__record('foo.example.com')
       }.to raise_error(Puppet::Error, /"bar" is not a Hash\./)
     end
   end
@@ -74,7 +74,7 @@ describe 'bind::a' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_bind__record('foo.example.com')
       }.to raise_error(Puppet::Error, /\["bar"\] is not a string\./)
     end
   end
@@ -87,7 +87,7 @@ describe 'bind::a' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
+      expect { should contain_bind__record('foo.example.com')
       }.to raise_error(Puppet::Error, /"false" is not a boolean\./)
     end
   end
@@ -101,8 +101,8 @@ describe 'bind::a' do
     } }
 
     it 'should fail' do
-      expect { should contain_bind__record('foo.example.com') 
-      }.to raise_error(Puppet::Error, /You need zone_arp if you want the PTR/)
+      expect { should contain_bind__record('foo.example.com')
+      }.to raise_error(Puppet::Error, /You need zone_arpa if you want the PTR/)
     end
   end
 
@@ -137,7 +137,7 @@ describe 'bind::a' do
       :hash_data        => {},
       :content_template => nil
     ) }
-    
+
     it { should contain_bind__record('PTR foo.example.com').with(
       :ensure           => 'present',
       :zone             => 'foobar.arpa',
