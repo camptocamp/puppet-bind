@@ -1,5 +1,5 @@
 name         'camptocamp-bind'
-version      '0.2.0'
+version      '0.2.1'
 source       'https://github.com/camptocamp/puppet-bind'
 dependency   'puppetlabs/stdlib', '0.0.1'
 dependency   'ripienaar/concat', '0.0.1'
