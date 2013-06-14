@@ -1,3 +1,8 @@
+<%- 
+if @is_dynamic and @allow_update.empty?
+  raise(Puppet::ParseError, "allow_update is empty for dynamic zone '#{name}'")
+end
+-%>
 # File managed by puppet
 zone "<%= @name %>" IN {
   type master;
@@ -10,6 +15,13 @@ zone "<%= @name %>" IN {
   <% end -%>
 <% else -%>
   allow-transfer { none; };
+<% end -%>
+<% if @is_dynamic -%>
+  <% if @allow_update.is_a?(Array) -%>
+  allow-update { key <%= @allow_update.join('.; key ') -%>.; };
+  <% else -%>
+  allow-update { key <%= @allow_update %>.; };
+  <% end -%>
 <% end -%>
   allow-query { any; };
   notify yes;
