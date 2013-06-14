@@ -6,7 +6,7 @@ describe 'dynamic_bind_zone' do
     :operatingsystem => 'Debian'
   } }
   describe "should depend on bind::key" do
-    it { should contain_concat("/etc/bind/dynamic/test.tld.conf").with_require(/.*Bind::Key.*update.dynamic.*/i) }
+    it { should contain_concat__fragment("00.bind.test.tld").with_require(/.*Bind::Key.*update.dynamic.*/i) }
   end
 
   describe "zone configuration should contain 'type master'" do
