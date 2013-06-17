@@ -53,4 +53,26 @@ class bind::base {
     require => Package['bind9'],
   }
 
+  file {'/etc/bind/keys':
+    ensure  => directory,
+    owner   => root,
+    group   => bind,
+    mode    => '0750',
+    purge   => true,
+    force   => true,
+    recurse => true,
+    require => Package['bind9'],
+  }
+
+  file {'/etc/bind/dynamic':
+    ensure  => directory,
+    owner   => root,
+    group   => bind,
+    mode    => '0775',
+    purge   => true,
+    force   => true,
+    recurse => true,
+    require => Package['bind9'],
+  }
+
 }

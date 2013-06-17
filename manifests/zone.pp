@@ -17,7 +17,9 @@
 #
 define bind::zone (
   $ensure        = present,
+  $is_dynamic    = false,
   $is_slave      = false,
+  $allow_update  = [],
   $zone_ttl      = '',
   $zone_contact  = '',
   $zone_serial   = '',
@@ -34,7 +36,9 @@ define bind::zone (
   validate_re($ensure, ['present', 'absent'],
               "\$ensure must be either 'present' or 'absent', got '${ensure}'")
 
+  validate_bool($is_dynamic)
   validate_bool($is_slave)
+  validate_array($allow_update)
   validate_string($zone_ttl)
   validate_string($zone_contact)
   validate_string($zone_serial)
@@ -43,6 +47,10 @@ define bind::zone (
   validate_string($zone_expiracy)
   validate_string($zone_ns)
   validate_string($zone_origin)
+
+  if ($is_slave and $is_dynamic) {
+    fail "Zone '${name}' cannot be slave AND dynamic!"
+  }
 
   concat::fragment {"named.local.zone.${name}":
     ensure  => $ensure,
@@ -79,11 +87,21 @@ define bind::zone (
         validate_re($zone_serial, '^\d+$', "Wrong serial value for ${name}!")
         validate_re($zone_ttl, '^\d+$', "Wrong ttl value for ${name}!")
 
-        concat {"/etc/bind/pri/${name}.conf":
-          owner  => root,
-          group  => root,
-          mode   => '0644',
-          notify => Exec['reload bind9'],
+        $conf_file = $is_dynamic? {
+          true    => "/etc/bind/dynamic/${name}.conf",
+          default => "/etc/bind/pri/${name}.conf",
+        }
+
+        $require = $is_dynamic? {
+          true    => bind::key[$allow_update],
+          default => undef,
+        }
+
+        concat {$conf_file:
+          owner   => root,
+          group   => root,
+          mode    => '0644',
+          notify  => Exec['reload bind9'],
         }
 
         Concat::Fragment["bind.zones.${name}"] {
@@ -92,9 +110,9 @@ define bind::zone (
 
         concat::fragment {"00.bind.${name}":
           ensure  => $ensure,
-          target  => "/etc/bind/pri/${name}.conf",
+          target  => $conf_file,
           content => template('bind/zone-header.erb'),
-          require => Package['bind9'],
+          require => [Package['bind9'], $require]
         }
 
         file {"/etc/bind/pri/${name}.conf.d":

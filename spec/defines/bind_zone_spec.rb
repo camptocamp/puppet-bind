@@ -30,6 +30,29 @@ describe 'bind::zone' do
     end
   end
 
+  context 'when passing wrong type for is_dynamic' do
+    let (:params) { {
+      :is_dynamic => 'goodbye'
+    } }
+
+    it 'should fail' do
+      expect { should contain_concat('/etc/bind/zones/domain.tld.conf') 
+      }.to raise_error(Puppet::Error, /"goodbye" is not a boolean\./)
+    end
+  end
+
+  context 'when zone is a slave with dynamic update enabled' do
+    let (:params) { {
+      :is_dynamic => true,
+      :is_slave   => true
+    } }
+
+    it 'should fail' do
+      expect { should contain_concat('/etc/bind/zones/domain.tld.conf') 
+      }.to raise_error(Puppet::Error, /Zone 'domain\.tld' cannot be slave AND dynamic!/)
+    end
+  end
+
   # Test all string parameters
   [:ensure, :zone_ttl, :zone_contact, :zone_serial, :zone_refresh,
    :zone_retry, :zone_expiracy, :zone_ns,
@@ -95,7 +118,7 @@ describe 'bind::zone' do
     context 'when passing wrong ttl' do
       let (:params) { {
         :is_slave     => false,
-        :zone_contact => 'admin@example.com',
+        :zone_contact => 'admin.example.com',
         :zone_ns      => 'ns.tld',
         :zone_serial  => '123456',
         :zone_ttl     => 'abc'
@@ -107,6 +130,7 @@ describe 'bind::zone' do
       end
     end
   end
+
 
   # Check resources
   context 'when present' do
