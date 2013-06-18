@@ -69,9 +69,6 @@ class bind::base {
     owner   => root,
     group   => bind,
     mode    => '0775',
-    purge   => true,
-    force   => true,
-    recurse => true,
     require => Package['bind9'],
   }
 
