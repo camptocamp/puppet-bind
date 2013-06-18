@@ -99,8 +99,8 @@ define bind::zone (
 
         concat {$conf_file:
           owner   => root,
-          group   => root,
-          mode    => '0644',
+          group   => bind,
+          mode    => '0664',
           notify  => Exec['reload bind9'],
         }
 
