@@ -173,8 +173,8 @@ describe 'bind::zone' do
       ) }
       it { should contain_concat('/etc/bind/pri/domain.tld.conf').with(
         :owner => 'root',
-        :group => 'root',
-        :mode  => '0644'
+        :group => 'bind',
+        :mode  => '0664'
       ) }
       it { should contain_concat__fragment('00.bind.domain.tld').with(
         :ensure  => 'present',
