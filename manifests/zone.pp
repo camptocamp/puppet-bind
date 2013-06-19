@@ -102,6 +102,7 @@ define bind::zone (
           group   => bind,
           mode    => '0664',
           notify  => Exec['reload bind9'],
+          require => Package['bind9'],
         }
 
         Concat::Fragment["bind.zones.${name}"] {
@@ -112,7 +113,7 @@ define bind::zone (
           ensure  => $ensure,
           target  => $conf_file,
           content => template('bind/zone-header.erb'),
-          require => [Package['bind9'], $require]
+          require => $require,
         }
 
         file {"/etc/bind/pri/${name}.conf.d":
