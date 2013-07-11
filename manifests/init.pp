@@ -44,10 +44,5 @@
 # }
 #
 class bind {
-
-  case $::operatingsystem {
-    'Debian','Ubuntu': { include bind::debian }
-    default          : { fail "Unknown ${::operatingsystem}" }
-  }
-
+    include bind::base
 }

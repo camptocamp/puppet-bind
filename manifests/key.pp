@@ -17,6 +17,8 @@ define bind::key(
   $algorithm = 'hmac-md5',
 ) {
 
+  include bind::params
+
   validate_string($ensure)
   validate_re($ensure, ['present', 'absent'],
               "\$ensure must be either 'present' or 'absent', got '${ensure}'")
@@ -25,18 +27,18 @@ define bind::key(
   validate_string($secret)
 
 
-  file {"/etc/bind/keys/${name}.conf":
+  file {"${bind::params::keys_directory}/${name}.conf":
     ensure  => $ensure,
     mode    => '0600',
-    owner   => 'bind',
-    group   => 'bind',
+    owner   => $bind::params::bind_user,
+    group   => $bind::params::bind_group,
     content => template("${module_name}/dnskey.conf.erb"),
   }
 
   concat::fragment {"dnskey.${name}":
     ensure  => $ensure,
-    target  => '/etc/bind/named.conf.local',
-    content => "include \"/etc/bind/keys/${name}.conf\";\n",
+    target  => "${bind::params::config_base_dir}/${bind::params::named_local_name}",
+    content => "include \"${bind::params::keys_directory}/${name}.conf\";\n",
     notify  => Exec['reload bind9'],
     require => Package['bind9'],
   }
