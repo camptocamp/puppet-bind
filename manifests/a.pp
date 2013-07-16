@@ -50,5 +50,4 @@ define bind::a(
       content_template => $content_template,
     }
   }
-
 }

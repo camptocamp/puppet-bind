@@ -4,34 +4,47 @@
 # You should NOT include this class as is, as it won't work at all!
 # Please refer to Class['bind'].
 #
-class bind::base {
+class bind::base inherits bind::params {
 
   include concat::setup
 
-  concat {'/etc/bind/named.conf.local':
+  concat {"${bind::params::config_base_dir}/${bind::params::named_local_name}":
     owner => root,
     group => root,
     mode  => '0644',
     force => true,
   }
 
-  package {'bind9':
-    ensure => present,
+  file_line {'include local':
+    ensure  => present,
+    line    => "include \"${bind::params::config_base_dir}/${bind::params::named_local_name}\";",
+    path    => "${bind::params::config_base_dir}/${bind::params::named_conf_name}",
+    require => Package['bind9'],
+    notify  => Exec['reload bind9']
   }
 
-  service {'bind9':
-    ensure  => running,
-    enable  => true,
-    require => Package['bind9'],
+  package {$bind::params::package_name:
+    ensure => present,
+    alias  => 'bind9'
+  }
+
+  service { 'bind9':
+    ensure    => running,
+    name      => $bind::params::service_name,
+    enable    => true,
+    require   => Package['bind9'],
+    restart   => $bind::params::restart,
+    hasstatus => $bind::params::service_has_status,
+    pattern   => $bind::params::service_pattern
   }
 
   exec {'reload bind9':
-    command     => 'service bind9 reload',
-    onlyif      => 'named-checkconf -jz /etc/bind/named.conf',
+    command     => "service ${bind::params::service_name} reload",
+    onlyif      => "named-checkconf -jz ${bind::params::config_base_dir}/${bind::params::named_conf_name}",
     refreshonly => true,
   }
 
-  file {'/etc/bind/zones':
+  file {$bind::params::zones_directory:
     ensure  => directory,
     owner   => root,
     group   => root,
@@ -42,7 +55,7 @@ class bind::base {
     require => Package['bind9'],
   }
 
-  file {'/etc/bind/pri':
+  file {$bind::params::pri_directory:
     ensure  => directory,
     owner   => root,
     group   => root,
@@ -53,10 +66,10 @@ class bind::base {
     require => Package['bind9'],
   }
 
-  file {'/etc/bind/keys':
+  file {$bind::params::keys_directory:
     ensure  => directory,
     owner   => root,
-    group   => bind,
+    group   => $bind::params::bind_group,
     mode    => '0750',
     purge   => true,
     force   => true,
@@ -64,10 +77,10 @@ class bind::base {
     require => Package['bind9'],
   }
 
-  file {'/etc/bind/dynamic':
+  file {$bind::params::dynamic_directory:
     ensure  => directory,
     owner   => root,
-    group   => bind,
+    group   => $bind::params::bind_group,
     mode    => '0775',
     require => Package['bind9'],
   }

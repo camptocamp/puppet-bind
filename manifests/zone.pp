@@ -32,6 +32,8 @@ define bind::zone (
   $zone_origin   = '',
 ) {
 
+  include bind::params
+
   validate_string($ensure)
   validate_re($ensure, ['present', 'absent'],
               "\$ensure must be either 'present' or 'absent', got '${ensure}'")
@@ -54,15 +56,15 @@ define bind::zone (
 
   concat::fragment {"named.local.zone.${name}":
     ensure  => $ensure,
-    target  => '/etc/bind/named.conf.local',
-    content => "include \"/etc/bind/zones/${name}.conf\";\n",
+    target  => "${bind::params::config_base_dir}/${bind::params::named_local_name}",
+    content => "include \"${bind::params::zones_directory}/${name}.conf\";\n",
     notify  => Exec['reload bind9'],
     require => Package['bind9'],
   }
 
   case $ensure {
     present: {
-      concat {"/etc/bind/zones/${name}.conf":
+      concat {"${bind::params::zones_directory}/${name}.conf":
         owner  => root,
         group  => root,
         mode   => '0644',
@@ -70,7 +72,7 @@ define bind::zone (
       }
       concat::fragment {"bind.zones.${name}":
         ensure  => $ensure,
-        target  => "/etc/bind/zones/${name}.conf",
+        target  => "${bind::params::zones_directory}/${name}.conf",
         notify  => Exec['reload bind9'],
         require => Package['bind9'],
       }
@@ -88,8 +90,8 @@ define bind::zone (
         validate_re($zone_ttl, '^\d+$', "Wrong ttl value for ${name}!")
 
         $conf_file = $is_dynamic? {
-          true    => "/etc/bind/dynamic/${name}.conf",
-          default => "/etc/bind/pri/${name}.conf",
+          true    => "${bind::params::dynamic_directory}/${name}.conf",
+          default => "${bind::params::pri_directory}/${name}.conf",
         }
 
         $require = $is_dynamic? {
@@ -99,7 +101,7 @@ define bind::zone (
 
         concat {$conf_file:
           owner   => root,
-          group   => bind,
+          group   => $bind::params::bind_group,
           mode    => '0664',
           notify  => Exec['reload bind9'],
           require => Package['bind9'],
@@ -116,16 +118,16 @@ define bind::zone (
           require => $require,
         }
 
-        file {"/etc/bind/pri/${name}.conf.d":
+        file {"${bind::params::pri_directory}/${name}.conf.d":
           ensure  => absent,
         }
       }
     }
     absent: {
-      file {"/etc/bind/pri/${name}.conf":
+      file {"${bind::params::pri_directory}/${name}.conf":
         ensure => absent,
       }
-      file {"/etc/bind/zones/${name}.conf":
+      file {"${bind::params::zones_directory}/${name}.conf":
         ensure => absent,
       }
     }

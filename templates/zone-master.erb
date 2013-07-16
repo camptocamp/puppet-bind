@@ -1,4 +1,4 @@
-<%- 
+<%-
 if @is_dynamic and @allow_update.empty?
   raise(Puppet::ParseError, "allow_update is empty for dynamic zone '#{name}'")
 end
@@ -7,9 +7,9 @@ end
 zone "<%= @name %>" IN {
   type master;
 <% if @is_dynamic -%>
-  file "/etc/bind/dynamic/<%= @name %>.conf";
+  file "<%= scope.lookupvar("bind::params::dynamic_directory") %>/<%= @name %>.conf";
 <% else -%>
-  file "/etc/bind/pri/<%= @name %>.conf";
+  file "<%= scope.lookupvar("bind::params::pri_directory") %>/<%= @name %>.conf";
 <% end -%>
 <% if @zone_xfers and not @zone_xfers.empty? -%>
   <% if @zone_xfers.is_a?(Array) -%>

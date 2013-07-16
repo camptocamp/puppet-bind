@@ -1,0 +1,31 @@
+@parameters = { 
+  'Debian'              => { 
+    'osfamily'          => 'Debian',
+    'package_name'      => 'bind9',
+    'service_name'      => 'bind9',
+    'bind_user'         => 'bind',
+    'bind_group'        => 'bind',
+    'config_base_dir'   => '/etc/bind',
+    'named_conf_name'   => 'named.conf',
+    'named_local_name'  => 'named.conf.local',
+    'zones_directory'   => '/etc/bind/zones',
+    'pri_directory'     => '/etc/bind/pri',
+    'keys_directory'    => '/etc/bind/keys',
+    'dynamic_directory' => '/etc/bind/dynamic',
+  },
+    'CentOS'            => {
+    'osfamily'          => 'RedHat',
+    'package_name'      => 'bind',
+    'service_name'      => 'named',
+    'bind_user'         => 'named',
+    'bind_group'        => 'named',
+    'config_base_dir'   => '/etc',
+    'named_conf_name'   => 'named.conf',
+    'named_local_name'  => 'named.conf.local',
+    'zones_directory'   => '/etc/named/zones',
+    'pri_directory'     => '/etc/named/pri',
+    'keys_directory'    => '/etc/named/keys',
+    'dynamic_directory' => '/etc/named/dynamic',
+  },
+}
+
