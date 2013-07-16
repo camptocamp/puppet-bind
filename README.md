@@ -1,6 +1,6 @@
 # Bind module for Puppet
 
-**Manages bind configuration under Debian or Ubuntu.**
+**Manages bind configuration under Debian / Ubuntu and CentOS.**
 
 This module is provided by [Camptocamp](http://www.camptocamp.com/)
 
@@ -90,7 +90,7 @@ Creates a generic record (or a series thereof).
 ### bind::zone
 
 Creates a zone.
-    
+
     bind::zone {'test.tld':
       zone_contact => 'contact.test.tld',
       zone_ns      => 'ns0.test.tld',
@@ -116,12 +116,12 @@ Copyright (c) 2013 <mailto:puppet@camptocamp.com> All rights reserved.
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
