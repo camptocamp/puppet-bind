@@ -78,7 +78,7 @@ define bind::generate(
   $record_class='',
   $ttl='') {
 
-  include bind::params 
+  include bind::params
 
   validate_string($ensure)
   validate_re($ensure, ['present', 'absent'],
