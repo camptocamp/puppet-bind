@@ -50,7 +50,7 @@ define bind::record (
 
   concat::fragment {"${zone}.${record_type}.${name}":
     ensure  => $ensure,
-    target  => "/etc/bind/pri/${zone}.conf",
+    target  => "${bind::params::pri_directory}/${zone}.conf",
     content => template($records_template),
     notify  => Service['bind9'],
   }

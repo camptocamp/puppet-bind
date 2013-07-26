@@ -34,7 +34,7 @@ define bind::mx (
 
   concat::fragment {"bind.${name}":
     ensure  => $ensure,
-    target  => "/etc/bind/pri/${zone}.conf",
+    target  => "${bind::params::pri_directory}/${zone}.conf",
     content => template('bind/mx-record.erb'),
     notify  => Service['bind9'],
   }
