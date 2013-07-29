@@ -107,7 +107,7 @@ define bind::zone (
             replace => false,
             content => template('bind/zone-header.erb'),
             notify  => Exec['reload bind9'],
-            require => Package['bind9'],
+            require => [Package['bind9'], $require],
           }
         } else {
           concat {$conf_file:
@@ -122,7 +122,6 @@ define bind::zone (
             ensure  => $ensure,
             target  => $conf_file,
             content => template('bind/zone-header.erb'),
-            require => $require,
           }
         }
 
