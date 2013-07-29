@@ -9,7 +9,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
       :operatingsystem => k
     } }
     describe "should depend on bind::key" do
-      it { should contain_concat__fragment("00.bind.test.tld").with_require(/.*Bind::Key.*update.dynamic.*/i) }
+      it { should contain_file("#{v['dynamic_directory']}/test.tld.conf").with_require(/.*Bind::Key.*update.dynamic.*/i) }
     end
 
     describe "zone configuration should contain 'type master'" do
