@@ -95,7 +95,7 @@ define bind::zone (
         }
 
         $require = $is_dynamic? {
-          true    => bind::key[$allow_update],
+          true    => Bind::Key[$allow_update],
           default => undef,
         }
 
