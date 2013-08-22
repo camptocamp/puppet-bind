@@ -139,7 +139,8 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
       context 'when slave' do
         let (:params) { {
           :is_slave     => true,
-          :zone_masters => '1.2.3.4'
+          :zone_masters => '1.2.3.4',
+          :transfer_source => '2.3.4.5',
         } }
 
         it { should contain_concat("#{v['zones_directory']}/domain.tld.conf").with(
@@ -150,7 +151,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
         it { should contain_concat__fragment('bind.zones.domain.tld').with(
           :ensure  => 'present',
           :target  => "#{v['zones_directory']}/domain.tld.conf",
-          :content => "# File managed by puppet\nzone domain.tld IN {\n  type slave;\n    masters { 1.2.3.4; };\n    allow-query { any; };\n};\n"
+          :content => "# File managed by puppet\nzone domain.tld IN {\n  type slave;\n    masters { 1.2.3.4; };\n    allow-query { any; };\n    transfer-source 2.3.4.5;  };\n"
         ) }
           end
 
@@ -171,7 +172,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
         it { should contain_concat__fragment('bind.zones.domain.tld').with(
           :ensure  => 'present',
           :target  => "#{v['zones_directory']}/domain.tld.conf",
-          :content => "# File managed by puppet\nzone \"domain.tld\" IN {\n  type master;\n  file \"#{v['pri_directory']}/domain.tld.conf\";\n  allow-transfer { none; };\n  allow-query { any; };\n  notify yes;\n};\n"
+          :content => "# File managed by puppet\nzone \"domain.tld\" IN {\n  type master;\n  file \"#{v['pri_directory']}/domain.tld.conf\";\n  allow-transfer { none; };\n  allow-query { any; };\n  notify yes;\n  };\n"
         ) }
         it { should contain_concat("#{v['pri_directory']}/domain.tld.conf").with(
           :owner => 'root',

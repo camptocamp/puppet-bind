@@ -4,6 +4,7 @@
 #
 # Arguments:
 #  *$is_slave*: Boolean. Is your zone a slave or a master? Default false
+#  *$transfer_source*: IPv4 address. Source IP to bind to when requesting a transfer (slave only)
 #  *$zone_ttl*: Time period. Time to live for your zonefile (master only)
 #  *$zone_contact*: Valid contact record (master only)
 #  *$zone_serial*: Integer. Zone serial (master only)
@@ -16,20 +17,21 @@
 #  *$zone_origin*: The origin of the zone
 #
 define bind::zone (
-  $ensure        = present,
-  $is_dynamic    = false,
-  $is_slave      = false,
-  $allow_update  = [],
-  $zone_ttl      = '',
-  $zone_contact  = '',
-  $zone_serial   = '',
-  $zone_refresh  = '3h',
-  $zone_retry    = '1h',
-  $zone_expiracy = '1w',
-  $zone_ns       = '',
-  $zone_xfers    = '',
-  $zone_masters  = '',
-  $zone_origin   = '',
+  $ensure          = present,
+  $is_dynamic      = false,
+  $is_slave        = false,
+  $allow_update    = [],
+  $transfer_source = '',
+  $zone_ttl        = '',
+  $zone_contact    = '',
+  $zone_serial     = '',
+  $zone_refresh    = '3h',
+  $zone_retry      = '1h',
+  $zone_expiracy   = '1w',
+  $zone_ns         = '',
+  $zone_xfers      = '',
+  $zone_masters    = '',
+  $zone_origin     = '',
 ) {
 
   include bind::params
@@ -41,6 +43,7 @@ define bind::zone (
   validate_bool($is_dynamic)
   validate_bool($is_slave)
   validate_array($allow_update)
+  validate_string($transfer_source)
   validate_string($zone_ttl)
   validate_string($zone_contact)
   validate_string($zone_serial)
@@ -52,6 +55,10 @@ define bind::zone (
 
   if ($is_slave and $is_dynamic) {
     fail "Zone '${name}' cannot be slave AND dynamic!"
+  }
+
+  if ($transfer_source != '' and ! $is_slave) {
+    fail "Zone '${name}': transfer_source can be set only for slave zones!"
   }
 
   concat::fragment {"named.local.zone.${name}":
