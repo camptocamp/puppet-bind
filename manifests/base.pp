@@ -6,8 +6,6 @@
 #
 class bind::base inherits bind::params {
 
-  include concat::setup
-
   concat {"${bind::params::config_base_dir}/${bind::params::named_local_name}":
     owner => root,
     group => root,
