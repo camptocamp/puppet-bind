@@ -15,6 +15,7 @@
 #  *$zone_xfers*: IPs. Valid xfers for zone (master only)
 #  *$zone_masters*: IPs. Valid master for this zone (slave only)
 #  *$zone_origin*: The origin of the zone
+#  *$zone_notify*: IPs to use for also-notify entry
 #
 define bind::zone (
   $ensure          = present,
@@ -32,6 +33,7 @@ define bind::zone (
   $zone_xfers      = '',
   $zone_masters    = '',
   $zone_origin     = '',
+  $zone_notify     = ''
 ) {
 
   include bind::params

@@ -161,7 +161,8 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
           :zone_contact => 'admin@example.com',
           :zone_ns      => 'ns.tld',
           :zone_serial  => '123456',
-          :zone_ttl     => '60'
+          :zone_ttl     => '60',
+          :zone_notify  => ['1.1.1.1', '2.2.2.2']
         } }
 
         it { should contain_concat("#{v['zones_directory']}/domain.tld.conf").with(
@@ -172,7 +173,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
         it { should contain_concat__fragment('bind.zones.domain.tld').with(
           :ensure  => 'present',
           :target  => "#{v['zones_directory']}/domain.tld.conf",
-          :content => "# File managed by puppet\nzone \"domain.tld\" IN {\n  type master;\n  file \"#{v['pri_directory']}/domain.tld.conf\";\n  allow-transfer { none; };\n  allow-query { any; };\n  notify yes;\n};\n"
+          :content => "# File managed by puppet\nzone \"domain.tld\" IN {\n  type master;\n  file \"#{v['pri_directory']}/domain.tld.conf\";\n  allow-transfer { none; };\n  allow-query { any; };\n  notify yes;\n    also-notify { 1.1.1.1; 2.2.2.2; };\n  };\n"
         ) }
         it { should contain_concat("#{v['pri_directory']}/domain.tld.conf").with(
           :owner => 'root',

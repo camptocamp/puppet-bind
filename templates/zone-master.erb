@@ -29,4 +29,11 @@ zone "<%= @name %>" IN {
 <% end -%>
   allow-query { any; };
   notify yes;
+<% if @zone_notify and not @zone_notify.empty? -%>
+  <% if @zone_notify.is_a?(Array) -%>
+  also-notify { <%= @zone_notify.join('; ') -%>; };
+  <% else -%>
+  also-notify { <%= @zone_notify %>; };
+  <% end -%>
+<% end -%>
 };
