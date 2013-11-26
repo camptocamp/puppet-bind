@@ -298,5 +298,25 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
       )
       }
     end
+
+    context 'when passing SRV with _' do
+      let (:title) { 'SRV entry' }
+      let (:params) { {
+        :zone       => 'foo.example.com',
+        :hash_data  => {
+        '_sip._tcp.foo.example.com.'   => {
+        'owner' => '0 5 5060 sipserver.example.com.',
+        'ttl'   => '86400',
+      },
+      },
+      :record_type => 'SRV',
+      } }
+
+      it {
+        should contain_concat__fragment('foo.example.com.SRV.SRV entry').with_content(
+          /_sip\._tcp\.foo\.example.com. 86400 IN SRV 0 5 5060 sipserver\.example\.com\./
+      )
+      }
+    end
   end
 }
