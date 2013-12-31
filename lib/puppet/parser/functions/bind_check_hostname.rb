@@ -20,6 +20,9 @@ Usage: bind_check_hostname(hostname, type)
 
     # Allows '@'
     return true if record == '@'
+    
+    # Allows '*'
+    return true if record == '*'
 
     # All is allowed for SRV and TXT record types
     return true if type == 'SRV'
