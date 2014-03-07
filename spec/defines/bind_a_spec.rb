@@ -120,7 +120,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
         :zone             => 'foo.example.com',
         :record_type      => 'A',
         :hash_data        => {},
-        :content_template => nil
+        :content_template => ''
       ) }
         end
 
@@ -137,7 +137,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
         :zone             => 'foo.example.com',
         :record_type      => 'A',
         :hash_data        => {},
-        :content_template => nil
+        :content_template => ''
       ) }
 
       it { should contain_bind__record('PTR foo.example.com').with(
@@ -146,7 +146,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
         :record_type      => 'PTR',
         :ptr_zone         => 'foo.example.com',
         :hash_data        => {},
-        :content_template => nil
+        :content_template => ''
       ) }
         end
   end
