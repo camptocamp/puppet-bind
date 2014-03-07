@@ -4,7 +4,7 @@
 # Please refer to Class['bind'].
 
 class bind::params {
-    if $::operatingsystem == 'Debian' or $::operatingsystem == 'Ubuntu' {
+    if $::osfamily == 'Debian' {
         $package_name         = 'bind9'
         $service_name         = 'bind9'
         $bind_user            = 'bind'
@@ -21,7 +21,7 @@ class bind::params {
         $keys_directory       = '/etc/bind/keys'
         $dynamic_directory    = '/etc/bind/dynamic'
     }
-    elsif $::operatingsystem == 'CentOS' {
+    elsif $::osfamily == 'RedHat' {
         $package_name         = 'bind'
         $service_name         = 'named'
         $bind_user            = 'named'

@@ -31,13 +31,13 @@ class bind::base inherits bind::params {
     name      => $bind::params::service_name,
     enable    => true,
     require   => Package['bind9'],
-    restart   => $bind::params::restart,
+    restart   => $bind::params::service_restart,
     hasstatus => $bind::params::service_has_status,
     pattern   => $bind::params::service_pattern
   }
 
   exec {'reload bind9':
-    command     => "service ${bind::params::service_name} reload",
+    command     => $bind::params::service_restart,
     onlyif      => "named-checkconf -jz ${bind::params::config_base_dir}/${bind::params::named_conf_name}",
     refreshonly => true,
   }
