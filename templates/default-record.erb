@@ -1,6 +1,6 @@
 <%- 
 @hash_data.sort.each do |host, datas|
-  raise(Puppet::ParseError, "'#{host}' is NOT a valid name") unless scope.function_bind_check_hostname([host, record_type])
+  raise(Puppet::ParseError, "'#{host}' is NOT a valid name") unless scope.function_bind_check_hostname([host, @record_type])
   if  @record_type == 'PTR'
     if host != '@'
       if datas.fetch('ptr',true) 
