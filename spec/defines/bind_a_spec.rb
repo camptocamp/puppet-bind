@@ -149,5 +149,50 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
         :content_template => ''
       ) }
         end
+
+    context 'when using star catchall' do
+      let (:params) { {
+        :zone      => 'foo.example.com',
+        :hash_data => {'*' => { 'owner' => 'foo.example.com', }},
+        :ptr       => false,
+      } }
+
+      it { should contain_bind__record('foo.example.com').with(
+        :ensure           => 'present',
+        :zone             => 'foo.example.com',
+        :record_type      => 'A',
+        :hash_data        => {'*' => { 'owner' => 'foo.example.com', }},
+        :content_template => ''
+      ) }
+        end
+
+    context 'when using blank host' do
+      let (:params) { {
+        :zone      => 'foo.example.com',
+        :hash_data => {'' => { 'owner' => 'foo.example.com', }},
+        :ptr       => false,
+      } }
+
+      it { should contain_bind__record('foo.example.com').with(
+        :ensure           => 'present',
+        :zone             => 'foo.example.com',
+        :record_type      => 'A',
+        :hash_data        => {'' => { 'owner' => 'foo.example.com', }},
+        :content_template => ''
+      ) }
+        end
+
+    context 'when passing syntactically incorrect domain name' do
+      let (:params) { {
+        :zone      => 'foo.example.com',
+        :hash_data => {'foo).bar' => { 'owner' => 'foo.example.com', }},
+        :ptr       => false,
+      } }
+
+      it 'should fail' do
+        expect { should contain_bind__record('foo.example.com')
+        }.to raise_error(Puppet::Error, /'foo\)\.bar' is NOT a valid name/)
+      end
+    end
   end
 }
