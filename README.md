@@ -1,5 +1,7 @@
 # Bind module for Puppet
 
+[![Build Status](https://travis-ci.org/camptocamp/puppet-bind.png?branch=master)](https://travis-ci.org/camptocamp/puppet-bind)
+
 **Manages bind configuration under Debian / Ubuntu and CentOS.**
 
 This module is provided by [Camptocamp](http://www.camptocamp.com/)
