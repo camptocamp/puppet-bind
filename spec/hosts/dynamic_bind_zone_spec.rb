@@ -5,8 +5,11 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
 
   describe 'dynamic_bind_zone' do
     let (:facts) { {
+      :id              => 'root',
+      :kernel          => 'Linux',
       :osfamily        => v['osfamily'],
-      :operatingsystem => k
+      :operatingsystem => k,
+      :path            => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     } }
     describe "should depend on bind::key" do
       it { should contain_file("#{v['dynamic_directory']}/test.tld.conf").with_require(/.*Bind::Key.*update.dynamic.*/i) }

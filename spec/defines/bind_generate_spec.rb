@@ -6,8 +6,11 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
   describe 'bind::generate' do
     let (:title) { 'test.tld' }
     let (:facts) { {
+      :id              => 'root',
+      :kernel          => 'Linux',
       :osfamily        => v['osfamily'],
-      :operatingsystem => k
+      :operatingsystem => k,
+      :path            => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     } }
 
     context 'when using a wrong ensure value' do
