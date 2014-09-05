@@ -6,8 +6,14 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
     let (:title) { 'CNAME foo.example.com' }
     let (:facts) { {
       :osfamily        => v['osfamily'],
-      :operatingsystem => k
+      :operatingsystem => k,
+      :id              => 'root',
+      :kernel          => 'Linux',
+      :path            => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
     } }
+    let :pre_condition do 
+      "class {'bind':}"
+    end
 
     context 'when using a wrong ensure value' do
       let (:params) { {
