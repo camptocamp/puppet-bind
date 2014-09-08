@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-bind",
-  "version": "0.3",
+  "version": "0.3.0",
   "author": "DevOps Team / Camptocamp",
   "description": "Bind defined resource types",
   "summary": "Camptocamp Bind Module",
