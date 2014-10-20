@@ -1,5 +1,6 @@
 # Bind module for Puppet
 
+[![Puppet Forge](http://img.shields.io/puppetforge/v/camptocamp/bind.svg)](https://forge.puppetlabs.com/camptocamp/bind)
 [![Build Status](https://travis-ci.org/camptocamp/puppet-bind.png?branch=master)](https://travis-ci.org/camptocamp/puppet-bind)
 
 **Manages bind configuration under Debian / Ubuntu and CentOS.**
