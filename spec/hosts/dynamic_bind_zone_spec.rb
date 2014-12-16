@@ -1,32 +1,39 @@
 require 'spec_helper'
-require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
 
-@parameters.each { |k, v|
+describe 'dynamic_bind_zone' do
 
-  describe 'dynamic_bind_zone' do
-    let (:facts) { {
-      :id              => 'root',
-      :kernel          => 'Linux',
-      :osfamily        => v['osfamily'],
-      :operatingsystem => k,
-      :path            => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    } }
-    describe "should depend on bind::key" do
-      it { should contain_file("#{v['dynamic_directory']}/test.tld.conf").with_require(/.*Bind::Key.*update.dynamic.*/i) }
-    end
+  on_supported_os.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) do
+        facts
+      end
 
-    describe "zone configuration should contain 'type master'" do
-      it { should contain_concat__fragment('bind.zones.test.tld').with(
-        :content => /type master;/i,
-        :target  => "#{v['zones_directory']}/test.tld.conf"
-      )}
-    end
+      let(:confdir) do
+        case facts[:osfamily]
+        when 'Debian'
+          '/etc/bind'
+        when 'RedHat'
+          '/etc/named'
+        end
+      end
 
-    describe "zone configuration should contain allow-update" do
-      it { should contain_concat__fragment('bind.zones.test.tld').with(
-        :content => /allow-update \{ key update.dynamic\.; \};/i,
-        :target  => "#{v['zones_directory']}/test.tld.conf"
-      )}
+      describe "should depend on bind::key" do
+        it { should contain_file("#{confdir}/dynamic/test.tld.conf").with_require(/.*Bind::Key.*update.dynamic.*/i) }
+      end
+
+      describe "zone configuration should contain 'type master'" do
+        it { should contain_concat__fragment('bind.zones.test.tld').with(
+          :content => /type master;/i,
+          :target  => "#{confdir}/zones/test.tld.conf"
+        )}
+      end
+
+      describe "zone configuration should contain allow-update" do
+        it { should contain_concat__fragment('bind.zones.test.tld').with(
+          :content => /allow-update \{ key update.dynamic\.; \};/i,
+          :target  => "#{confdir}/zones/test.tld.conf"
+        )}
+      end
     end
   end
-}
+end

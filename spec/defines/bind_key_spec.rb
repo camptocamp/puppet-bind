@@ -1,56 +1,67 @@
 require 'spec_helper'
-require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
-@parameters.each { |k, v|
-  describe 'bind::key' do
-    let (:title) {'update.domain.tld'}
-    let (:facts) { {
-      :osfamily        => v['osfamily'],
-      :operatingsystem => k
-    } }
+describe 'bind::key' do
 
-    # Validate input
-    context 'when missing secret value' do
-      it 'should fail' do
-        expect { should contain_concat("#{v['keys_directory']}/update.domain.tld.conf")
-        }.to raise_error(Puppet::Error, /Must pass secret to Bind::Key.*/)
+  let (:title) {'update.domain.tld'}
+
+  on_supported_os.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) do
+        facts
       end
-    end
 
-    context 'when using a wrong ensure value' do
-      let (:params) { {
-        :ensure => 'running',
-        :secret => 'abcdefg'
-      } }
-
-      it 'should fail' do
-        expect { should contain_concat("#{v['keys_directory']}/update.domain.tld.conf")
-        }.to raise_error(Puppet::Error, /\$ensure must be either.* got 'running'/)
+      let(:confdir) do
+        case facts[:osfamily]
+        when 'Debian'
+          '/etc/bind'
+        when 'RedHat'
+          '/etc/named'
         end
+      end
+
+      # Validate input
+      context 'when missing secret value' do
+        it 'should fail' do
+          expect { should contain_concat("#{confdir}/keys/update.domain.tld.conf")
+          }.to raise_error(Puppet::Error, /Must pass secret to Bind::Key.*/)
         end
-
-    context 'when passing wrong type for algorithm' do
-      let (:params) { {
-        :secret    => 'abcdefg',
-        :algorithm => ['abcde', 'fghij']
-      } }
-
-      it 'should fail' do
-        expect { should contain_concat("#{v['keys_directory']}/update.domain.tld.conf")
-        }.to raise_error(Puppet::Error, /\["abcde", "fghij"\] is not a string\..+/)
       end
-    end
 
-    context 'when passing wrong type for secret' do
-      let (:params) { {
-        :secret => ['abcde', 'fghij']
-      } }
+      context 'when using a wrong ensure value' do
+        let (:params) { {
+          :ensure => 'running',
+          :secret => 'abcdefg'
+        } }
 
-      it 'should fail' do
-        expect { should contain_concat("#{v['keys_directory']}/update.domain.tld.conf")
-        }.to raise_error(Puppet::Error, /\["abcde", "fghij"\] is not a string\..+/)
+        it 'should fail' do
+          expect { should contain_concat("#{confdir}/keys/update.domain.tld.conf")
+          }.to raise_error(Puppet::Error, /\$ensure must be either.* got 'running'/)
+        end
       end
-    end
 
+      context 'when passing wrong type for algorithm' do
+        let (:params) { {
+          :secret    => 'abcdefg',
+          :algorithm => ['abcde', 'fghij']
+        } }
+
+        it 'should fail' do
+          expect { should contain_concat("#{confdir}/keys/update.domain.tld.conf")
+          }.to raise_error(Puppet::Error, /\["abcde", "fghij"\] is not a string\..+/)
+        end
+      end
+
+      context 'when passing wrong type for secret' do
+        let (:params) { {
+          :secret => ['abcde', 'fghij']
+        } }
+
+        it 'should fail' do
+          expect { should contain_concat("#{confdir}/keys/update.domain.tld.conf")
+          }.to raise_error(Puppet::Error, /\["abcde", "fghij"\] is not a string\..+/)
+        end
+      end
+
+    end
   end
-}
+end
