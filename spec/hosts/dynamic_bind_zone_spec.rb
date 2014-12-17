@@ -5,7 +5,9 @@ describe 'dynamic_bind_zone' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
-        facts
+        facts.merge({
+          :concat_basedir => '/var/lib/puppet/concat',
+        })
       end
 
       let(:confdir) do
