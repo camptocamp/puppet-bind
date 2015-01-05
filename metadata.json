@@ -1,10 +1,10 @@
 {
   "name": "camptocamp-bind",
   "version": "1.0.3",
-  "author": "DevOps Team / Camptocamp",
+  "author": "Camptocamp",
   "description": "Bind defined resource types",
   "summary": "Camptocamp Bind Module",
-  "license": "GNU GPLv3",
+  "license": "Apache-2.0",
   "source": "https://github.com/camptocamp/puppet-bind",
   "project_page": "https://github.com/camptocamp/puppet-bind",
   "issues_url": "https://github.com/puppetlabs/puppet-bind/issues",
