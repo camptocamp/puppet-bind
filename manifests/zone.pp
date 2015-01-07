@@ -72,7 +72,7 @@ define bind::zone (
   }
 
   case $ensure {
-    present: {
+    'present': {
       concat {"${bind::params::zones_directory}/${name}.conf":
         owner  => root,
         group  => root,
@@ -143,7 +143,7 @@ define bind::zone (
         }
       }
     }
-    absent: {
+    'absent': {
       file {"${bind::params::pri_directory}/${name}.conf":
         ensure => absent,
       }
