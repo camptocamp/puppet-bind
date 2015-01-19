@@ -201,7 +201,7 @@ describe 'bind::record' do
         it 'should fail' do
           expect {
             should contain_concat__fragment('')
-          }.to raise_error(Puppet::Error, /"" does not match/)
+          }.to raise_error(Puppet::Error, /nil does not match/)
         end
       end
 

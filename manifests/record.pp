@@ -28,9 +28,9 @@ define bind::record (
   $zone,
   $hash_data,
   $record_type,
-  $ensure   = present,
-  $ptr_zone = '',
-  $content_template = '',
+  $ensure           = present,
+  $ptr_zone         = undef,
+  $content_template = undef,
 ) {
 
   validate_string($ensure)
@@ -44,7 +44,7 @@ define bind::record (
   validate_hash($hash_data)
 
   $records_template = $content_template ?{
-    ''      => 'bind/default-record.erb',
+    undef   => 'bind/default-record.erb',
     default => $content_template,
   }
 

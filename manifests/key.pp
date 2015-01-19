@@ -17,7 +17,7 @@ define bind::key(
   $algorithm = 'hmac-md5',
 ) {
 
-  include bind::params
+  include ::bind::params
 
   validate_string($ensure)
   validate_re($ensure, ['present', 'absent'],

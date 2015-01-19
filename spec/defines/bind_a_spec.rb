@@ -106,7 +106,6 @@ describe 'bind::a' do
           :zone      => 'foo.example.com',
           :hash_data => {},
           :ptr       => true,
-          :zone_arpa => ''
         } }
 
         it 'should fail' do
@@ -127,7 +126,7 @@ describe 'bind::a' do
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {},
-          :content_template => ''
+          :content_template => nil,
         ) }
       end
 
@@ -144,7 +143,7 @@ describe 'bind::a' do
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {},
-          :content_template => ''
+          :content_template => nil,
         ) }
 
         it { should contain_bind__record('PTR foo.example.com').with(
@@ -153,7 +152,7 @@ describe 'bind::a' do
           :record_type      => 'PTR',
           :ptr_zone         => 'foo.example.com',
           :hash_data        => {},
-          :content_template => ''
+          :content_template => nil,
         ) }
       end
 
@@ -169,7 +168,7 @@ describe 'bind::a' do
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {'*' => { 'owner' => 'foo.example.com', }},
-          :content_template => ''
+          :content_template => nil,
         ) }
       end
 
@@ -185,7 +184,7 @@ describe 'bind::a' do
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {'' => { 'owner' => 'foo.example.com', }},
-          :content_template => ''
+          :content_template => nil,
         ) }
       end
 

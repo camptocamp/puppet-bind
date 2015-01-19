@@ -13,8 +13,8 @@ define bind::mx (
   $host,
   $priority,
   $ensure = present,
-  $owner = '',
-  $ttl = ''
+  $owner  = undef,
+  $ttl    = undef,
 ) {
 
   validate_string($ensure)

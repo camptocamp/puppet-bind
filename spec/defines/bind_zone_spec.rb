@@ -208,7 +208,7 @@ describe 'bind::zone' do
            it { should contain_concat__fragment('00.bind.domain.tld').with(
              :ensure  => 'present',
              :target  => "#{confdir}/pri/domain.tld.conf",
-             :content => "; File managed by puppet\n$TTL 60\n@ IN SOA domain.tld. admin@example.com. (\n      123456  ; serial\n      3h ; refresh\n      1h   ; retry\n      1w; expiracy\n      60 )   ; TTL\n      IN NS ns.tld.\n$ORIGIN .\n"
+             :content => "; File managed by puppet\n$TTL 60\n@ IN SOA domain.tld. admin@example.com. (\n      123456  ; serial\n      3h ; refresh\n      1h   ; retry\n      1w; expiracy\n      60 )   ; TTL\n      IN NS ns.tld.\n"
            ) }
            it { should contain_file("#{confdir}/pri/domain.tld.conf.d").with(
              :ensure => 'absent'

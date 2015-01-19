@@ -44,5 +44,5 @@
 # }
 #
 class bind {
-    include bind::base
+    include ::bind::base
 }

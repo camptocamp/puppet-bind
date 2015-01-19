@@ -22,21 +22,21 @@ define bind::zone (
   $is_dynamic      = false,
   $is_slave        = false,
   $allow_update    = [],
-  $transfer_source = '',
-  $zone_ttl        = '',
-  $zone_contact    = '',
-  $zone_serial     = '',
+  $transfer_source = undef,
+  $zone_ttl        = undef,
+  $zone_contact    = undef,
+  $zone_serial     = undef,
   $zone_refresh    = '3h',
   $zone_retry      = '1h',
   $zone_expiracy   = '1w',
-  $zone_ns         = '',
-  $zone_xfers      = '',
-  $zone_masters    = '',
-  $zone_origin     = '',
-  $zone_notify     = ''
+  $zone_ns         = undef,
+  $zone_xfers      = undef,
+  $zone_masters    = undef,
+  $zone_origin     = undef,
+  $zone_notify     = undef,
 ) {
 
-  include bind::params
+  include ::bind::params
 
   validate_string($ensure)
   validate_re($ensure, ['present', 'absent'],
@@ -59,7 +59,7 @@ define bind::zone (
     fail "Zone '${name}' cannot be slave AND dynamic!"
   }
 
-  if ($transfer_source != '' and ! $is_slave) {
+  if ($transfer_source and ! $is_slave) {
     fail "Zone '${name}': transfer_source can be set only for slave zones!"
   }
 
