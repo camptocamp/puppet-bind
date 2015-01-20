@@ -29,8 +29,8 @@ define bind::record (
   $hash_data,
   $record_type,
   $ensure           = present,
+  $content_template = 'bind/default-record.erb',
   $ptr_zone         = undef,
-  $content_template = undef,
 ) {
 
   validate_string($ensure)
@@ -43,15 +43,10 @@ define bind::record (
   validate_string($content_template)
   validate_hash($hash_data)
 
-  $records_template = $content_template ?{
-    undef   => 'bind/default-record.erb',
-    default => $content_template,
-  }
-
   concat::fragment {"${zone}.${record_type}.${name}":
     ensure  => $ensure,
     target  => "${bind::params::pri_directory}/${zone}.conf",
-    content => template($records_template),
+    content => template($content_template),
     notify  => Service['bind9'],
   }
 
