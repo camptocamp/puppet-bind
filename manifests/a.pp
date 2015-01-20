@@ -13,9 +13,9 @@
 define bind::a(
   $zone,
   $hash_data,
-  $ensure = present,
-  $zone_arpa = '',
-  $ptr    = true,
+  $ensure           = present,
+  $zone_arpa        = undef,
+  $ptr              = true,
   $content_template = undef,
 ) {
 
@@ -28,7 +28,7 @@ define bind::a(
   validate_hash($hash_data)
   validate_bool($ptr)
 
-  if ($ptr and $zone_arpa == '') {
+  if ($ptr and !$zone_arpa) {
     fail 'You need zone_arpa if you want the PTR!'
   }
 

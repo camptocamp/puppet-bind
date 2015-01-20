@@ -106,7 +106,6 @@ describe 'bind::a' do
           :zone      => 'foo.example.com',
           :hash_data => {},
           :ptr       => true,
-          :zone_arpa => ''
         } }
 
         it 'should fail' do
@@ -122,13 +121,13 @@ describe 'bind::a' do
           :ptr       => false
         } }
 
-        it { should contain_bind__record('foo.example.com').with(
+        it { should contain_bind__record('foo.example.com').with({
           :ensure           => 'present',
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {},
-          :content_template => ''
-        ) }
+          :content_template => 'bind/default-record.erb',
+        }) }
       end
 
       context 'when using using ptr' do
@@ -139,22 +138,22 @@ describe 'bind::a' do
           :zone_arpa => 'foobar.arpa'
         } }
 
-        it { should contain_bind__record('foo.example.com').with(
+        it { should contain_bind__record('foo.example.com').with({
           :ensure           => 'present',
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {},
-          :content_template => ''
-        ) }
+          :content_template => 'bind/default-record.erb',
+        }) }
 
-        it { should contain_bind__record('PTR foo.example.com').with(
+        it { should contain_bind__record('PTR foo.example.com').with({
           :ensure           => 'present',
           :zone             => 'foobar.arpa',
           :record_type      => 'PTR',
           :ptr_zone         => 'foo.example.com',
           :hash_data        => {},
-          :content_template => ''
-        ) }
+          :content_template => 'bind/default-record.erb',
+        }) }
       end
 
       context 'when using star catchall' do
@@ -164,13 +163,13 @@ describe 'bind::a' do
           :ptr       => false,
         } }
 
-        it { should contain_bind__record('foo.example.com').with(
+        it { should contain_bind__record('foo.example.com').with({
           :ensure           => 'present',
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {'*' => { 'owner' => 'foo.example.com', }},
-          :content_template => ''
-        ) }
+          :content_template => 'bind/default-record.erb',
+        }) }
       end
 
       context 'when using blank host' do
@@ -180,13 +179,13 @@ describe 'bind::a' do
           :ptr       => false,
         } }
 
-        it { should contain_bind__record('foo.example.com').with(
+        it { should contain_bind__record('foo.example.com').with({
           :ensure           => 'present',
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {'' => { 'owner' => 'foo.example.com', }},
-          :content_template => ''
-        ) }
+          :content_template => 'bind/default-record.erb',
+        }) }
       end
 
       context 'when passing syntactically incorrect domain name' do
