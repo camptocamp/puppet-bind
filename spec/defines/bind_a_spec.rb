@@ -126,7 +126,7 @@ describe 'bind::a' do
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {},
-          :content_template => nil,
+          :content_template => 'bind/default-record.erb',
         ) }
       end
 
@@ -143,7 +143,7 @@ describe 'bind::a' do
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {},
-          :content_template => nil,
+          :content_template => 'bind/default-record.erb',
         ) }
 
         it { should contain_bind__record('PTR foo.example.com').with(
@@ -152,7 +152,7 @@ describe 'bind::a' do
           :record_type      => 'PTR',
           :ptr_zone         => 'foo.example.com',
           :hash_data        => {},
-          :content_template => nil,
+          :content_template => 'bind/default-record.erb',
         ) }
       end
 
@@ -168,7 +168,7 @@ describe 'bind::a' do
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {'*' => { 'owner' => 'foo.example.com', }},
-          :content_template => nil,
+          :content_template => 'bind/default-record.erb',
         ) }
       end
 
@@ -184,7 +184,7 @@ describe 'bind::a' do
           :zone             => 'foo.example.com',
           :record_type      => 'A',
           :hash_data        => {'' => { 'owner' => 'foo.example.com', }},
-          :content_template => nil,
+          :content_template => 'bind/default-record.erb',
         ) }
       end
 
