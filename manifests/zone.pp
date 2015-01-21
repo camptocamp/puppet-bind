@@ -29,7 +29,7 @@ define bind::zone (
   $zone_refresh    = '3h',
   $zone_retry      = '1h',
   $zone_expiracy   = '1w',
-  $zone_ns         = undef,
+  $zone_ns         = [],
   $zone_xfers      = undef,
   $zone_masters    = undef,
   $zone_origin     = undef,
@@ -94,7 +94,7 @@ define bind::zone (
 ## END of slave
       } else {
         validate_re($zone_contact, '^\S+$', "Wrong contact value for ${name}!")
-#        validate_re($zone_ns, '^\S+$', "Wrong ns value for ${name}!")
+        validate_slength($zone_ns, 255, 3)
         validate_re($zone_serial, '^\d+$', "Wrong serial value for ${name}!")
         validate_re($zone_ttl, '^\d+$', "Wrong ttl value for ${name}!")
 
