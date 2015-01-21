@@ -52,7 +52,7 @@ define bind::zone (
   validate_string($zone_refresh)
   validate_string($zone_retry)
   validate_string($zone_expiracy)
-  validate_string($zone_ns)
+  validate_array($zone_ns)
   validate_string($zone_origin)
 
   if ($is_slave and $is_dynamic) {
@@ -94,7 +94,7 @@ define bind::zone (
 ## END of slave
       } else {
         validate_re($zone_contact, '^\S+$', "Wrong contact value for ${name}!")
-        validate_re($zone_ns, '^\S+$', "Wrong ns value for ${name}!")
+#        validate_re($zone_ns, '^\S+$', "Wrong ns value for ${name}!")
         validate_re($zone_serial, '^\d+$', "Wrong serial value for ${name}!")
         validate_re($zone_ttl, '^\d+$', "Wrong ttl value for ${name}!")
 
