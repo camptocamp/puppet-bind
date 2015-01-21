@@ -6,8 +6,11 @@ $TTL <%= @zone_ttl %>
       <%= @zone_retry %>   ; retry
       <%= @zone_expiracy %>; expiracy
       <%= @zone_ttl %> )   ; TTL
-<% @zone_ns.each do |ns| %>      IN NS <%= ns %>.
-<% end %>
+<% @zone_ns.each do |ns| -
+  raise(Puppet::ParseError, "Wrong ns value: '#{ns}'") unless ( ns =~ Regexp.compile('^\S+$'))
+-%>
+      IN NS <%= ns %>.
+<% end -%>
 <% if @zone_origin -%>
 $ORIGIN <%= @zone_origin %>.
 <% end -%>
