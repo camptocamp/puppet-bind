@@ -91,7 +91,7 @@ describe 'bind::zone' do
 
            it 'should fail' do
              expect { should contain_concat("#{confdir}/zones/domain.tld.conf")
-             }.to raise_error(Puppet::Error, /false is not a string\./)
+             }.to raise_error(Puppet::Error, /false is not (a string|an Array)\./)
            end
          end
        end
@@ -101,7 +101,7 @@ describe 'bind::zone' do
            let (:params) { {
              :is_slave     => false,
              :zone_contact => 'it has spaces',
-             :zone_ns      => 'ns.tld',
+             :zone_ns      => ['ns.tld'],
              :zone_serial  => '123456',
              :zone_ttl     => '60'
            } }
@@ -116,14 +116,15 @@ describe 'bind::zone' do
            let (:params) { {
              :is_slave     => false,
              :zone_contact => 'admin@example.com',
-             :zone_ns      => 'ns space tld',
+             :zone_ns      => ['ns space tld'],
              :zone_serial  => '123456',
              :zone_ttl     => '60'
            } }
 
            it 'should fail' do
              expect { should contain_concat("#{confdir}/zones/domain.tld.conf")
-             }.to raise_error(Puppet::Error, /Wrong ns value for domain\.tld/)
+             }.to raise_error(Puppet::Error, /Failed to parse template bind\/zone-header.erb/)
+             #}.to raise_error(Puppet::Error, /Wrong ns value for 'ns space tld'/)
            end
          end
 
@@ -131,7 +132,7 @@ describe 'bind::zone' do
            let (:params) { {
              :is_slave     => false,
              :zone_contact => 'admin@example.com',
-             :zone_ns      => 'ns.tld',
+             :zone_ns      => ['ns.tld'],
              :zone_serial  => 'deadbeef',
              :zone_ttl     => '60'
            } }
@@ -146,7 +147,7 @@ describe 'bind::zone' do
            let (:params) { {
              :is_slave     => false,
              :zone_contact => 'admin.example.com',
-             :zone_ns      => 'ns.tld',
+             :zone_ns      => ['ns.tld'],
              :zone_serial  => '123456',
              :zone_ttl     => 'abc'
            } }
@@ -184,7 +185,7 @@ describe 'bind::zone' do
            let (:params) { {
              :is_slave     => false,
              :zone_contact => 'admin@example.com',
-             :zone_ns      => 'ns.tld',
+             :zone_ns      => ['ns.tld', 'ns2.tld'],
              :zone_serial  => '123456',
              :zone_ttl     => '60',
              :zone_notify  => ['1.1.1.1', '2.2.2.2']
@@ -208,7 +209,7 @@ describe 'bind::zone' do
            it { should contain_concat__fragment('00.bind.domain.tld').with({
              :ensure  => 'present',
              :target  => "#{confdir}/pri/domain.tld.conf",
-             :content => "; File managed by puppet\n$TTL 60\n@ IN SOA domain.tld. admin@example.com. (\n      123456  ; serial\n      3h ; refresh\n      1h   ; retry\n      1w; expiracy\n      60 )   ; TTL\n      IN NS ns.tld.\n"
+             :content => "; File managed by puppet\n$TTL 60\n@ IN SOA ns.tld. admin@example.com. (\n      123456  ; serial\n      3h ; refresh\n      1h   ; retry\n      1w; expiracy\n      60 )   ; TTL\n      IN NS ns.tld.\n      IN NS ns2.tld.\n"
            }) }
            it { should contain_file("#{confdir}/pri/domain.tld.conf.d").with({
              :ensure => 'absent'
