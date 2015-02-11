@@ -18,12 +18,12 @@ class bind::base inherits bind::params {
     line    => "include \"${bind::params::config_base_dir}/${bind::params::named_local_name}\";",
     path    => "${bind::params::config_base_dir}/${bind::params::named_conf_name}",
     require => Package['bind9'],
-    notify  => Exec['reload bind9']
+    notify  => Exec['reload bind9'],
   }
 
   package {$bind::params::package_name:
     ensure => present,
-    alias  => 'bind9'
+    alias  => 'bind9',
   }
 
   service { 'bind9':
@@ -33,7 +33,7 @@ class bind::base inherits bind::params {
     require   => Package['bind9'],
     restart   => $bind::params::service_restart,
     hasstatus => $bind::params::service_has_status,
-    pattern   => $bind::params::service_pattern
+    pattern   => $bind::params::service_pattern,
   }
 
   exec {'reload bind9':
