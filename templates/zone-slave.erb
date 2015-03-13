@@ -1,11 +1,7 @@
 # File managed by puppet
 zone <%= @name %> IN {
   type slave;
-  <% if @zone_masters.is_a?(Array) -%>
-  masters { <%= @zone_masters.join('; ') -%>; };
-  <% else -%>
-  masters { <%= @zone_masters %>; };
-  <% end -%>
+  masters { <%= Array(@zone_masters).join('; ') -%>; };
   allow-query { any; };
   <% if @transfer_source and @transfer_source != '' -%>
   transfer-source <%= @transfer_source %>;
