@@ -7,7 +7,7 @@ zone <%= @name %> IN {
   masters { <%= @zone_masters %>; };
   <% end -%>
   allow-query { any; };
-  <% if @transfer_source != '' -%>
+  <% if @transfer_source and @transfer_source != '' -%>
   transfer-source <%= @transfer_source %>;
   <% end -%>
 };
