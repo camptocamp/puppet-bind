@@ -177,7 +177,7 @@ describe 'bind::zone' do
            it { should contain_concat__fragment('bind.zones.domain.tld').with({
              :ensure  => 'present',
              :target  => "#{confdir}/zones/domain.tld.conf",
-             :content => "# File managed by puppet\nzone domain.tld IN {\n  type slave;\n    masters { 1.2.3.4; };\n    allow-query { any; };\n    transfer-source 2.3.4.5;\n  };\n"
+             :content => "# File managed by puppet\nzone domain.tld IN {\n  type slave;\n  masters { 1.2.3.4; };\n  allow-query { any; };\n    transfer-source 2.3.4.5;\n  };\n"
            }) }
          end
 
@@ -199,7 +199,7 @@ describe 'bind::zone' do
            it { should contain_concat__fragment('bind.zones.domain.tld').with({
              :ensure  => 'present',
              :target  => "#{confdir}/zones/domain.tld.conf",
-             :content => "# File managed by puppet\nzone \"domain.tld\" IN {\n  type master;\n  file \"#{confdir}/pri/domain.tld.conf\";\n  allow-transfer { none; };\n  allow-query { any; };\n  notify yes;\n    also-notify { 1.1.1.1; 2.2.2.2; };\n  };\n"
+             :content => "# File managed by puppet\nzone \"domain.tld\" IN {\n  type master;\n  file \"#{confdir}/pri/domain.tld.conf\";\n  allow-transfer { none; };\n  allow-query { any; };\n  notify yes;\n  also-notify { 1.1.1.1; 2.2.2.2; };\n};\n"
            }) }
            it { should contain_concat("#{confdir}/pri/domain.tld.conf").with({
              :owner => 'root',
