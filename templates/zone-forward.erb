@@ -1,5 +1,0 @@
-# File managed by puppet
-zone <%= @name %> IN {
-  type forward;
-  forwarders { <%= Array(@zone_forwarders).join('; ') -%>; };
-};
