@@ -1,3 +1,7 @@
+## 2015-03-24 - Release 1.0.7
+
+- Lint
+
 ## 2015-01-21 - Release 1.0.6
 
 - Corrected unit tests
