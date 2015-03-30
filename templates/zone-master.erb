@@ -12,28 +12,16 @@ zone "<%= @name %>" IN {
   file "<%= scope.lookupvar("bind::params::pri_directory") %>/<%= @name %>.conf";
 <% end -%>
 <% if @zone_xfers and not @zone_xfers.empty? -%>
-  <% if @zone_xfers.is_a?(Array) -%>
-  allow-transfer { <%= @zone_xfers.join('; ') -%>; };
-  <% else -%>
-  allow-transfer { <%= @zone_xfers %>; };
-  <% end -%>
+  allow-transfer { <%= Array(@zone_xfers).join('; ') -%>; };
 <% else -%>
   allow-transfer { none; };
 <% end -%>
 <% if @is_dynamic -%>
-  <% if @allow_update.is_a?(Array) -%>
-  allow-update { key <%= @allow_update.join('.; key ') -%>.; };
-  <% else -%>
-  allow-update { key <%= @allow_update %>.; };
-  <% end -%>
+  allow-update { key <%= Array(@allow_update).join('.; key ') -%>.; };
 <% end -%>
   allow-query { any; };
   notify yes;
 <% if @zone_notify and not @zone_notify.empty? -%>
-  <% if @zone_notify.is_a?(Array) -%>
-  also-notify { <%= @zone_notify.join('; ') -%>; };
-  <% else -%>
-  also-notify { <%= @zone_notify %>; };
-  <% end -%>
+  also-notify { <%= Array(@zone_notify).join('; ') -%>; };
 <% end -%>
 };
