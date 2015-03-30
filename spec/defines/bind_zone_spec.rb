@@ -53,7 +53,7 @@ describe 'bind::zone' do
 
         it 'should fail' do
           expect { should contain_concat("#{confdir}/zones/domain.tld.conf")
-        }.to raise_error(Puppet::Error, /Zone type 'hello' not supported\./)
+          }.to raise_error(Puppet::Error, /Zone type 'hello' not supported\./)
         end
       end
 
@@ -76,7 +76,7 @@ describe 'bind::zone' do
 
         it 'should fail' do
           expect { should contain_concat("#{confdir}/zones/domain.tld.conf")
-        }.to raise_error(Puppet::Error, /Zone 'domain\.tld' cannot be slave AND dynamic!/)
+          }.to raise_error(Puppet::Error, /Zone 'domain\.tld' cannot be slave AND dynamic!/)
         end
       end
 
