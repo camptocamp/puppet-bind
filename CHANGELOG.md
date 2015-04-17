@@ -1,3 +1,7 @@
+## 2015-04-17 - Release 1.0.9
+
+- Fetch fixtures from puppet forge
+
 ## 2015-04-03 - Release 1.0.8
 
 - Compact templating
