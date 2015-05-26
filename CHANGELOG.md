@@ -1,3 +1,36 @@
+## 2015-05-26 - Release 1.0.14
+
+add utopic & vivid nodesets
+
+## 2015-05-25 - Release 1.0.13
+
+Don't allow failure on Puppet 4
+
+## 2015-05-13 - Release 1.0.12
+
+Add puppet-lint-file_source_rights-check gem
+
+## 2015-05-12 - Release 1.0.11
+
+Don't pin beaker
+
+## 2015-04-27 - Release 1.0.10
+
+Add nodeset ubuntu-12.04-x86_64-openstack
+
+## 2015-04-17 - Release 1.0.9
+
+- Fetch fixtures from puppet forge
+
+## 2015-04-03 - Release 1.0.8
+
+- Compact templating
+- Confine rspec pinning to ruby 1.8
+
+## 2015-03-24 - Release 1.0.7
+
+- Lint
+
 ## 2015-01-21 - Release 1.0.6
 
 - Corrected unit tests
