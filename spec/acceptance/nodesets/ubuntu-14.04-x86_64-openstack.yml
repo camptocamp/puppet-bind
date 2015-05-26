@@ -3,8 +3,11 @@ HOSTS:
     default_apply_opts:
       strict_variables:
     platform: ubuntu-14.04-amd64
-    hypervisor : vagrant
-    box : puppetlabs/ubuntu-14.04-64-nocm
+    hypervisor : openstack
+    flavor: m1.small
+    image: ubuntu-1404-latest
+    user: ubuntu
 CONFIG:
   type: foss
   log_level: debug
+  openstack_network: default
