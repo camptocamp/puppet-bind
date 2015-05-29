@@ -1,3 +1,11 @@
+## 2015-05-28 - Release 1.0.16
+
+Add beaker_spec_helper to Gemfile
+
+## 2015-05-26 - Release 1.0.15
+
+Use random application order in nodeset
+
 ## 2015-05-26 - Release 1.0.14
 
 add utopic & vivid nodesets
