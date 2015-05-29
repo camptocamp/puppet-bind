@@ -36,6 +36,7 @@ define bind::zone (
   $zone_forwarders = undef,
   $zone_origin     = undef,
   $zone_notify     = undef,
+  $is_slave        = false,
 ) {
 
   include ::bind::params
@@ -44,6 +45,7 @@ define bind::zone (
   validate_re($ensure, ['present', 'absent'],
               "\$ensure must be either 'present' or 'absent', got '${ensure}'")
 
+  validate_bool($is_slave)
   validate_bool($is_dynamic)
   validate_array($allow_update)
   validate_string($transfer_source)
@@ -58,11 +60,19 @@ define bind::zone (
 
   validate_string($zone_origin)
 
-  if ($zone_type != 'master' and $is_dynamic) {
-    fail "Zone '${name}' cannot be ${zone_type} AND dynamic!"
+  # add backwards support for is_slave parameter 
+  if ($is_slave) and ($zone_type == 'master') {
+    warning('$is_slave is deprecated. You should set $zone_type = \'master\'')
+    $int_zone_type = 'slave'
+  } else {
+    $int_zone_type = $zone_type
   }
 
-  if ($transfer_source and $zone_type != 'slave') {
+  if ($int_zone_type != 'master' and $is_dynamic) {
+    fail "Zone '${name}' cannot be ${int_zone_type} AND dynamic!"
+  }
+
+  if ($transfer_source and $int_zone_type != 'slave') {
     fail "Zone '${name}': transfer_source can be set only for slave zones!"
   }
 
@@ -89,7 +99,7 @@ define bind::zone (
         require => Package['bind9'],
       }
 
-      case $zone_type {
+      case $int_zone_type {
         'master': {
           validate_re($zone_contact, '^\S+$', "Wrong contact value for ${name}!")
           validate_slength($zone_ns, 255, 3)
@@ -151,7 +161,7 @@ define bind::zone (
             content => template('bind/zone-forward.erb'),
           }
         }
-        default: { fail("Zone type '${zone_type}' not supported.") }
+        default: { fail("Zone type '${int_zone_type}' not supported.") }
       }
     }
     'absent': {
