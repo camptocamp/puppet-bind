@@ -1,3 +1,7 @@
+## 2015-06-22 - Release 1.1.0
+
+Add support for "forward zone" thanks to @vide
+
 ## 2015-05-28 - Release 1.0.16
 
 Add beaker_spec_helper to Gemfile
