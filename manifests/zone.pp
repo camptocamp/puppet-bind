@@ -130,6 +130,7 @@ define bind::zone (
           concat::fragment {"00.bind.${name}":
             ensure  => $ensure,
             target  => $conf_file,
+            order   => '01',
             content => template('bind/zone-header.erb'),
           }
         }
