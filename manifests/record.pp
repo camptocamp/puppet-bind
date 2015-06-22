@@ -61,6 +61,7 @@ define bind::record (
     ensure  => $ensure,
     target  => "${bind::params::pri_directory}/${zone}.conf",
     content => $record_content,
+    order   => '10',
     notify  => Service['bind9'],
   }
 
