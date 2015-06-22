@@ -62,7 +62,7 @@ define bind::zone (
 
   # add backwards support for is_slave parameter 
   if ($is_slave) and ($zone_type == 'master') {
-    warning('$is_slave is deprecated. You should set $zone_type = \'master\'')
+    warning('$is_slave is deprecated. You should set $zone_type = \'slave\'')
     $int_zone_type = 'slave'
   } else {
     $int_zone_type = $zone_type
