@@ -46,14 +46,14 @@ describe 'bind::zone' do
         end
       end
 
-      context 'when passing wrong type for is_slave' do
+      context 'when passing an unexpected value to zone_type' do
         let (:params) { {
-          :is_slave => 'hello'
+          :zone_type => 'hello'
         } }
 
         it 'should fail' do
           expect { should contain_concat("#{confdir}/zones/domain.tld.conf")
-          }.to raise_error(Puppet::Error, /"hello" is not a boolean\./)
+          }.to raise_error(Puppet::Error, /Zone type 'hello' not supported\./)
         end
       end
 
@@ -71,7 +71,7 @@ describe 'bind::zone' do
       context 'when zone is a slave with dynamic update enabled' do
         let (:params) { {
           :is_dynamic => true,
-          :is_slave   => true
+          :zone_type  => 'slave'
         } }
 
         it 'should fail' do
@@ -99,7 +99,7 @@ describe 'bind::zone' do
        context 'when master' do
          context 'when passing contact with spaces' do
            let (:params) { {
-             :is_slave     => false,
+             :zone_type    => 'master',
              :zone_contact => 'it has spaces',
              :zone_ns      => ['ns.tld'],
              :zone_serial  => '123456',
@@ -114,7 +114,7 @@ describe 'bind::zone' do
 
          context 'when passing ns with spaces' do
            let (:params) { {
-             :is_slave     => false,
+             :zone_type    => 'master',
              :zone_contact => 'admin@example.com',
              :zone_ns      => ['ns space tld'],
              :zone_serial  => '123456',
@@ -130,7 +130,7 @@ describe 'bind::zone' do
 
          context 'when passing wrong serial' do
            let (:params) { {
-             :is_slave     => false,
+             :zone_type    => 'master',
              :zone_contact => 'admin@example.com',
              :zone_ns      => ['ns.tld'],
              :zone_serial  => 'deadbeef',
@@ -145,7 +145,7 @@ describe 'bind::zone' do
 
          context 'when passing wrong ttl' do
            let (:params) { {
-             :is_slave     => false,
+             :zone_type    => 'master',
              :zone_contact => 'admin.example.com',
              :zone_ns      => ['ns.tld'],
              :zone_serial  => '123456',
@@ -164,7 +164,7 @@ describe 'bind::zone' do
        context 'when present' do
          context 'when slave' do
            let (:params) { {
-             :is_slave     => true,
+             :zone_type    => 'slave',
              :zone_masters => '1.2.3.4',
              :transfer_source => '2.3.4.5',
            } }
@@ -181,9 +181,27 @@ describe 'bind::zone' do
            }) }
          end
 
+         context 'when forward' do
+           let (:params) { {
+             :zone_type    => 'forward',
+             :zone_forwarders => '1.2.3.4',
+           } }
+
+           it { should contain_concat("#{confdir}/zones/domain.tld.conf").with({
+             :owner => 'root',
+             :group => 'root',
+             :mode  => '0644'
+           }) }
+           it { should contain_concat__fragment('bind.zones.domain.tld').with({
+             :ensure  => 'present',
+             :target  => "#{confdir}/zones/domain.tld.conf",
+             :content => "# File managed by puppet\nzone domain.tld IN {\n  type forward;\n  forwarders { 1.2.3.4; };\n};\n"
+           }) }
+         end
+
          context 'when master' do
            let (:params) { {
-             :is_slave     => false,
+             :zone_type    => 'master',
              :zone_contact => 'admin@example.com',
              :zone_ns      => ['ns.tld', 'ns2.tld'],
              :zone_serial  => '123456',
