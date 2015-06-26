@@ -1,3 +1,7 @@
+## 2015-06-26 - Release 1.1.1
+
+Fix strict_variables activation with rspec-puppet 2.2
+
 ## 2015-06-22 - Release 1.1.0
 
 Add support for "forward zone" thanks to @vide
