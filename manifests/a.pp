@@ -16,6 +16,7 @@ define bind::a(
   $ensure           = present,
   $zone_arpa        = undef,
   $ptr              = true,
+  $content          = undef,
   $content_template = undef,
 ) {
 
@@ -32,11 +33,16 @@ define bind::a(
     fail 'You need zone_arpa if you want the PTR!'
   }
 
+  if ($content and $content_template) {
+    fail '$content and $content_template are mutually exclusive'
+  }
+
   bind::record {$name:
     ensure           => $ensure,
     zone             => $zone,
     hash_data        => $hash_data,
     record_type      => 'A',
+    content          => $content,
     content_template => $content_template,
   }
 
@@ -47,6 +53,7 @@ define bind::a(
       record_type      => 'PTR',
       ptr_zone         => $zone,
       hash_data        => $hash_data,
+      content          => $content,
       content_template => $content_template,
     }
   }
