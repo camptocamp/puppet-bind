@@ -29,7 +29,8 @@ define bind::record (
   $hash_data,
   $record_type,
   $ensure           = present,
-  $content_template = 'bind/default-record.erb',
+  $content          = undef,
+  $content_template = undef,
   $ptr_zone         = undef,
 ) {
 
@@ -40,13 +41,26 @@ define bind::record (
   validate_string($zone)
   validate_string($record_type)
   validate_string($ptr_zone)
-  validate_string($content_template)
   validate_hash($hash_data)
+
+  if ($content_template and $content != template('bind/default-record.erb')) {
+    fail '$content and $content_template are mutually exclusive'
+  }
+
+  if($content_template){
+    warning '$content_template is deprecated. Please use $content parameter.'
+    validate_string($content_template)
+    $record_content = template(content_template)
+  }elsif($content){
+    $record_content = $content
+  }else{
+    $record_content = template('bind/default-record.erb')
+  }
 
   concat::fragment {"${zone}.${record_type}.${name}":
     ensure  => $ensure,
     target  => "${bind::params::pri_directory}/${zone}.conf",
-    content => template($content_template),
+    content => $record_content,
     notify  => Service['bind9'],
   }
 
