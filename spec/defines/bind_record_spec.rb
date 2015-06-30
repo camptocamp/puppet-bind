@@ -59,18 +59,6 @@ describe 'bind::record' do
         end
       end
 
-      context 'when hash_data is not specified' do
-        let (:params) { {
-          :zone        => 'foo.example.com',
-          :record_type => 'CNAME'
-        } }
-
-        it 'should fail' do
-          expect { should contain_concat__fragment('')
-          }.to raise_error(Puppet::Error, /Must pass hash_data to Bind::Record/)
-        end
-      end
-
       context 'when passing wrong type for hash_data' do
         let (:params) { {
           :zone        => 'foo.example.com',
@@ -80,7 +68,7 @@ describe 'bind::record' do
 
         it 'should fail' do
           expect { should contain_concat__fragment('')
-          }.to raise_error(Puppet::Error, /"bar" is not a Hash\./)
+          }.to raise_error(Puppet::Error, /undefined method/) # method `sort' for "bar":String with ruby>1.9.3, method `fetch' for nil:NilClass on ruby 1.8.7
         end
       end
 
@@ -271,7 +259,19 @@ describe 'bind::record' do
         }
       end
 
-      context 'when passing data with A' do
+      context 'when passing zone without hash_data and with type A' do
+        let (:title) { 'A entry' }
+        let (:params) { {
+          :zone       => 'foo.example.com',
+          :record_type => 'A',
+        } }
+
+        it {
+          should_not contain_concat__fragment('foo.example.com.A.A entry')
+        }
+      end
+
+      context 'when passing data with hash and type A' do
         let (:title) { 'A entry' }
         let (:params) { {
           :zone       => 'foo.example.com',

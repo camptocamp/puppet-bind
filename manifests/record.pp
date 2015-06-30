@@ -26,7 +26,7 @@
 #
 define bind::record (
   $zone,
-  $hash_data,
+  $hash_data        = {},
   $record_type,
   $ensure           = present,
   $content          = template('bind/default-record.erb'),
@@ -48,7 +48,8 @@ define bind::record (
   }
 
   if($content_template){
-    warning '$content_template is deprecated. Please use content parameter.'
+    warning '$content_template is deprecated. Please use $content parameter.'
+    validate_string($content_template)
     $record_content = template(content_template)
   }else{
     $record_content = $content
