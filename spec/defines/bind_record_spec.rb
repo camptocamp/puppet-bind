@@ -271,7 +271,7 @@ describe 'bind::record' do
         }
       end
 
-      context 'when passing data with A' do
+      context 'when passing data with hash and type A' do
         let (:title) { 'A entry' }
         let (:params) { {
           :zone       => 'foo.example.com',
