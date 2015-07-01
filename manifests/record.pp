@@ -43,7 +43,7 @@ define bind::record (
   validate_string($ptr_zone)
   validate_hash($hash_data)
 
-  if ($content_template and $content != template('bind/default-record.erb')) {
+  if ($content_template and $content) {
     fail '$content and $content_template are mutually exclusive'
   }
 
