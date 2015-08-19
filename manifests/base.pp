@@ -21,9 +21,9 @@ class bind::base inherits bind::params {
     notify  => Exec['reload bind9'],
   }
 
-  package {$bind::params::package_name:
+  package { 'bind9':
     ensure => present,
-    alias  => 'bind9',
+    name   => $bind::params::package_name,
   }
 
   service { 'bind9':
