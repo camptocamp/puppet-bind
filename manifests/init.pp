@@ -43,6 +43,24 @@
 #   }
 # }
 #
-class bind {
+class bind ($a_records  = {},    # Hash of A records
+            $generates  = {},    # Hash of $GENERATE directives
+            $mx_records = {},    # Hash of MX records
+            $records    = {},    # Hash of generic records
+            $zones      = {},    # Hash of zones
+            $keys       = {} ) { # Hash of keys for dynamic zones
     include ::bind::base
+
+    validate_hash($a_records)
+    create_resources(bind::a,$a_records)
+    validate_hash($generates)
+    create_resources(bind::generate,$generates)
+    validate_hash($mx_records)
+    create_resources(bind::mx,$mx_records)
+    validate_hash($records)
+    create_resources(bind::record,$records)
+    validate_hash($zones)
+    create_resources(bind::zone,$zones)
+    validate_hash($keys)
+    create_resources(bind::key,$keys)
 }
