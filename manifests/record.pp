@@ -50,7 +50,7 @@ define bind::record (
   if($content_template){
     warning '$content_template is deprecated. Please use $content parameter.'
     validate_string($content_template)
-    $record_content = template(content_template)
+    $record_content = template($content_template)
   }elsif($content){
     $record_content = $content
   }else{
