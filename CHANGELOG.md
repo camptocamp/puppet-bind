@@ -1,3 +1,9 @@
+## 2015-09-16 - Release 1.1.4
+
+- fix default record order
+- add missing parameters to README (GH #55)
+- fix missing dollar in variable (GH #57)
+
 ## 2015-08-21 - Release 1.1.3
 
 Use docker for acceptance tests
