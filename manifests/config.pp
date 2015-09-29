@@ -1,9 +1,3 @@
-# = Class: bind::base
-#
-# Declares some basic resources.
-# You should NOT include this class as is, as it won't work at all!
-# Please refer to Class['bind'].
-#
 class bind::config {
   include ::bind::params
 
