@@ -40,6 +40,7 @@ class bind::base inherits bind::params {
     command     => $bind::params::service_restart,
     onlyif      => "named-checkconf -jz ${bind::params::config_base_dir}/${bind::params::named_conf_name}",
     refreshonly => true,
+    path        => $::path,
   }
 
   file {$bind::params::zones_directory:

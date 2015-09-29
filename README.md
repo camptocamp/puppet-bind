@@ -7,21 +7,6 @@
 
 This module is provided by [Camptocamp](http://www.camptocamp.com/)
 
-## Exec paths
-
-In order to not have any path problem, you should add the following line in
-some globally included .pp file:
-
-    Exec {
-      path => '/some/relevant/path:/some/other:...',
-    }
-
-For example:
-
-    Exec {
-      path => '/bin:/sbin:/usr/sbin:/usr/bin',
-    }
-
 
 ## Classes
 
