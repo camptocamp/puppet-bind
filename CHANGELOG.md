@@ -1,3 +1,9 @@
+## 2015-09-29 - Release 1.2.0
+
+- Add acceptance tests
+- Refactor module to use install/config/service
+- Fix ordering of service on RedHat systems
+
 ## 2015-09-29 - Release 1.1.5
 
 - pass $::path to exec
