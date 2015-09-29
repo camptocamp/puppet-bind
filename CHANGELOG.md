@@ -1,3 +1,7 @@
+## 2015-09-29 - Release 1.1.5
+
+- pass $::path to exec
+
 ## 2015-09-16 - Release 1.1.4
 
 - fix default record order
