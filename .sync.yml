@@ -1,3 +1,5 @@
 ---
 .travis.yml:
+  acceptance:
+    - '*'
   forge_password: "HLOnMqlB03FRSusdbWf/afjyc0jbHgoVZ/HF4x8y9H7g8utuBQJxjsAAxdrAme5JOuN6i3+J1A8IrpcRIwicBDk/yav4IrT65fCyzfBz7p6Kx2doT4a3WwiMXzqgcDe8Z8l7hu531HnXzxXEjCKCoEFiUBWI+4ULXQk3ATMrm/U="
