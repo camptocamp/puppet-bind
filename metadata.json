@@ -18,34 +18,11 @@
       ]
     },
     {
-      "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "5",
-        "6",
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "OracleLinux",
-      "operatingsystemrelease": [
-        "5",
-        "6",
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "5",
-        "6",
-        "7"
-      ]
-    },
-    {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
@@ -54,16 +31,6 @@
         "12.04",
         "14.04"
       ]
-    }
-  ],
-  "requirements": [
-    {
-      "name": "pe",
-      "version_requirement": ">= 3.2.0 < 3.4.0"
-    },
-    {
-      "name": "puppet",
-      "version_requirement": "3.x"
     }
   ],
   "dependencies": [
