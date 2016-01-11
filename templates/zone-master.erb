@@ -1,6 +1,6 @@
 <%-
-if @is_dynamic and @allow_update.empty?
-  raise(Puppet::ParseError, "allow_update is empty for dynamic zone '#{name}'")
+if @is_dynamic and (@allow_update.empty? and @allow_update_cidr.empty?)
+  raise(Puppet::ParseError, "Both allow_update and allow_update_cidr are empty for dynamic zone '#{name}'")
 end
 -%>
 # File managed by puppet
@@ -17,7 +17,8 @@ zone "<%= @name %>" IN {
   allow-transfer { none; };
 <% end -%>
 <% if @is_dynamic -%>
-  allow-update { key <%= Array(@allow_update).join('.; key ') -%>.; };
+  allow-update { <% if ![nil, '', :undef].include?(@allow_update) -%>key <%= Array(@allow_update).join('.; key ') -%>.;<% end
+    -%><% if ![nil, '', :undef].include?(@allow_update_cidr) -%> <%= Array(@allow_update_cidr).join('; ') -%>;<% end -%> };
 <% end -%>
   allow-query { any; };
   notify yes;
