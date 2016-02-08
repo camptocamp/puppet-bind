@@ -210,6 +210,28 @@ Key content.
 ##### `$algorithm = hmac-md5`
 Key algorithm.
 
+## Simple Example
+
+    bind::zone {'example.com':
+      ensure       => 'present',
+      zone_contact => 'contact.example.com',
+      zone_ns      => ['ns0.example.com'],
+      zone_serial  => '2012112901',
+      zone_ttl     => '604800',
+      zone_origin  => 'example.com',
+    }
+    
+    bind::a { 'example.com':
+      ensure    => 'present',
+      zone      => 'example.com',
+      ptr       => false,
+      hash_data => {
+        'host1' => { owner => '192.168.0.1', },
+        'host2' => { owner => '192.168.0.2', },
+      },
+    }
+
+
 ## Contributing
 
 Please report bugs and feature request using [GitHub issue
