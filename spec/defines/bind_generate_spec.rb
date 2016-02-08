@@ -51,7 +51,7 @@ describe 'bind::generate' do
 
         it 'should fail' do
           expect { should contain_concat__fragment('test.tld')
-          }.to raise_error(Puppet::Error, /Must pass zone to Bind::Generate/)
+          }.to raise_error(StandardError, /zone/)
         end
       end
 
@@ -80,7 +80,7 @@ describe 'bind::generate' do
 
         it 'should fail' do
           expect { should contain_concat__fragment('test.tld')
-          }.to raise_error(Puppet::Error, /Must pass range to Bind::Generate/)
+          }.to raise_error(StandardError, /range/)
         end
       end
 
@@ -109,7 +109,7 @@ describe 'bind::generate' do
 
         it 'should fail' do
           expect { should contain_concat__fragment('test.tld')
-          }.to raise_error(Puppet::Error, /Must pass record_type to Bind::Generate/)
+          }.to raise_error(StandardError, /record_type/)
         end
       end
 
@@ -138,7 +138,7 @@ describe 'bind::generate' do
 
         it 'should fail' do
           expect { should contain_concat__fragment('test.tld')
-          }.to raise_error(Puppet::Error, /Must pass lhs to Bind::Generate/)
+          }.to raise_error(StandardError, /lhs/)
         end
       end
 
@@ -167,7 +167,7 @@ describe 'bind::generate' do
 
         it 'should fail' do
           expect { should contain_concat__fragment('test.tld')
-          }.to raise_error(Puppet::Error, /Must pass rhs to Bind::Generate/)
+          }.to raise_error(StandardError, /rhs/)
         end
       end
 

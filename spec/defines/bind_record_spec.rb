@@ -42,7 +42,7 @@ describe 'bind::record' do
 
         it 'should fail' do
           expect { should contain_concat__fragment('')
-          }.to raise_error(Puppet::Error, /Must pass zone to Bind::Record/)
+          }.to raise_error(StandardError, /zone/)
         end
       end
 
@@ -67,7 +67,7 @@ describe 'bind::record' do
 
         it 'should fail' do
           expect { should contain_concat__fragment('')
-          }.to raise_error(Puppet::Error, /Must pass hash_data to Bind::Record/)
+          }.to raise_error(StandardError, /hash_data/)
         end
       end
 
@@ -92,7 +92,7 @@ describe 'bind::record' do
 
         it 'should fail' do
           expect { should contain_concat__fragment('')
-          }.to raise_error(Puppet::Error, /Must pass record_type to Bind::Record/)
+          }.to raise_error(StandardError, /record_type/)
         end
       end
 
@@ -201,7 +201,7 @@ describe 'bind::record' do
         it 'should fail' do
           expect {
             should contain_concat__fragment('')
-          }.to raise_error(Puppet::Error, /nil does not match/)
+          }.to raise_error(Puppet::Error, /Failed to parse template bind\/default-record.erb/)
         end
       end
 
