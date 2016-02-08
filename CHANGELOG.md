@@ -1,3 +1,8 @@
+## 2016-02-08 - Release 1.2.1
+
+- Corrected unit tests for puppet 4.0
+- Changed resource names for generate
+
 ## 2015-09-29 - Release 1.2.0
 
 - Add acceptance tests
