@@ -227,7 +227,7 @@ describe 'bind::generate' do
           :lhs         => 'dhcp-$',
           :rhs         => '10.10.0.$',
         } }
-        it { should contain_concat__fragment('test.tld.A.2-100.generate').with({
+        it { should contain_concat__fragment('a-record.generate').with({
           :ensure  => 'present',
           :target  => "#{confdir}/pri/test.tld.conf",
           :content => "\$GENERATE 2-100 dhcp-\$   A 10.10.0.\$ ; a-record\n"
@@ -243,7 +243,7 @@ describe 'bind::generate' do
           :lhs         => 'dhcp-$',
           :rhs         => '10.10.0.$',
         } }
-        it { should contain_concat__fragment('test.tld.CNAME.2-100.generate').with({
+        it { should contain_concat__fragment('a-record.generate').with({
           :ensure  => 'present',
           :target  => "#{confdir}/pri/test.tld.conf",
           :content => "\$GENERATE 2-100 dhcp-\$   CNAME 10.10.0.\$ ; a-record\n"
@@ -259,7 +259,7 @@ describe 'bind::generate' do
           :lhs         => '$.0.10.10.IN-ADDR.ARPA.',
           :rhs         => 'dhcp-$.test.tld.',
         } }
-        it { should contain_concat__fragment('0.10.10.IN-ADDR.ARPA.PTR.2-100.generate').with({
+        it { should contain_concat__fragment('ptr-record.generate').with({
           :ensure  => 'present',
           :target  => "#{confdir}/pri/0.10.10.IN-ADDR.ARPA.conf",
           :content => "$GENERATE 2-100 $.0.10.10.IN-ADDR.ARPA.   PTR dhcp-$.test.tld. ; ptr-record\n"
