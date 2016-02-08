@@ -36,7 +36,7 @@ describe 'bind::a' do
 
         it 'should fail' do
           expect { should contain_bind__record('foo.example.com')
-          }.to raise_error(Puppet::Error, /Must pass zone to Bind::A/)
+          }.to raise_error(StandardError, /zone/)
         end
       end
 
@@ -59,7 +59,7 @@ describe 'bind::a' do
 
         it 'should fail' do
           expect { should contain_bind__record('foo.example.com')
-          }.to raise_error(Puppet::Error, /Must pass hash_data to Bind::A/)
+          }.to raise_error(StandardError, /hash_data/)
         end
       end
 

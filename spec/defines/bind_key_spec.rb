@@ -29,7 +29,7 @@ describe 'bind::key' do
       context 'when missing secret value' do
         it 'should fail' do
           expect { should contain_concat("#{confdir}/keys/update.domain.tld.conf")
-          }.to raise_error(Puppet::Error, /Must pass secret to Bind::Key.*/)
+          }.to raise_error(StandardError, /secret/)
         end
       end
 

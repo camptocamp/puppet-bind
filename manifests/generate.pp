@@ -93,7 +93,7 @@ define bind::generate(
   validate_string($record_class)
   validate_string($ttl)
 
-  ::concat::fragment {"${zone}.${record_type}.${range}.generate":
+  ::concat::fragment {"${name}.generate":
     ensure  => $ensure,
     target  => "${bind::params::pri_directory}/${zone}.conf",
     content => template('bind/generate.erb'),
