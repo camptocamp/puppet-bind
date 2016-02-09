@@ -1,3 +1,7 @@
+## 2016-02-09 - Release 1.2.2
+
+- Corrected PTR zone content
+
 ## 2016-02-08 - Release 1.2.1
 
 - Corrected unit tests for puppet 4.0
