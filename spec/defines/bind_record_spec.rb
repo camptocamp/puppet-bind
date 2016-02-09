@@ -222,8 +222,6 @@ describe 'bind::record' do
         it {
           should contain_concat__fragment('foo.example.com.PTR.PTR entry').with_content(
             /4\.3\.2\.1\.in-addr\.arpa\.  IN PTR host1\.foo\./
-          ).with_content(
-            /host1  IN PTR 1\.2\.3\.4/
           )
         }
       end
@@ -246,8 +244,6 @@ describe 'bind::record' do
         it {
           should contain_concat__fragment('foo.example.com.PTR.PTR entry').with_content(
             /4\.3\.2\.1\.in-addr\.arpa\. 60 IN PTR host1\.foo\./
-          ).with_content(
-            /host1 60 IN PTR 1\.2\.3\.4/
           )
         }
       end

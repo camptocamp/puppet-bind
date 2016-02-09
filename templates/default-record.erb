@@ -7,7 +7,6 @@
         scope.function_validate_re([@ptr_zone, '^\S+$'])
 -%>
 <%= require 'ipaddr'; IPAddr.new(datas.fetch('owner')).reverse %>. <%= datas.fetch('ttl', '') %> IN PTR <%= host %>.<%= @ptr_zone %>.
-<%= host %> <%= datas.fetch('ttl', '') %> <%= datas.fetch('record_class', 'IN') %> <%= @record_type %> <%= datas.fetch('owner') %>
 <%- 
       end
     end
