@@ -19,7 +19,7 @@ class bind::params {
         $zones_directory      = '/etc/bind/zones'
         $pri_directory        = '/etc/bind/pri'
         $keys_directory       = '/etc/bind/keys'
-        $dynamic_directory    = '/etc/bind/dynamic'
+        $dynamic_directory    = '/var/lib/bind/dynamic'
     }
     elsif $::osfamily == 'RedHat' {
         $package_name         = 'bind'
