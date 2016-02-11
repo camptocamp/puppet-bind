@@ -19,6 +19,7 @@ This class must be declared before using the definitions in this module.
 ## Definitions
 
 * bind::a
+* bind::acl
 * bind::generate
 * bind::mx
 * bind::record
@@ -52,6 +53,23 @@ Needed if `$ptr` is true. For reverse DNS you will have to setup your reverse DN
 Zone content;
 ##### `$content_template = undef`
 Zone content template.
+
+### bind::acl
+
+Creates an ACL bloc
+
+    bind::acl {'my acl':
+      ensure => present,
+      acls   => [
+        '!192.168.1.0/24',
+        'any'
+      ],
+    }
+
+#### `$ensure = present`
+Ensure the ACL is present (or absent if set to "absent")
+#### `acls = []`
+List of ACL directive
 
 ### bind::generate
 

@@ -20,6 +20,7 @@ class bind::params {
         $pri_directory        = '/etc/bind/pri'
         $keys_directory       = '/etc/bind/keys'
         $dynamic_directory    = '/etc/bind/dynamic'
+        $acls_directory       = '/etc/bind/acls'
         if $bind::chroot {
           fail('Chroot mode is not yet implemented for Debian in this module.')
         }
@@ -50,6 +51,7 @@ class bind::params {
         $pri_directory        = '/etc/named/pri'
         $keys_directory       = '/etc/named/keys'
         $dynamic_directory    = '/etc/named/dynamic'
+        $acls_directory       = '/etc/named/acls'
     }
     else {
         fail "Unknown ${::operatingsystem}"
