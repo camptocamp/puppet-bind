@@ -28,7 +28,7 @@ class bind::params {
         $bind_group           = 'named'
         $service_has_status   = true
         $service_pattern      = undef
-        $service_restart      = '/etc/init.d/named reload'
+        $service_restart      = '/sbin/service named reload'
         $config_base_dir      = '/etc'
         $named_conf_name      = 'named.conf'
         $named_local_name     = 'named.conf.local'
