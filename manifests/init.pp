@@ -62,5 +62,6 @@ class bind(
     refreshonly => true,
     require     => Service['bind9'],
     path        => $::path,
+    require     => Class['bind::service'],
   }
 }
