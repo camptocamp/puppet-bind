@@ -23,6 +23,7 @@ define bind::zone (
   $is_dynamic      = false,
   $allow_update    = [],
   $transfer_source = undef,
+  $view            = 'default',
   $zone_type       = 'master',
   $zone_ttl        = undef,
   $zone_contact    = undef,
@@ -49,6 +50,7 @@ define bind::zone (
   validate_bool($is_dynamic)
   validate_array($allow_update)
   validate_string($transfer_source)
+  validate_string($view)
   validate_string($zone_type)
   validate_string($zone_ttl)
   validate_string($zone_contact)
@@ -59,6 +61,8 @@ define bind::zone (
   validate_array($zone_ns)
 
   validate_string($zone_origin)
+
+  $_view = regsubst($view, '\s', '-', 'G')
 
   # add backwards support for is_slave parameter 
   if ($is_slave) and ($zone_type == 'master') {
@@ -76,9 +80,9 @@ define bind::zone (
     fail "Zone '${name}': transfer_source can be set only for slave zones!"
   }
 
-  concat::fragment {"named.local.zone.${name}":
+  concat::fragment {"${_view}.zone.${name}":
     ensure  => $ensure,
-    target  => "${bind::params::config_base_dir}/${bind::params::named_local_name}",
+    target  => "${bind::params::views_directory}/${_view}.zones",
     content => "include \"${bind::params::zones_directory}/${name}.conf\";\n",
     notify  => Exec['reload bind9'],
     require => Package['bind9'],

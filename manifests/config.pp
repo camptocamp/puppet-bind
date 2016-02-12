@@ -69,11 +69,23 @@ class bind::config {
     recurse => true,
   }
 
+  file {$bind::params::views_directory:
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    purge   => true,
+    force   => true,
+    recurse => true,
+  }
+
   file {$bind::params::dynamic_directory:
     ensure => directory,
     owner  => root,
     group  => $bind::params::bind_group,
     mode   => '0775',
   }
+
+  ::bind::view {'default': }
 
 }

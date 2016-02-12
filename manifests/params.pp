@@ -21,6 +21,7 @@ class bind::params {
         $keys_directory       = '/etc/bind/keys'
         $dynamic_directory    = '/etc/bind/dynamic'
         $acls_directory       = '/etc/bind/acls'
+        $views_directory      = '/etc/bind/views'
         if $bind::chroot {
           fail('Chroot mode is not yet implemented for Debian in this module.')
         }
@@ -52,6 +53,7 @@ class bind::params {
         $keys_directory       = '/etc/named/keys'
         $dynamic_directory    = '/etc/named/dynamic'
         $acls_directory       = '/etc/named/acls'
+        $views_directory      = '/etc/named/views'
     }
     else {
         fail "Unknown ${::operatingsystem}"
