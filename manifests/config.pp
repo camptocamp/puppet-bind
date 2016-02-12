@@ -3,7 +3,7 @@ class bind::config {
 
   concat {"${bind::params::config_base_dir}/${bind::params::named_local_name}":
     owner => root,
-    group => root,
+    group => $bind::params::bind_group,
     mode  => '0644',
     force => true,
   }
