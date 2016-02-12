@@ -8,6 +8,10 @@
 # This modules is valid for Bind 9.7.1 (squeeze version).
 # For 9.7.2, it will be really limited (no view nor ACL support).
 #
+# = Parameters
+#
+# $chroot:: If the chroot version of bind should be used. Default: false
+#
 #
 # Example:
 #
@@ -43,7 +47,9 @@
 #   }
 # }
 #
-class bind {
+class bind(
+  $chroot = false,
+) {
   anchor { 'bind::begin': } ->
   class { '::bind::install': } ->
   class { '::bind::config': } ~>
@@ -54,6 +60,7 @@ class bind {
     command     => $bind::params::service_restart,
     onlyif      => "named-checkconf -jz ${bind::params::config_base_dir}/${bind::params::named_conf_name}",
     refreshonly => true,
+    require     => Service['bind9'],
     path        => $::path,
   }
 }
