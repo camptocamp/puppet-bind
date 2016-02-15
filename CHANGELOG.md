@@ -1,3 +1,7 @@
+## 2016-02-15 - Release 1.3.1
+
+- Added missing fragment
+
 ## 2016-02-15 - Release 1.3.0
 
 - Added ACLs support
