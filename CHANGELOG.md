@@ -1,3 +1,9 @@
+## 2016-02-15 - Release 1.3.0
+
+- Added ACLs support
+- Added Views support
+- Some minor corrections to tests
+
 ## 2016-02-09 - Release 1.2.2
 
 - Corrected PTR zone content
