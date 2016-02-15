@@ -1,0 +1,20 @@
+view "<%=@_name%>" {
+<%-
+  @options.sort.each do |key, value|
+    if value.is_a?(Array)
+-%>
+  <%=key%> {
+<%-
+  value.each do |i|
+-%>
+    <%=i%>;
+  };
+<%-
+  end
+    else
+-%>
+  <%=key%> <%=value%>;
+<% end -%>
+<% end -%>
+  include "<%=scope.lookupvar('bind::params::views_directory')%>/<%=@_name%>.zones";
+}
