@@ -2,6 +2,8 @@ require 'spec_helper_acceptance'
 
 describe 'bind' do
 
+  let(:serial) { '2016021209' }
+
   context 'with defaults' do
     it 'should apply without error' do
       pp = <<-EOS
@@ -18,7 +20,6 @@ describe 'bind' do
       apply_manifest(pp, :catch_changes => true)
     end
 
-
     it 'should create a zone and load it' do
       pp = <<-EOS
         class {'::bind': }
@@ -29,7 +30,7 @@ describe 'bind' do
             'ns0.my-zone.tld',
             'ns1.my-zone.tld',
           ],
-          zone_serial  => '201602120937',
+          zone_serial  => '#{serial}',
           zone_ttl     => '18600',
         }
         ::bind::a {'A records':
@@ -37,24 +38,31 @@ describe 'bind' do
           zone      => 'my-zone.tld',
           ptr       => false,
           hash_data => {
-            '@'   => { owner => '192.168.10.1', },
-            'ns0' => { owner => '192.168.10.252', },
-            'ns1' => { owner => '192.168.10.253', },
+            '@'    => { owner => '192.168.10.1', },
+            'test' => { owner => '192.168.10.2', },
+            'ns0'  => { owner => '192.168.10.252', },
+            'ns1'  => { owner => '192.168.10.253', },
           }
         }
       EOS
 
       apply_manifest(pp, :cat_failures => true)
       apply_manifest(pp, :catch_changes => true)
-
     end
 
-    describe port("53") {
+    describe port('53') do
       it {
         should be_listening.with('tcp')
         should be_listening.with('udp')
       }
-    }
+    end
 
+    describe command("host -4 google-public-dns-a.google.com localhost") do
+      its(:stdout) {should match /Host google-public-dns-a.google.com not found: 5\(REFUSED\)/}
+    end
+    describe command("host -4 ns0.my-zone.tld localhost") do
+      its(:stdout) {should match /ns0.my-zone.tld has address 192.168.10.252/}
+    end
   end
+
 end
