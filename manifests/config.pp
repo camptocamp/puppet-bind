@@ -80,13 +80,18 @@ class bind::config {
     mode   => '0775',
   }
 
-  ::bind::view {'default':
-    options => {
+  $opts = {
  
       'include'       => "\"${bind::params::config_base_dir}/named.conf.default-zones\"",
       'match-clients' => [ '"any"' ],
       'recursion'     => 'no',
     }
+
+  $options = deep_merge($opts, $bind::default_view)
+
+  ::bind::view {'default':
+    options => $options,
+    order   => 100,
   }
 
 }
