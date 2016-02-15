@@ -1,9 +1,9 @@
 define bind::view(
   $ensure  = 'present',
   $options = {
-    'match-clients' => [ '"any"' ],
-    'recursion'     => 'no',
-  }
+    'recursion' => 'no',
+  },
+  $order  = 10,
 ) {
 
   validate_re($ensure, ['^present$', '^absent$'])
@@ -35,7 +35,8 @@ define bind::view(
   concat::fragment {"named.local.view.${_name}":
     ensure  => $ensure,
     target  => "${bind::params::config_base_dir}/${bind::params::named_local_name}",
-    content => "include \"${bind::params::views_directory}/${_name}.view\";",
+    content => "include \"${bind::params::views_directory}/${_name}.view\";\n",
+    order   => $order,
     notify  => Exec['reload bind9'],
     require => Class['bind::install'],
   }
