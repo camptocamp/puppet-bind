@@ -46,7 +46,15 @@ describe 'bind' do
 
       apply_manifest(pp, :cat_failures => true)
       apply_manifest(pp, :catch_changes => true)
+
     end
+
+    describe port("53") {
+      it {
+        should be_listening.with('tcp')
+        should be_listening.with('udp')
+      }
+    }
 
   end
 end
