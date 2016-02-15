@@ -8,11 +8,9 @@ view "<%=@_name%>" {
   value.each do |i|
 -%>
     <%=i%>;
+<% end -%>
   };
-<%-
-  end
-    else
--%>
+<% else -%>
   <%=key%> <%=value%>;
 <% end -%>
 <% end -%>
