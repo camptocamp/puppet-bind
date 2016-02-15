@@ -19,24 +19,25 @@
 #  *$zone_notify*: IPs to use for also-notify entry
 #
 define bind::zone (
-  $ensure          = present,
-  $is_dynamic      = false,
-  $allow_update    = [],
-  $transfer_source = undef,
-  $zone_type       = 'master',
-  $zone_ttl        = undef,
-  $zone_contact    = undef,
-  $zone_serial     = undef,
-  $zone_refresh    = '3h',
-  $zone_retry      = '1h',
-  $zone_expiracy   = '1w',
-  $zone_ns         = [],
-  $zone_xfers      = undef,
-  $zone_masters    = undef,
-  $zone_forwarders = undef,
-  $zone_origin     = undef,
-  $zone_notify     = undef,
-  $is_slave        = false,
+  $ensure            = present,
+  $is_dynamic        = false,
+  $allow_update      = [],
+  $allow_update_cidr = [],
+  $transfer_source   = undef,
+  $zone_type         = 'master',
+  $zone_ttl          = undef,
+  $zone_contact      = undef,
+  $zone_serial       = undef,
+  $zone_refresh      = '3h',
+  $zone_retry        = '1h',
+  $zone_expiracy     = '1w',
+  $zone_ns           = [],
+  $zone_xfers        = undef,
+  $zone_masters      = undef,
+  $zone_forwarders   = undef,
+  $zone_origin       = undef,
+  $zone_notify       = undef,
+  $is_slave          = false,
 ) {
 
   include ::bind::params
@@ -48,6 +49,7 @@ define bind::zone (
   validate_bool($is_slave)
   validate_bool($is_dynamic)
   validate_array($allow_update)
+  validate_array($allow_update_cidr)
   validate_string($transfer_source)
   validate_string($zone_type)
   validate_string($zone_ttl)
@@ -60,7 +62,7 @@ define bind::zone (
 
   validate_string($zone_origin)
 
-  # add backwards support for is_slave parameter 
+  # add backwards support for is_slave parameter
   if ($is_slave) and ($zone_type == 'master') {
     warning('$is_slave is deprecated. You should set $zone_type = \'slave\'')
     $int_zone_type = 'slave'
