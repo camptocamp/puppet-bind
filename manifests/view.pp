@@ -32,4 +32,12 @@ define bind::view(
     owner  => 'root',
   }
 
+  concat::fragment {"named.local.view.${_name}":
+    ensure  => $ensure,
+    target  => "${bind::params::config_base_dir}/${bind::params::named_local_name}",
+    content => "include ${bind::params::views_directory}/${_name}.view",
+    notify  => Exec['reload bind9'],
+    require => Class['bind::install'],
+  }
+
 }
