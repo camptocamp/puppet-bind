@@ -50,6 +50,7 @@
 class bind(
   $chroot       = false,
   $default_view = {},
+  $config       = {},
 ) {
   anchor { 'bind::begin': } ->
   class { '::bind::install': } ->

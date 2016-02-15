@@ -15,11 +15,28 @@ class bind::config {
     owner => 'root',
   }
 
+  $config = {
+    'directory'         => '"/var/cache/bind"',
+    'dnssec-validation' => 'auto',
+    'auth-nxdomain'     => 'no',
+    'listen-on-v6'      => ['any'],
+  }
+  $conf = deep_merge($config, $bind::config)
+
   file {"${bind::params::config_base_dir}/${bind::params::named_conf_name}":
     ensure  => file,
     content => template('bind/named.conf.erb'),
     group   => 'root',
     mode    => '0644',
+    owner   => 'root',
+  }
+
+  file {"${bind::params::config_base_dir}/named.conf.options":
+    ensure  => file,
+    content => template('bind/named.conf.options.erb'),
+    group   => 'root',
+    mode    => '0644',
+    notify  => Exec['reload bind9'],
     owner   => 'root',
   }
 
