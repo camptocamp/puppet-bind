@@ -36,12 +36,6 @@ matrix:
   - rvm: default
     sudo: required
     services: docker
-    env: BEAKER_set="debian-6-x86_64-docker"
-    bundler_args:
-    script: sudo service docker restart ; sleep 10 && bundle exec rspec spec/acceptance/*_spec.rb
-  - rvm: default
-    sudo: required
-    services: docker
     env: BEAKER_set="debian-7-x86_64-docker"
     bundler_args:
     script: sudo service docker restart ; sleep 10 && bundle exec rspec spec/acceptance/*_spec.rb
