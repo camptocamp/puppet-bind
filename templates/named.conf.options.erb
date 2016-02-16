@@ -1,0 +1,17 @@
+options {
+<%-
+  @conf.sort.each do |key, value|
+    if value.is_a?(Array)
+-%>
+  <%=key%> {
+<%-
+  value.each do |i|
+-%>
+    <%=i%>;
+<% end -%>
+  };
+<% else -%>
+  <%=key%> <%=value%>;
+<%end -%>
+<%end -%>
+};

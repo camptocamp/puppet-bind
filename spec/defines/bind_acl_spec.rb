@@ -55,7 +55,7 @@ describe 'bind::acl' do
         }}
 
         it { should contain_file('good acl').with({
-          :content => "acl good-acl {\n  !192.168.10.0/24;\n  any;\n}\n",
+          :content => "acl good-acl {\n  !192.168.10.0/24;\n  any;\n};\n",
           :ensure  => 'file',
           :path    => "#{confdir}/acls/good-acl",
         }) }

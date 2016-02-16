@@ -15,18 +15,23 @@ class bind::config {
     owner => 'root',
   }
 
-  file_line {'include local':
-    ensure => present,
-    line   => "include \"${bind::params::config_base_dir}/${bind::params::named_local_name}\";",
-    path   => "${bind::params::config_base_dir}/${bind::params::named_conf_name}",
-    notify => Exec['reload bind9'],
+  $conf = deep_merge($bind::params::default_config, $bind::config)
+
+  file {"${bind::params::config_base_dir}/${bind::params::named_conf_name}":
+    ensure  => file,
+    content => template('bind/named.conf.erb'),
+    group   => 'root',
+    mode    => '0644',
+    owner   => 'root',
   }
 
-  file_line {'include acls':
-    ensure => present,
-    line   => "include \"${bind::params::config_base_dir}/acls.conf\";",
-    path   => "${bind::params::config_base_dir}/${bind::params::named_conf_name}",
-    notify => Exec['reload bind9'],
+  file {"${bind::params::config_base_dir}/named.conf.options":
+    ensure  => file,
+    content => template('bind/named.conf.options.erb'),
+    group   => 'root',
+    mode    => '0644',
+    notify  => Exec['reload bind9'],
+    owner   => 'root',
   }
 
   file {$bind::params::zones_directory:
@@ -86,6 +91,18 @@ class bind::config {
     mode   => '0775',
   }
 
-  ::bind::view {'default': }
+  $opts = {
+
+      'include'       => "\"${bind::params::config_base_dir}/${bind::params::default_zones_file}\"",
+      'match-clients' => [ '"any"' ],
+      'recursion'     => 'no',
+    }
+
+  $options = deep_merge($opts, $bind::default_view)
+
+  ::bind::view {'default':
+    options => $options,
+    order   => 100,
+  }
 
 }

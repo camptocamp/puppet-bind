@@ -8,13 +8,11 @@ view "<%=@_name%>" {
   value.each do |i|
 -%>
     <%=i%>;
+<% end -%>
   };
-<%-
-  end
-    else
--%>
+<% else -%>
   <%=key%> <%=value%>;
 <% end -%>
 <% end -%>
   include "<%=scope.lookupvar('bind::params::views_directory')%>/<%=@_name%>.zones";
-}
+};

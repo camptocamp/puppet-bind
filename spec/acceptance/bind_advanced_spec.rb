@@ -4,27 +4,30 @@ describe 'bind' do
 
   let(:serial) { '2016021209' }
 
-  context 'with defaults' do
-    it 'should apply without error' do
-      pp = <<-EOS
-        class { 'bind': }
-      EOS
+  context "With dedicated view, acl and zone" do
 
-      apply_manifest(pp, :catch_failures => true)
-    end
-    it 'should idempotently run' do
+    it "should create a view, attach a zone to it and load without error" do
       pp = <<-EOS
-        class { 'bind': }
-      EOS
-
-      apply_manifest(pp, :catch_changes => true)
-    end
-
-    it 'should create a zone and load it' do
-      pp = <<-EOS
-        class {'::bind': }
+        class {'::bind':
+          default_view => {
+            'match-clients' => ['!127.0.0.0/8', '"any"'],
+          }
+        }
+        ::bind::acl {'internal':
+          ensure => present,
+          acls   => [
+            '127.0.0.0/8',
+          ],
+        }
+        ::bind::view {'my-view':
+          options => {
+            'include'       => "\"${bind::params::config_base_dir}/${bind::params::default_zones_file}\"",
+            'match-clients' => ['"internal"'],
+          },
+        }
         ::bind::zone {'my-zone.tld':
           ensure       => present,
+          view         => 'my-view',
           zone_contact => 'contact.my-zone.tld',
           zone_ns      => [
             'ns0.my-zone.tld',
@@ -50,7 +53,6 @@ describe 'bind' do
           }
           'RedHat': {
             package {'bind-utils': }
-            package {'iproute': }
           }
         }
       EOS
@@ -59,19 +61,20 @@ describe 'bind' do
       apply_manifest(pp, :catch_changes => true)
     end
 
-    describe port('53') do
+    describe port("53") {
       it {
         should be_listening.with('tcp')
         should be_listening.with('udp')
       }
+    }
+
+    describe command("host -4 ns1.my-zone.tld localhost") do
+      its(:stdout) {should match /ns1.my-zone.tld has address 192.168.10.253/}
+    end
+    describe command("host -4 google-public-dns-b.google.com localhost") do
+      its(:stdout) {should match /google-public-dns-b.google.com has address 8.8.4.4/}
     end
 
-    describe command("host -4 google-public-dns-a.google.com localhost") do
-      its(:stdout) {should match /not found: 5\(REFUSED\)/}
-    end
-    describe command("host -4 ns0.my-zone.tld localhost") do
-      its(:stdout) {should match /ns0.my-zone.tld has address 192.168.10.252/}
-    end
+
   end
-
 end
