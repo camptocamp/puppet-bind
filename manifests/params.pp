@@ -46,12 +46,13 @@ class bind::params {
         }
         $bind_user            = 'named'
         $bind_group           = 'named'
-        $service_has_status   = true
         $service_pattern      = undef
         if versioncmp($::operatingsystemmajrelease,'7') < 0 {
           $service_restart      = "/etc/init.d/${service_name} restart"
+          $service_has_status   = false
         } else {
           $service_restart      = "/usr/bin/systemctl reload ${service_name}"
+          $service_has_status   = true
         }
         $config_base_dir      = '/etc'
         $named_conf_name      = 'named.conf'
