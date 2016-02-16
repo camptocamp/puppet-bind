@@ -37,6 +37,14 @@ describe 'bind' do
             'recursion'         => 'yes',
           },
         }
+        case $::osfamily {
+          'Debian': {
+            package {'dnsutils': }
+          }
+          'RedHat': {
+            package {'bind-utils': }
+          }
+        }
       EOS
 
       apply_manifest(pp, :catch_failures => true)

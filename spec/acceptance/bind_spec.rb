@@ -44,6 +44,14 @@ describe 'bind' do
             'ns1'  => { owner => '192.168.10.253', },
           }
         }
+        case $::osfamily {
+          'Debian': {
+            package {'dnsutils': }
+          }
+          'RedHat': {
+            package {'bind-utils': }
+          }
+        }
       EOS
 
       apply_manifest(pp, :cat_failures => true)
