@@ -21,7 +21,7 @@ describe 'bind' do
         }
         ::bind::view {'my-view':
           options => {
-            'include'       => '"/etc/bind/named.conf.default-zones"',
+            'include'       => "\"${bind::params::config_base_dir}/${bind::params::default_zones_file}\"",
             'match-clients' => ['"internal"'],
           },
         }

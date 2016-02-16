@@ -15,13 +15,7 @@ class bind::config {
     owner => 'root',
   }
 
-  $config = {
-    'directory'         => '"/var/cache/bind"',
-    'dnssec-validation' => 'auto',
-    'auth-nxdomain'     => 'no',
-    'listen-on-v6'      => ['any'],
-  }
-  $conf = deep_merge($config, $bind::config)
+  $conf = deep_merge($bind::params::default_config, $bind::config)
 
   file {"${bind::params::config_base_dir}/${bind::params::named_conf_name}":
     ensure  => file,
@@ -99,7 +93,7 @@ class bind::config {
 
   $opts = {
 
-      'include'       => "\"${bind::params::config_base_dir}/named.conf.default-zones\"",
+      'include'       => "\"${bind::params::config_base_dir}/${bind::params::default_zones_file}\"",
       'match-clients' => [ '"any"' ],
       'recursion'     => 'no',
     }
