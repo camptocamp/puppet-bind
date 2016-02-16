@@ -24,10 +24,10 @@ class bind::params {
         $views_directory      = '/etc/bind/views'
         $default_zones_file   = 'named.conf.default-zones'
         $default_config       = {
-	  'directory'         => '"/var/cache/bind"',
-	  'dnssec-validation' => 'auto',
-	  'auth-nxdomain'     => 'no',
-	  'listen-on-v6'      => ['any'],
+          'directory'         => '"/var/cache/bind"',
+          'dnssec-validation' => 'auto',
+          'auth-nxdomain'     => 'no',
+          'listen-on-v6'      => ['any'],
         }
         if $bind::chroot {
           fail('Chroot mode is not yet implemented for Debian in this module.')
@@ -65,17 +65,17 @@ class bind::params {
         $default_zones_file   = 'named.rfc1912.zones'
         $default_config       = {
           'allow-query'            => ['localhost'],
-	  'auth-nxdomain'          => 'no',
+          'auth-nxdomain'          => 'no',
           'bindkeys-file'          => '"/etc/named.iscdlv.key"',
-	  'directory'              => '"/var/named"',
+          'directory'              => '"/var/named"',
           'dnssec-enable'          => 'yes',
-	  'dnssec-validation'      => 'yes',
+          'dnssec-validation'      => 'yes',
           'dump-file'              => '"/var/named/data/cache_dump.db"',
           'managed-keys-directory' => '"/var/named/dynamic"',
           'memstatistics-file'     => '"/var/named/data/named_mem_stats.txt"',
           'pid-file'               => '"/run/named/named.pid"',
           'listen-on'              => ['127.0.0.1'],
-	  'listen-on-v6'           => ['::1'],
+          'listen-on-v6'           => ['::1'],
           'session-keyfile'        => '"/run/named/session.key"',
           'statistics-file'        => '"/var/named/data/named_stats.txt"',
         }
