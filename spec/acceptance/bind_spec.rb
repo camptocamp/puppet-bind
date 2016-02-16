@@ -50,6 +50,7 @@ describe 'bind' do
           }
           'RedHat': {
             package {'bind-utils': }
+            package {'iproute': }
           }
         }
       EOS
