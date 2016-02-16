@@ -98,7 +98,7 @@ class bind::config {
   }
 
   $opts = {
- 
+
       'include'       => "\"${bind::params::config_base_dir}/named.conf.default-zones\"",
       'match-clients' => [ '"any"' ],
       'recursion'     => 'no',
