@@ -66,7 +66,7 @@ describe 'bind' do
     end
 
     describe command("host -4 google-public-dns-a.google.com localhost") do
-      its(:stdout) {should match /Host google-public-dns-a.google.com not found: 5\(REFUSED\)/}
+      its(:stdout) {should match /not found: 5\(REFUSED\)/}
     end
     describe command("host -4 ns0.my-zone.tld localhost") do
       its(:stdout) {should match /ns0.my-zone.tld has address 192.168.10.252/}
