@@ -49,7 +49,7 @@ class bind::params {
         $service_has_status   = true
         $service_pattern      = undef
         if versioncmp($::operatingsystemmajrelease,'7') < 0 {
-          $service_restart      = "/etc/init.d/${service_name} reload"
+          $service_restart      = "/etc/init.d/${service_name} restart"
         } else {
           $service_restart      = "/usr/bin/systemctl reload ${service_name}"
         }
