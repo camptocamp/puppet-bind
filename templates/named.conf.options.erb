@@ -15,3 +15,28 @@ options {
 <%end -%>
 <%end -%>
 };
+
+logging {
+<% @logging['channels'].sort.each do |key, hash| -%>
+  channel <%=key%> {
+<% hash.sort.each do |directive, value| -%>
+<% if value.is_a?(Array) %>
+    <%=directive%> {
+<% value.each do |i| -%>
+      <%=i%>;
+<% end -%>
+    };
+<% else -%>
+    <%=directive%> <%=value%>;
+<%end -%>
+<%end -%>
+  };
+<%end -%>
+<%-
+  @logging['categories'].sort.each do |key, value|
+-%>
+  category <%=key%> {
+    <%=Array(value).join(';')%>;
+  };
+<%end -%>
+};

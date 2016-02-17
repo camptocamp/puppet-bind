@@ -51,6 +51,7 @@ class bind(
   $chroot       = false,
   $default_view = {},
   $config       = {},
+  $logging      = {},
 ) {
   anchor { 'bind::begin': } ->
   class { '::bind::install': } ->
