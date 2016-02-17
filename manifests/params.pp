@@ -4,6 +4,21 @@
 # Please refer to Class['bind'].
 
 class bind::params {
+    $default_logging = {
+      'channels'           => {
+        'simple_log'       => {
+          'file'           => '"/var/log/named/bind.log"',
+          'severity'       => 'warning',
+          'print-time'     => 'yes',
+          'print-severity' => 'yes',
+          'print-category' => 'yes',
+        },
+      },
+      'categories'         => {
+        'default'          => 'simple_log',
+      },
+    }
+
     if $::osfamily == 'Debian' {
         $package_name         = 'bind9'
         $service_name         = 'bind9'

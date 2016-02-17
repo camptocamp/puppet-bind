@@ -16,6 +16,7 @@ class bind::config {
   }
 
   $conf = deep_merge($bind::params::default_config, $bind::config)
+  $logging = deep_merge($bind::params::default_logging, $bind::logging)
 
   file {"${bind::params::config_base_dir}/${bind::params::named_conf_name}":
     ensure  => file,
@@ -89,6 +90,14 @@ class bind::config {
     owner  => root,
     group  => $bind::params::bind_group,
     mode   => '0775',
+  }
+
+  file {'/var/log/named':
+    ensure  => directory,
+    group   => 'adm',
+    mode    => '0750',
+    owner   => $bind::params::bind_user,
+    seltype => 'named_log_t',
   }
 
   $opts = {
