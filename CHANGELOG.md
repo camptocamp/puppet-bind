@@ -1,3 +1,10 @@
+## 2016-02-17 - Release 1.4.0
+
+- Corrected issues in 1.3.x
+- Added Configuration support
+- Added Logging support
+- Added new acceptance tests in order to spot errors
+
 ## 2016-02-15 - Release 1.3.1
 
 - Added missing fragment
