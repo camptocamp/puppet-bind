@@ -1,0 +1,11 @@
+; Bind::Include['<%=@name%>']
+<% if @origin != ''%>
+<% if @inline_origin -%>
+$INCLUDE <%=@origin%> <%=@_file%>
+<% else -%>
+$ORIGIN <%=@origin%>
+$INCLUDE <%=@_file%>
+<% end -%>
+<% else -%>
+$INCLUDE <%= @_file %>
+<% end -%>
