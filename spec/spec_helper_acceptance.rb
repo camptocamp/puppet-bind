@@ -1,6 +1,6 @@
 require 'beaker-rspec'
 
-install_puppet_on hosts, {}
+install_puppet_agent_on hosts, {}
 
 RSpec.configure do |c|
   # Project root
