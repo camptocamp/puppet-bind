@@ -6,4 +6,5 @@ zone <%= @name %> IN {
   <% if @transfer_source and @transfer_source != '' -%>
   transfer-source <%= @transfer_source %>;
   <% end -%>
+  forwarders { };
 };

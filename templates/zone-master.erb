@@ -24,4 +24,5 @@ zone "<%= @name %>" IN {
 <% if @zone_notify and not @zone_notify.empty? -%>
   also-notify { <%= Array(@zone_notify).join('; ') -%>; };
 <% end -%>
+  forwarders { };
 };
