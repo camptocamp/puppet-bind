@@ -29,7 +29,7 @@ group :system_tests do
   gem 'beaker-rspec',         :require => false
   gem 'beaker_spec_helper',   :require => false
   gem 'serverspec',           :require => false
-  gem 'specinfra', '2.59.0',  :require => false
+  gem 'specinfra',            :require => false
 end
 
 if facterversion = ENV['FACTER_GEM_VERSION']
