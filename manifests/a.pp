@@ -7,6 +7,7 @@
 #  *zone_arpa*:   needed if you set $ptr to true
 #  *$ptr*:        set it to true if you want the related PTR records
 #                 NOTE: don't forget to create the zone!
+#  *$dynamic_zone*: Specifies if the record will be added to a dynamic zone
 #
 #  For other arguments, please refer to bind::records !
 #
@@ -18,6 +19,7 @@ define bind::a(
   $ptr              = true,
   $content          = undef,
   $content_template = undef,
+  $dynamic_zone     = false,
 ) {
 
   validate_string($ensure)
@@ -44,6 +46,7 @@ define bind::a(
     record_type      => 'A',
     content          => $content,
     content_template => $content_template,
+    dynamic_zone     => $dynamic_zone,
   }
 
   if $ptr {
@@ -55,6 +58,7 @@ define bind::a(
       hash_data        => $hash_data,
       content          => $content,
       content_template => $content_template,
+      dynamic_zone     => $dynamic_zone,
     }
   }
 }

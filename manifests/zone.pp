@@ -64,7 +64,7 @@ define bind::zone (
 
   $_view = regsubst($view, '\s', '-', 'G')
 
-  # add backwards support for is_slave parameter 
+  # add backwards support for is_slave parameter
   if ($is_slave) and ($zone_type == 'master') {
     warning('$is_slave is deprecated. You should set $zone_type = \'slave\'')
     $int_zone_type = 'slave'
@@ -120,31 +120,19 @@ define bind::zone (
             default => undef,
           }
 
-          if $is_dynamic {
-            file {$conf_file:
-              owner   => root,
-              group   => $bind::params::bind_group,
-              mode    => '0664',
-              replace => false,
-              content => template('bind/zone-header.erb'),
-              notify  => Exec['reload bind9'],
-              require => [Package['bind9'], $require],
-            }
-          } else {
-            concat {$conf_file:
-              owner   => root,
-              group   => $bind::params::bind_group,
-              mode    => '0664',
-              notify  => Exec['reload bind9'],
-              require => Package['bind9'],
-            }
+          concat {$conf_file:
+            owner   => root,
+            group   => $bind::params::bind_group,
+            mode    => '0664',
+            notify  => Exec['reload bind9'],
+            require => Package['bind9'],
+          }
 
-            concat::fragment {"00.bind.${name}":
-              ensure  => $ensure,
-              target  => $conf_file,
-              order   => '01',
-              content => template('bind/zone-header.erb'),
-            }
+          concat::fragment {"00.bind.${name}":
+            ensure  => $ensure,
+            target  => $conf_file,
+            order   => '01',
+            content => template('bind/zone-header.erb'),
           }
 
           Concat::Fragment["bind.zones.${name}"] {
