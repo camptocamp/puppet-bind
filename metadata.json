@@ -28,6 +28,18 @@
       "operatingsystemrelease": [
         "14.04"
       ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "12"
+      ]
+    },
+    {
+      "operatingsystem": "openSUSE",
+      "operatingsystemrelease": [
+        "42.2"
+      ]
     }
   ],
   "dependencies": [

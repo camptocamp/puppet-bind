@@ -4,21 +4,6 @@
 # Please refer to Class['bind'].
 
 class bind::params {
-  $default_logging = {
-    'channels'           => {
-      'simple_log'       => {
-        'file'           => '"/var/log/named/bind.log"',
-        'severity'       => 'warning',
-        'print-time'     => 'yes',
-        'print-severity' => 'yes',
-        'print-category' => 'yes',
-      },
-    },
-    'categories'         => {
-      'default'          => 'simple_log',
-    },
-  }
-
   if $::osfamily == 'Debian' {
     $package_name         = 'bind9'
     $service_name         = 'bind9'
@@ -43,6 +28,20 @@ class bind::params {
       'dnssec-validation' => 'auto',
       'auth-nxdomain'     => 'no',
       'listen-on-v6'      => ['any'],
+    }
+    $default_logging = {
+      'channels'           => {
+        'simple_log'       => {
+          'file'           => '"/var/log/named/bind.log"',
+          'severity'       => 'warning',
+          'print-time'     => 'yes',
+          'print-severity' => 'yes',
+          'print-category' => 'yes',
+        },
+      },
+      'categories'         => {
+        'default'          => 'simple_log',
+      },
     }
     if $bind::chroot {
       fail('Chroot mode is not yet implemented for Debian in this module.')
@@ -94,6 +93,49 @@ class bind::params {
       'session-keyfile'        => '"/run/named/session.key"',
       'statistics-file'        => '"/var/named/data/named_stats.txt"',
     }
+    $default_logging = {
+      'channels'           => {
+        'simple_log'       => {
+          'file'           => '"/var/log/named/bind.log"',
+          'severity'       => 'warning',
+          'print-time'     => 'yes',
+          'print-severity' => 'yes',
+          'print-category' => 'yes',
+        },
+      },
+      'categories'         => {
+        'default'          => 'simple_log',
+      },
+    }
+  }
+  elsif $::osfamily == 'Suse' {
+    $package_name         = 'bind'
+    $service_name         = 'named'
+    $named_local_name     = 'named.conf.include'
+    $bind_user            = 'named'
+    $bind_group           = 'named'
+    $service_pattern      = undef
+    $service_restart      = "/usr/bin/systemctl reload ${service_name}"
+    $service_has_status   = true
+    $config_base_dir      = '/etc'
+    $named_conf_name      = 'named.conf'
+    $zones_directory      = '/etc/named.d/zones'
+    $pri_directory        = '/etc/named.d/pri'
+    $keys_directory       = '/etc/named.d/keys'
+    $dynamic_directory    = '/etc/named.d/dyn'
+    $acls_directory       = '/etc/named.d/acls'
+    $views_directory      = '/etc/named.d/views'
+    $default_zones_file   = 'named.d/default-zones'
+    $default_config       = {
+      'directory'              => '"/var/lib/named"',
+      'managed-keys-directory' => '"/var/lib/named/dyn"',
+      'dump-file'              => '"/var/log/named_dump.db"',
+      'statistics-file'        => '"/var/log/named.stats"',
+      'listen-on-v6'           => ['any'],
+      'notify'                 => 'no',
+      'disable-empty-zone'     => '"1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA"',
+    }
+    $default_logging = {}
   }
   else {
     fail "Unknown ${::operatingsystem}"
