@@ -101,11 +101,10 @@ class bind::config {
   }
 
   $opts = {
-
-      'include'       => "\"${bind::params::config_base_dir}/${bind::params::default_zones_file}\"",
-      'match-clients' => [ '"any"' ],
-      'recursion'     => 'no',
-    }
+    'include'       => "\"${bind::params::config_base_dir}/${bind::params::default_zones_file}\"",
+    'match-clients' => [ '"any"' ],
+    'recursion'     => 'no',
+  }
 
   $options = deep_merge($opts, $bind::default_view)
 
