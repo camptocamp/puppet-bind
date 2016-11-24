@@ -57,12 +57,14 @@ define bind::record (
     $record_content = template('bind/default-record.erb')
   }
 
-  concat::fragment {"${zone}.${record_type}.${name}":
-    ensure  => $ensure,
-    target  => "${bind::params::pri_directory}/${zone}.conf",
-    content => $record_content,
-    order   => '10',
-    notify  => Service['bind9'],
+  if $ensure == 'present' {
+    concat::fragment {"${zone}.${record_type}.${name}":
+      ensure  => $ensure,
+      target  => "${bind::params::pri_directory}/${zone}.conf",
+      content => $record_content,
+      order   => '10',
+      notify  => Service['bind9'],
+    }
   }
 
 }

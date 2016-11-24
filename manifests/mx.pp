@@ -32,12 +32,13 @@ define bind::mx (
     default => $owner
   }
 
-  concat::fragment {"bind.${name}":
-    ensure  => $ensure,
-    target  => "${bind::params::pri_directory}/${zone}.conf",
-    content => template('bind/mx-record.erb'),
-    notify  => Service['bind9'],
+  if $ensure == 'present' {
+    concat::fragment {"bind.${name}":
+      ensure  => $ensure,
+      target  => "${bind::params::pri_directory}/${zone}.conf",
+      content => template('bind/mx-record.erb'),
+      notify  => Service['bind9'],
+    }
   }
-
 }
 
