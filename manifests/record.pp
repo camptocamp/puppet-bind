@@ -23,6 +23,7 @@
 #          },
 #          ...
 #        }
+#  *$dynamic_zone*:      Specifies if the record is being added to a dynamic zone
 #
 define bind::record (
   $zone,
@@ -32,6 +33,7 @@ define bind::record (
   $content          = undef,
   $content_template = undef,
   $ptr_zone         = undef,
+  $dynamic_zone     = false,
 ) {
 
   validate_string($ensure)
@@ -57,9 +59,15 @@ define bind::record (
     $record_content = template('bind/default-record.erb')
   }
 
+  if $dynamic_zone {
+    $target_path = "${bind::params::dynamic_directory}/${zone}.conf"
+  } else {
+    $target_path = "${bind::params::pri_directory}/${zone}.conf"
+  }
+
   concat::fragment {"${zone}.${record_type}.${name}":
     ensure  => $ensure,
-    target  => "${bind::params::pri_directory}/${zone}.conf",
+    target  => $target_path,
     content => $record_content,
     order   => '10',
     notify  => Service['bind9'],
