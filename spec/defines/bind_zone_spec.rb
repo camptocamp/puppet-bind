@@ -175,7 +175,6 @@ describe 'bind::zone' do
              :mode  => '0644'
            }) }
            it { should contain_concat__fragment('bind.zones.domain.tld').with({
-             :ensure  => 'present',
              :target  => "#{confdir}/zones/domain.tld.conf",
              :content => "# File managed by puppet\nzone domain.tld IN {\n  type slave;\n  masters { 1.2.3.4; };\n  allow-query { any; };\n    transfer-source 2.3.4.5;\n    forwarders { };\n};\n"
            }) }
@@ -193,7 +192,6 @@ describe 'bind::zone' do
              :mode  => '0644'
            }) }
            it { should contain_concat__fragment('bind.zones.domain.tld').with({
-             :ensure  => 'present',
              :target  => "#{confdir}/zones/domain.tld.conf",
              :content => "# File managed by puppet\nzone domain.tld IN {\n  type forward;\n  forwarders { 1.2.3.4; };\n};\n"
            }) }
@@ -215,7 +213,6 @@ describe 'bind::zone' do
              :mode  => '0644'
            }) }
            it { should contain_concat__fragment('bind.zones.domain.tld').with({
-             :ensure  => 'present',
              :target  => "#{confdir}/zones/domain.tld.conf",
              :content => "# File managed by puppet\nzone \"domain.tld\" IN {\n  type master;\n  file \"#{confdir}/pri/domain.tld.conf\";\n  allow-transfer { none; };\n  allow-query { any; };\n  notify yes;\n  also-notify { 1.1.1.1; 2.2.2.2; };\n  forwarders { };\n};\n"
            }) }
@@ -225,7 +222,6 @@ describe 'bind::zone' do
              :mode  => '0664'
            }) }
            it { should contain_concat__fragment('00.bind.domain.tld').with({
-             :ensure  => 'present',
              :target  => "#{confdir}/pri/domain.tld.conf",
              :content => "; File managed by puppet\n$TTL 60\n@ IN SOA ns.tld. admin@example.com. (\n      123456  ; serial\n      3h ; refresh\n      1h   ; retry\n      1w; expiracy\n      60 )   ; TTL\n      IN NS ns.tld.\n      IN NS ns2.tld.\n"
            }) }

@@ -35,12 +35,12 @@ define bind::key(
     content => template("${module_name}/dnskey.conf.erb"),
   }
 
-  concat::fragment {"dnskey.${name}":
-    ensure  => $ensure,
-    target  => "${bind::params::config_base_dir}/${bind::params::named_local_name}",
-    content => "include \"${bind::params::keys_directory}/${name}.conf\";\n",
-    notify  => Exec['reload bind9'],
-    require => Package['bind9'],
+  if $ensure == 'present' {
+    concat::fragment {"dnskey.${name}":
+      target  => "${bind::params::config_base_dir}/${bind::params::named_local_name}",
+      content => "include \"${bind::params::keys_directory}/${name}.conf\";\n",
+      notify  => Exec['reload bind9'],
+      require => Package['bind9'],
+    }
   }
-
 }

@@ -93,10 +93,11 @@ define bind::generate(
   validate_string($record_class)
   validate_string($ttl)
 
-  ::concat::fragment {"${name}.generate":
-    ensure  => $ensure,
-    target  => "${bind::params::pri_directory}/${zone}.conf",
-    content => template('bind/generate.erb'),
-    notify  => Service['bind9'],
+  if $ensure == 'present' {
+    ::concat::fragment {"${name}.generate":
+      target  => "${bind::params::pri_directory}/${zone}.conf",
+      content => template('bind/generate.erb'),
+      notify  => Service['bind9'],
+    }
   }
 }

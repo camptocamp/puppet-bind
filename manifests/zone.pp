@@ -80,16 +80,14 @@ define bind::zone (
     fail "Zone '${name}': transfer_source can be set only for slave zones!"
   }
 
-  concat::fragment {"${_view}.zone.${name}":
-    ensure  => $ensure,
-    target  => "${bind::params::views_directory}/${_view}.zones",
-    content => "include \"${bind::params::zones_directory}/${name}.conf\";\n",
-    notify  => Exec['reload bind9'],
-    require => Package['bind9'],
-  }
-
   case $ensure {
     'present': {
+      concat::fragment {"${_view}.zone.${name}":
+        target  => "${bind::params::views_directory}/${_view}.zones",
+        content => "include \"${bind::params::zones_directory}/${name}.conf\";\n",
+        notify  => Exec['reload bind9'],
+        require => Package['bind9'],
+      }
       concat {"${bind::params::zones_directory}/${name}.conf":
         owner  => root,
         group  => root,
@@ -97,7 +95,6 @@ define bind::zone (
         notify => Exec['reload bind9'],
       }
       concat::fragment {"bind.zones.${name}":
-        ensure  => $ensure,
         target  => "${bind::params::zones_directory}/${name}.conf",
         notify  => Exec['reload bind9'],
         require => Package['bind9'],
@@ -140,7 +137,6 @@ define bind::zone (
             }
 
             concat::fragment {"00.bind.${name}":
-              ensure  => $ensure,
               target  => $conf_file,
               order   => '01',
               content => template('bind/zone-header.erb'),
