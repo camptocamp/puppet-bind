@@ -53,11 +53,11 @@ class bind(
   $config       = {},
   $logging      = {},
 ) {
-  anchor { 'bind::begin': } ->
-  class { '::bind::install': } ->
-  class { '::bind::config': } ~>
-  class { '::bind::service': } ->
-  anchor { 'bind::end': }
+  anchor { 'bind::begin': }
+  -> class { '::bind::install': }
+  -> class { '::bind::config': }
+  ~> class { '::bind::service': }
+  -> anchor { 'bind::end': }
 
   exec {'reload bind9':
     command     => $bind::params::service_restart,
