@@ -25,7 +25,6 @@ define bind::acl(
   }
 
   concat::fragment {"acl.${_name}":
-    ensure  => $ensure,
     content => "include \"${bind::params::acls_directory}/${_name}\";\n",
     notify  => Exec['reload bind9'],
     target  => "${bind::params::config_base_dir}/acls.conf",
