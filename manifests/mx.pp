@@ -34,7 +34,6 @@ define bind::mx (
 
   if $ensure == 'present' {
     concat::fragment {"bind.${name}":
-      ensure  => $ensure,
       target  => "${bind::params::pri_directory}/${zone}.conf",
       content => template('bind/mx-record.erb'),
       notify  => Service['bind9'],
