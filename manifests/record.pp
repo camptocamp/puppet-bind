@@ -59,7 +59,6 @@ define bind::record (
 
   if $ensure == 'present' {
     concat::fragment {"${zone}.${record_type}.${name}":
-      ensure  => $ensure,
       target  => "${bind::params::pri_directory}/${zone}.conf",
       content => $record_content,
       order   => '10',
