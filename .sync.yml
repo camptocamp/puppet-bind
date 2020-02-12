@@ -95,6 +95,10 @@
     enabled: true
     tag_regex: "^\\d"
 Gemfile:
+  required:
+    ':system_tests':
+      - gem: beaker-hostgenerator
+      - gem: "puppet-module-posix-system-r#{minor_version}"
   optional:
     ':development':
       - gem: 'github_changelog_generator'
