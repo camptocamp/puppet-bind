@@ -141,7 +141,7 @@ describe 'bind::zone' do
           it 'fails' do
             expect {
               is_expected.to contain_concat("#{confdir}/zones/domain.tld.conf")
-            }.to raise_error(Puppet::Error, /Failed to parse template bind\/zone-header.erb/)
+            }.to raise_error(Puppet::Error, %r{Failed to parse template bind/zone-header.erb})
             # }.to raise_error(Puppet::Error, /Wrong ns value for 'ns space tld'/)
           end
         end

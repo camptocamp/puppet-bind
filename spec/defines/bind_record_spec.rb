@@ -233,7 +233,7 @@ describe 'bind::record' do
         it 'fails' do
           expect {
             is_expected.to contain_concat__fragment('')
-          }.to raise_error(Puppet::Error, /Failed to parse template bind\/default-record.erb/)
+          }.to raise_error(Puppet::Error, %r{Failed to parse template bind/default-record.erb})
         end
       end
 
