@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'bind::zone' do
-  let (:title) { 'domain.tld' }
+  let(:title) { 'domain.tld' }
 
   let(:pre_condition) do
     "class { 'bind': }"
@@ -33,7 +33,7 @@ describe 'bind::zone' do
 
       # Validate input
       context 'when using a wrong ensure value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'running',
           }
@@ -47,7 +47,7 @@ describe 'bind::zone' do
       end
 
       context 'when passing an unexpected value to zone_type' do
-        let (:params) do
+        let(:params) do
           {
             zone_type: 'hello',
           }
@@ -61,7 +61,7 @@ describe 'bind::zone' do
       end
 
       context 'when passing wrong type for is_dynamic' do
-        let (:params) do
+        let(:params) do
           {
             is_dynamic: 'goodbye',
           }
@@ -75,7 +75,7 @@ describe 'bind::zone' do
       end
 
       context 'when zone is a slave with dynamic update enabled' do
-        let (:params) do
+        let(:params) do
           {
             is_dynamic: true,
             zone_type: 'slave',
@@ -94,7 +94,7 @@ describe 'bind::zone' do
        :zone_retry, :zone_expiracy, :zone_ns,
        :zone_origin].each do |p|
          context "when passing wrong type for #{p}" do
-           let (:params) do
+           let(:params) do
              {
                p => false,
              }
@@ -110,7 +110,7 @@ describe 'bind::zone' do
 
       context 'when master' do
         context 'when passing contact with spaces' do
-          let (:params) do
+          let(:params) do
             {
               zone_type: 'master',
               zone_contact: 'it has spaces',
@@ -128,7 +128,7 @@ describe 'bind::zone' do
         end
 
         context 'when passing ns with spaces' do
-          let (:params) do
+          let(:params) do
             {
               zone_type: 'master',
               zone_contact: 'admin@example.com',
@@ -147,7 +147,7 @@ describe 'bind::zone' do
         end
 
         context 'when passing wrong serial' do
-          let (:params) do
+          let(:params) do
             {
               zone_type: 'master',
               zone_contact: 'admin@example.com',
@@ -165,7 +165,7 @@ describe 'bind::zone' do
         end
 
         context 'when passing wrong ttl' do
-          let (:params) do
+          let(:params) do
             {
               zone_type: 'master',
               zone_contact: 'admin.example.com',
@@ -186,7 +186,7 @@ describe 'bind::zone' do
       # Check resources
       context 'when present' do
         context 'when slave' do
-          let (:params) do
+          let(:params) do
             {
               zone_type: 'slave',
               zone_masters: '1.2.3.4',
@@ -206,7 +206,7 @@ describe 'bind::zone' do
         end
 
         context 'when forward' do
-          let (:params) do
+          let(:params) do
             {
               zone_type: 'forward',
               zone_forwarders: '1.2.3.4',
@@ -225,7 +225,7 @@ describe 'bind::zone' do
         end
 
         context 'when master' do
-          let (:params) do
+          let(:params) do
             {
               zone_type: 'master',
               zone_contact: 'admin@example.com',
@@ -261,7 +261,7 @@ describe 'bind::zone' do
       end
 
       context 'when absent' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'absent',
           }

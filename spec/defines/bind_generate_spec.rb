@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'bind::generate' do
-  let (:title) { 'test.tld' }
+  let(:title) { 'test.tld' }
 
   let(:pre_condition) do
     "class { 'bind': }"
@@ -23,7 +23,7 @@ describe 'bind::generate' do
       end
 
       context 'when using a wrong ensure value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'running',
             zone: 'test.tld',
@@ -42,7 +42,7 @@ describe 'bind::generate' do
       end
 
       context 'when zone is not specified' do
-        let (:params) do
+        let(:params) do
           {
             range: '2-100',
             record_type: 'A',
@@ -59,7 +59,7 @@ describe 'bind::generate' do
       end
 
       context 'when passing wrong type for zone' do
-        let (:params) do
+        let(:params) do
           {
             zone: ['test.tld'],
             range: '2-100',
@@ -77,7 +77,7 @@ describe 'bind::generate' do
       end
 
       context 'when range is not specified' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'test.tld',
             record_type: 'A',
@@ -94,7 +94,7 @@ describe 'bind::generate' do
       end
 
       context 'when passing wrong type for range' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'test.tld',
             range: ['2-100'],
@@ -112,7 +112,7 @@ describe 'bind::generate' do
       end
 
       context 'when record_type is not specified' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'test.tld',
             range: '2-100',
@@ -129,7 +129,7 @@ describe 'bind::generate' do
       end
 
       context 'when passing wrong type for record_type' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'test.tld',
             range: '2-100',
@@ -147,7 +147,7 @@ describe 'bind::generate' do
       end
 
       context 'when lhs is not specified' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'test.tld',
             range: '2-100',
@@ -164,7 +164,7 @@ describe 'bind::generate' do
       end
 
       context 'when passing wrong type for lhs' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'test.tld',
             range: '2-100',
@@ -182,7 +182,7 @@ describe 'bind::generate' do
       end
 
       context 'when rhs is not specified' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'test.tld',
             range: '2-100',
@@ -199,7 +199,7 @@ describe 'bind::generate' do
       end
 
       context 'when passing wrong type for rhs' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'test.tld',
             range: '2-100',
@@ -217,7 +217,7 @@ describe 'bind::generate' do
       end
 
       context 'when passing wrong type for record_class' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'test.tld',
             range: '2-100',
@@ -236,7 +236,7 @@ describe 'bind::generate' do
       end
 
       context 'when passing wrong type for ttl' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'test.tld',
             range: '2-100',
@@ -255,8 +255,8 @@ describe 'bind::generate' do
       end
 
       context 'when using example 1' do
-        let (:title) { 'a-record' }
-        let (:params) do
+        let(:title) { 'a-record' }
+        let(:params) do
           {
             zone: 'test.tld',
             range: '2-100',
@@ -273,8 +273,8 @@ describe 'bind::generate' do
       end
 
       context 'when using example 2' do
-        let (:title) { 'a-record' }
-        let (:params) do
+        let(:title) { 'a-record' }
+        let(:params) do
           {
             zone: 'test.tld',
             range: '2-100',
@@ -291,8 +291,8 @@ describe 'bind::generate' do
       end
 
       context 'when using example 3' do
-        let (:title) { 'ptr-record' }
-        let (:params) do
+        let(:title) { 'ptr-record' }
+        let(:params) do
           {
             zone: '0.10.10.IN-ADDR.ARPA',
             range: '2-100',

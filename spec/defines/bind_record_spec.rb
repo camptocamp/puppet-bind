@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'bind::record' do
-  let (:title) { 'CNAME foo.example.com' }
+  let(:title) { 'CNAME foo.example.com' }
 
   let(:pre_condition) do
     "class { 'bind': }"
@@ -18,7 +18,7 @@ describe 'bind::record' do
       end
 
       context 'when using a wrong ensure value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'running',
             zone: 'foo.example.com',
@@ -35,7 +35,7 @@ describe 'bind::record' do
       end
 
       context 'when zone is not specified' do
-        let (:params) do
+        let(:params) do
           {
             hash_data: {},
             record_type: 'CNAME',
@@ -50,7 +50,7 @@ describe 'bind::record' do
       end
 
       context 'when passing wrong type for zone' do
-        let (:params) do
+        let(:params) do
           {
             zone: ['foo.example.com'],
             hash_data: {},
@@ -66,7 +66,7 @@ describe 'bind::record' do
       end
 
       context 'when hash_data is not specified' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             record_type: 'CNAME',
@@ -81,7 +81,7 @@ describe 'bind::record' do
       end
 
       context 'when passing wrong type for hash_data' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: 'bar',
@@ -97,7 +97,7 @@ describe 'bind::record' do
       end
 
       context 'when record_type is not specified' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {},
@@ -112,7 +112,7 @@ describe 'bind::record' do
       end
 
       context 'when passing wrong type for record_type' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {},
@@ -128,7 +128,7 @@ describe 'bind::record' do
       end
 
       context 'when passing wrong type for ptr_zone' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {},
@@ -145,7 +145,7 @@ describe 'bind::record' do
       end
 
       context 'when passing wrong type for content_template' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {},
@@ -162,7 +162,7 @@ describe 'bind::record' do
       end
 
       context 'when using default content_template' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {},
@@ -176,7 +176,7 @@ describe 'bind::record' do
       end
 
       context 'when passing a wrong hostname in data' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {
@@ -194,7 +194,7 @@ describe 'bind::record' do
       end
 
       context 'when passing a wrong owner in data with PTR' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {
@@ -216,8 +216,8 @@ describe 'bind::record' do
       end
 
       context 'when passing data with PTR without ptr_zone' do
-        let (:title) { 'PTR entry' }
-        let (:params) do
+        let(:title) { 'PTR entry' }
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {
@@ -238,8 +238,8 @@ describe 'bind::record' do
       end
 
       context 'when passing data with PTR' do
-        let (:title) { 'PTR entry' }
-        let (:params) do
+        let(:title) { 'PTR entry' }
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {
@@ -261,8 +261,8 @@ describe 'bind::record' do
       end
 
       context 'when passing data with PTR and ttl' do
-        let (:title) { 'PTR entry' }
-        let (:params) do
+        let(:title) { 'PTR entry' }
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {
@@ -285,8 +285,8 @@ describe 'bind::record' do
       end
 
       context 'when passing data with PTR and host=@' do
-        let (:title) { 'PTR entry' }
-        let (:params) do
+        let(:title) { 'PTR entry' }
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {
@@ -306,8 +306,8 @@ describe 'bind::record' do
       end
 
       context 'when passing data with hash and type A' do
-        let (:title) { 'A entry' }
-        let (:params) do
+        let(:title) { 'A entry' }
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {
@@ -327,8 +327,8 @@ describe 'bind::record' do
       end
 
       context 'when passing data with A with ttl' do
-        let (:title) { 'A entry' }
-        let (:params) do
+        let(:title) { 'A entry' }
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {
@@ -349,8 +349,8 @@ describe 'bind::record' do
       end
 
       context 'when passing SRV with _' do
-        let (:title) { 'SRV entry' }
-        let (:params) do
+        let(:title) { 'SRV entry' }
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {

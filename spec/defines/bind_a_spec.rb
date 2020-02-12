@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'bind::a' do
-  let (:title) { 'foo.example.com' }
+  let(:title) { 'foo.example.com' }
 
   let(:pre_condition) do
     "class { 'bind': }"
@@ -14,7 +14,7 @@ describe 'bind::a' do
       end
 
       context 'when using a wrong ensure value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'running',
             zone: 'foo.example.com',
@@ -30,7 +30,7 @@ describe 'bind::a' do
       end
 
       context 'when zone is not specified' do
-        let (:params) do
+        let(:params) do
           {
             hash_data: {},
           }
@@ -44,7 +44,7 @@ describe 'bind::a' do
       end
 
       context 'when passing wrong type for zone' do
-        let (:params) do
+        let(:params) do
           {
             zone: ['foo.example.com'],
             hash_data: {},
@@ -59,7 +59,7 @@ describe 'bind::a' do
       end
 
       context 'when hash_data is not specified' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
           }
@@ -73,7 +73,7 @@ describe 'bind::a' do
       end
 
       context 'when passing wrong type for hash_data' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: 'bar',
@@ -88,7 +88,7 @@ describe 'bind::a' do
       end
 
       context 'when passing wrong type for zone_arpa' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {},
@@ -104,7 +104,7 @@ describe 'bind::a' do
       end
 
       context 'when passing wrong type for ptr' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {},
@@ -120,7 +120,7 @@ describe 'bind::a' do
       end
 
       context 'when passing ptr without zone_arpa' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {},
@@ -136,7 +136,7 @@ describe 'bind::a' do
       end
 
       context 'when using not using ptr' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {},
@@ -153,7 +153,7 @@ describe 'bind::a' do
       end
 
       context 'when using using ptr' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {},
@@ -179,7 +179,7 @@ describe 'bind::a' do
       end
 
       context 'when using content' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: {},
@@ -198,7 +198,7 @@ describe 'bind::a' do
       end
 
       context 'when using star catchall' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: { '*' => { 'owner' => 'foo.example.com' } },
@@ -215,7 +215,7 @@ describe 'bind::a' do
       end
 
       context 'when using blank host' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: { '' => { 'owner' => 'foo.example.com' } },
@@ -232,7 +232,7 @@ describe 'bind::a' do
       end
 
       context 'when passing syntactically incorrect domain name' do
-        let (:params) do
+        let(:params) do
           {
             zone: 'foo.example.com',
             hash_data: { 'foo).bar' => { 'owner' => 'foo.example.com' } },

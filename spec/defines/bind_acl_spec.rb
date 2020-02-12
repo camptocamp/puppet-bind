@@ -21,8 +21,8 @@ describe 'bind::acl' do
       end
 
       context 'when using a wrong ensure value' do
-        let (:title) { 'wrong acl' }
-        let (:params) do
+        let(:title) { 'wrong acl' }
+        let(:params) do
           {
             ensure: 'foo',
             acls: ['any'],
@@ -35,8 +35,8 @@ describe 'bind::acl' do
       end
 
       context 'when passing wrong acls type' do
-        let (:title) { 'wrong acl' }
-        let (:params) do
+        let(:title) { 'wrong acl' }
+        let(:params) do
           {
             ensure: 'present',
             acls: 1,
@@ -49,8 +49,8 @@ describe 'bind::acl' do
       end
 
       context 'correct acl' do
-        let (:title) { 'good acl' }
-        let (:params) do
+        let(:title) { 'good acl' }
+        let(:params) do
           {
             ensure: 'present',
             acls: ['!192.168.10.0/24', 'any'],

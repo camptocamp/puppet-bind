@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'bind::key' do
-  let (:title) { 'update.domain.tld' }
+  let(:title) { 'update.domain.tld' }
 
   let(:pre_condition) do
     "class { 'bind': }"
@@ -32,7 +32,7 @@ describe 'bind::key' do
       end
 
       context 'when using a wrong ensure value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'running',
             secret: 'abcdefg',
@@ -47,7 +47,7 @@ describe 'bind::key' do
       end
 
       context 'when passing wrong type for algorithm' do
-        let (:params) do
+        let(:params) do
           {
             secret: 'abcdefg',
             algorithm: ['abcde', 'fghij'],
@@ -62,7 +62,7 @@ describe 'bind::key' do
       end
 
       context 'when passing wrong type for secret' do
-        let (:params) do
+        let(:params) do
           {
             secret: ['abcde', 'fghij'],
           }
