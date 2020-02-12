@@ -1,11 +1,10 @@
 require 'spec_helper_acceptance'
 
 describe 'bind' do
-
   let(:serial) { '2016021209' }
 
   context 'with defaults' do
-    it 'should apply without error' do
+    it 'applies without error' do
       pp = <<-EOS
         class { 'bind':
           config => {
@@ -47,16 +46,15 @@ describe 'bind' do
         }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
-      apply_manifest(pp, :catch_changes => true)
+      apply_manifest(pp, catch_failures: true)
+      apply_manifest(pp, catch_changes: true)
     end
 
-    describe command("host -4 google-public-dns-a.google.com localhost") do
-      its(:stdout) {should match /google-public-dns-a.google.com has address 8.8.8.8/}
+    describe command('host -4 google-public-dns-a.google.com localhost') do
+      its(:stdout) { is_expected.to match %r{google-public-dns-a.google.com has address 8.8.8.8} }
     end
-    describe command("host -4 www.camptocamp.com localhost") do
-      its(:stdout) {should match /has address/}
+    describe command('host -4 www.camptocamp.com localhost') do
+      its(:stdout) { is_expected.to match %r{has address} }
     end
   end
-
 end
