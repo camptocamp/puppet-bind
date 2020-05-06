@@ -12,6 +12,7 @@ define bind::mx (
   $zone,
   $host,
   $priority,
+  $path   = "${bind::params::pri_directory}/${zone}.conf",
   $ensure = present,
   $owner  = undef,
   $ttl    = undef,
@@ -34,7 +35,7 @@ define bind::mx (
 
   if $ensure == 'present' {
     concat::fragment {"bind.${name}":
-      target  => "${bind::params::pri_directory}/${zone}.conf",
+      target  => $path,
       content => template('bind/mx-record.erb'),
       notify  => Service['bind9'],
     }

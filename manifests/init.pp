@@ -48,14 +48,21 @@
 # }
 #
 class bind(
-  $chroot       = false,
-  $default_view = {},
-  $config       = {},
-  $logging      = {},
-) {
+  $chroot               = false,
+  $default_view         = {},
+  $config               = {},
+  $logging              = {},
+  $local_cfg_prepend    = false,
+  $options_cfg_prepend  = false,
+  $view_default         = true,
+) inherits bind::params {
   anchor { 'bind::begin': }
   -> class { '::bind::install': }
-  -> class { '::bind::config': }
+  -> class { '::bind::config':
+      local_cfg_prepend   => $local_cfg_prepend,
+      options_cfg_prepend => $options_cfg_prepend,
+      view_default        => $view_default,
+    }
   ~> class { '::bind::service': }
   -> anchor { 'bind::end': }
 
@@ -65,5 +72,13 @@ class bind(
     refreshonly => true,
     path        => $::path,
     require     => Class['bind::service'],
+  }
+
+  file { '/etc/bind/GeoIP.acl':
+      ensure => present,
+      source => "puppet:///modules/${module_name}/GeoIP.acl",
+      owner  => 'bind',
+      group  => 'bind',
+      mode   => '0640',
   }
 }

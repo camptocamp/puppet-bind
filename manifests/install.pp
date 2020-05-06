@@ -1,3 +1,4 @@
+#class bind::install
 class bind::install {
   include ::bind::params
   package { 'bind9':

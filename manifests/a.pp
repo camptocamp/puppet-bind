@@ -18,6 +18,10 @@ define bind::a(
   $ptr              = true,
   $content          = undef,
   $content_template = undef,
+  $path             = false,
+  $company          = false,
+  $view             = 'default',
+  $all_net          = false
 ) {
 
   validate_string($ensure)
@@ -37,6 +41,19 @@ define bind::a(
     fail '$content and $content_template are mutually exclusive'
   }
 
+  if ! $path {
+    $base_path = $bind::params::pri_directory
+    if $company {
+      $tmp_dir = "${bind::params::pri_directory}/${company}/${view}"
+    } else {
+      $tmp_dir = "${bind::params::pri_directory}/${view}"
+    }
+
+    $full_path = "${tmp_dir}/${zone}.conf"
+  } else {
+    $full_path = $path
+  }
+
   bind::record {$name:
     ensure           => $ensure,
     zone             => $zone,
@@ -44,6 +61,9 @@ define bind::a(
     record_type      => 'A',
     content          => $content,
     content_template => $content_template,
+    path             => $full_path,
+    company          => $company,
+    view             => $view,
   }
 
   if $ptr {
@@ -55,6 +75,9 @@ define bind::a(
       hash_data        => $hash_data,
       content          => $content,
       content_template => $content_template,
+      company          => $company,
+      view             => $view,
+      all_net          => $all_net
     }
   }
 }

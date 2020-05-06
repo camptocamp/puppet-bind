@@ -32,6 +32,11 @@ define bind::record (
   $content          = undef,
   $content_template = undef,
   $ptr_zone         = undef,
+  $path             = false,
+  $company          = false,
+  $view             = 'default',
+  $all_net          = false,
+  $order            = '10',
 ) {
 
   validate_string($ensure)
@@ -41,7 +46,35 @@ define bind::record (
   validate_string($zone)
   validate_string($record_type)
   validate_string($ptr_zone)
+  validate_string($content_template)
   validate_hash($hash_data)
+
+  if $path {
+    $full_zone_path = $path
+  } else {
+    if $record_type == 'PTR' {
+      $host = keys($hash_data)[0]
+      $ip = $hash_data[$host]['owner']
+      $net = net_include($all_net, $ip)
+      if $net {
+        $rev_subnet = net_reverse($net)
+        if $view == 'unset' {
+          $full_zone_path = "${bind::params::pri_directory}/${company}/${rev_subnet}.in-addr.arpa.conf"
+        } else {
+          $full_zone_path = "${bind::params::pri_directory}/${company}/${view}/${rev_subnet}.in-addr.arpa.conf"
+        }
+      } else {
+        $full_zone_path = false
+        notice("Can't found net ${ip} in all_net ${all_net}")
+      }
+    } else {
+      if $company {
+        $full_zone_path = "${bind::params::pri_directory}/${company}/${view}/${zone}.conf"
+      } else {
+        $full_zone_path = "${bind::params::pri_directory}/${view}/${zone}.conf"
+      }
+    }
+  }
 
   if ($content_template and $content) {
     fail '$content and $content_template are mutually exclusive'
@@ -57,13 +90,25 @@ define bind::record (
     $record_content = template('bind/default-record.erb')
   }
 
-  if $ensure == 'present' {
-    concat::fragment {"${zone}.${record_type}.${name}":
-      target  => "${bind::params::pri_directory}/${zone}.conf",
-      content => $record_content,
-      order   => '10',
-      notify  => Service['bind9'],
+  if $full_zone_path {
+    if ! defined(Concat[$full_zone_path]) {
+      concat {$full_zone_path:
+        owner => root,
+        group => root,
+        mode  => '0644',
+        force => true,
+      }
     }
   }
 
+  if $ensure == 'present' {
+    if $full_zone_path {
+      concat::fragment {"${view}.${zone}.${record_type}.${name}":
+        target  => $full_zone_path,
+        content => $record_content,
+        order   => $order,
+        notify  => Service['bind9'],
+      }
+    }
+  }
 }

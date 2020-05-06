@@ -1,10 +1,22 @@
 # File managed by puppet
-zone <%= @name %> IN {
+zone "<%= @zone_origin %>" IN {
   type slave;
-  masters { <%= Array(@zone_masters).join('; ') -%>; };
+<% if @slave_path -%>
+  file "<%= @slave_path %>/<%= @zone_origin %>.conf.<%= @company -%>_<%= @view -%>";
+<% end -%>
+<% if @zone_xfers and not @zone_xfers.empty? -%>
+<% if @zone_xfers.is_a?(Array) -%>
+  allow-transfer { <%= @zone_xfers.join('; ') -%>; };
+<% else -%>
+  allow-transfer { <%= @zone_xfers %>; };
+<% end -%>
+<% else -%>
+  allow-transfer { none; };
+<% end -%>
+<% if @zone_masters.is_a?(Array) -%>
+  masters { <%= @zone_masters.join('; ') -%>; };
+<% else -%>
+  masters { <%= @zone_masters %>; };
+<% end -%>
   allow-query { any; };
-  <% if @transfer_source and @transfer_source != '' -%>
-  transfer-source <%= @transfer_source %>;
-  <% end -%>
-  forwarders { };
 };

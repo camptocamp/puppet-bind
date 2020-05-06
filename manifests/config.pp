@@ -1,4 +1,9 @@
-class bind::config {
+#bind::config class
+class bind::config (
+  $local_cfg_prepend    = false,
+  $options_cfg_prepend  = false,
+  $view_default         = true,
+){
   include ::bind::params
 
   concat {"${bind::params::config_base_dir}/${bind::params::named_local_name}":
@@ -6,6 +11,13 @@ class bind::config {
     group => $bind::params::bind_group,
     mode  => '0644',
     force => true,
+  }
+
+  concat::fragment {'header_named.local':
+    target  => "${bind::params::config_base_dir}/${bind::params::named_local_name}",
+    content => template('bind/header-named.conf.local.erb'),
+    notify  => Exec['reload bind9'],
+    require => Package['bind9'],
   }
 
   concat {"${bind::params::config_base_dir}/acls.conf":
@@ -101,17 +113,17 @@ class bind::config {
   }
 
   $opts = {
-
-      'include'       => "\"${bind::params::config_base_dir}/${bind::params::default_zones_file}\"",
-      'match-clients' => [ '"any"' ],
-      'recursion'     => 'no',
-    }
+    'include'       => "\"${bind::params::config_base_dir}/${bind::params::default_zones_file}\"",
+    'match-clients' => [ '"any"' ],
+    'recursion'     => 'no',
+  }
 
   $options = deep_merge($opts, $bind::default_view)
 
-  ::bind::view {'default':
-    options => $options,
-    order   => 100,
+  if $view_default {
+    ::bind::view {'default':
+      options => $options,
+      order   => 100,
+    }
   }
-
 }

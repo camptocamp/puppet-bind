@@ -77,6 +77,9 @@ define bind::generate(
   $ensure       = present,
   $record_class = undef,
   $ttl          = undef,
+  $path         = false,
+  $company      = false,
+  $view         = 'default',
 ) {
 
   include ::bind::params
@@ -93,9 +96,21 @@ define bind::generate(
   validate_string($record_class)
   validate_string($ttl)
 
+  if ! $path {
+    $base_path = $bind::params::pri_directory
+    if $company {
+      $tmp_dir = "${bind::params::pri_directory}/${company}/${view}"
+    } else {
+      $tmp_dir = "${bind::params::pri_directory}/${view}"
+    }
+    $full_path = "${tmp_dir}/${zone}.conf"
+  } else {
+    $full_path = $path
+  }
+
   if $ensure == 'present' {
-    ::concat::fragment {"${name}.generate":
-      target  => "${bind::params::pri_directory}/${zone}.conf",
+    concat::fragment {"${view}.${zone}.${record_type}.${range}.${name}.generate":
+      target  => $full_path,
       content => template('bind/generate.erb'),
       notify  => Service['bind9'],
     }
