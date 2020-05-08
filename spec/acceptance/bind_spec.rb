@@ -1,26 +1,25 @@
 require 'spec_helper_acceptance'
 
 describe 'bind' do
-
   let(:serial) { '2016021209' }
 
   context 'with defaults' do
-    it 'should apply without error' do
+    it 'applies without error' do
       pp = <<-EOS
         class { 'bind': }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
-    it 'should idempotently run' do
+    it 'idempotentlies run' do
       pp = <<-EOS
         class { 'bind': }
       EOS
 
-      apply_manifest(pp, :catch_changes => true)
+      apply_manifest(pp, catch_changes: true)
     end
 
-    it 'should create a zone and load it' do
+    it 'creates a zone and load it' do
       pp = <<-EOS
         class {'::bind': }
         ::bind::zone {'my-zone.tld':
@@ -55,23 +54,22 @@ describe 'bind' do
         }
       EOS
 
-      apply_manifest(pp, :cat_failures => true)
-      apply_manifest(pp, :catch_changes => true)
+      apply_manifest(pp, cat_failures: true)
+      apply_manifest(pp, catch_changes: true)
     end
 
     describe port('53') do
       it {
-        should be_listening.with('tcp')
-        should be_listening.with('udp')
+        is_expected.to be_listening.with('tcp')
+        is_expected.to be_listening.with('udp')
       }
     end
 
-    describe command("host -4 google-public-dns-a.google.com localhost") do
-      its(:stdout) {should match /not found: 5\(REFUSED\)/}
+    describe command('host -4 google-public-dns-a.google.com localhost') do
+      its(:stdout) { is_expected.to match %r{not found: 5\(REFUSED\)} }
     end
-    describe command("host -4 ns0.my-zone.tld localhost") do
-      its(:stdout) {should match /ns0.my-zone.tld has address 192.168.10.252/}
+    describe command('host -4 ns0.my-zone.tld localhost') do
+      its(:stdout) { is_expected.to match %r{ns0.my-zone.tld has address 192.168.10.252} }
     end
   end
-
 end
