@@ -22,6 +22,8 @@ describe 'bind::zone' do
           '/etc/bind'
         when 'RedHat'
           '/etc/named'
+        when 'Suse'
+          '/etc/named.d'
         end
       end
 
@@ -29,7 +31,7 @@ describe 'bind::zone' do
         case facts[:osfamily]
         when 'Debian'
           'bind'
-        when 'RedHat'
+        when /RedHat|Suse/
           'named'
         end
       end

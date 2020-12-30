@@ -92,20 +92,31 @@ class bind::config {
     mode   => '0775',
   }
 
-  file {'/var/log/named':
-    ensure  => directory,
-    group   => 'adm',
-    mode    => '0750',
-    owner   => $bind::params::bind_user,
-    seltype => 'named_log_t',
+  if $::osfamily == 'Debian' or $::osfamily == 'RedHat' {
+    file {'/var/log/named':
+      ensure  => directory,
+      group   => 'adm',
+      mode    => '0750',
+      owner   => $bind::params::bind_user,
+      seltype => 'named_log_t',
+    }
+  }
+
+  if $::osfamily == 'Suse' {
+    file {'/etc/named.d/default-zones':
+      ensure => file,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+      source => 'puppet:///modules/bind/suse_default-zones',
+    }
   }
 
   $opts = {
-
-      'include'       => "\"${bind::params::config_base_dir}/${bind::params::default_zones_file}\"",
-      'match-clients' => [ '"any"' ],
-      'recursion'     => 'no',
-    }
+    'include'       => "\"${bind::params::config_base_dir}/${bind::params::default_zones_file}\"",
+    'match-clients' => [ '"any"' ],
+    'recursion'     => 'no',
+  }
 
   $options = deep_merge($opts, $bind::default_view)
 

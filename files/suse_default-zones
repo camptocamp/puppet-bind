@@ -1,0 +1,26 @@
+# Managed by Puppet
+# Extracted from SUSE's default /etc/named.conf
+
+# The following zone definitions don't need any modification.  The first one
+# is the definition of the root name servers.  The second one defines
+# localhost while the third defines the reverse lookup for localhost.
+
+zone "." in {
+	type hint;
+	file "root.hint";
+};
+
+zone "localhost" in {
+	type master;
+	file "localhost.zone";
+};
+
+zone "0.0.127.in-addr.arpa" in {
+	type master;
+	file "127.0.0.zone";
+};
+
+zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" IN {
+    type master;
+    file "127.0.0.zone";
+};

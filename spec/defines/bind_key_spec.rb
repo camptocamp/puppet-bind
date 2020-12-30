@@ -22,6 +22,8 @@ describe 'bind::key' do
           '/etc/bind'
         when 'RedHat'
           '/etc/named'
+        when 'Suse'
+          '/etc/named.d'
         end
       end
 
