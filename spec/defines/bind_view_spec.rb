@@ -7,11 +7,8 @@ describe 'bind::view' do
 
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-
       let(:facts) do
-        facts.merge({
-          :concat_basedir => '/var/lib/puppet/concat',
-        })
+        facts.merge(concat_basedir: '/var/lib/puppet/concat')
       end
 
       let(:confdir) do
@@ -24,16 +21,14 @@ describe 'bind::view' do
       end
 
       context 'my view' do
-        let(:title) {'my view'}
+        let(:title) { 'my view' }
+
         it {
-          should contain_file("#{confdir}/views/my-view.view").with({
-            :ensure => 'file',
-            :content => "view \"my-view\" {\n  recursion no;\n  include \"#{confdir}/views/my-view.zones\";\n};\n",
-          })
-          should contain_concat("#{confdir}/views/my-view.zones")
+          is_expected.to contain_file("#{confdir}/views/my-view.view").with(ensure: 'file',
+                                                                            content: "view \"my-view\" {\n  recursion no;\n  include \"#{confdir}/views/my-view.zones\";\n};\n")
+          is_expected.to contain_concat("#{confdir}/views/my-view.zones")
         }
       end
-
     end
   end
 end

@@ -1,12 +1,10 @@
 require 'spec_helper_acceptance'
 
 describe 'bind' do
-
   let(:serial) { '2016021209' }
 
-  context "With dedicated view, acl and zone" do
-
-    it "should create a view, attach a zone to it and load without error" do
+  context 'With dedicated view, acl and zone' do
+    it 'creates a view, attach a zone to it and load without error' do
       pp = <<-EOS
         class {'::bind':
           default_view => {
@@ -57,24 +55,22 @@ describe 'bind' do
         }
       EOS
 
-      apply_manifest(pp, :cat_failures => true)
-      apply_manifest(pp, :catch_changes => true)
+      apply_manifest(pp, cat_failures: true)
+      apply_manifest(pp, catch_changes: true)
     end
 
-    describe port("53") {
+    describe port('53') {
       it {
-        should be_listening.with('tcp')
-        should be_listening.with('udp')
+        is_expected.to be_listening.with('tcp')
+        is_expected.to be_listening.with('udp')
       }
     }
 
-    describe command("host -4 ns1.my-zone.tld localhost") do
-      its(:stdout) {should match /ns1.my-zone.tld has address 192.168.10.253/}
+    describe command('host -4 ns1.my-zone.tld localhost') do
+      its(:stdout) { is_expected.to match %r{ns1.my-zone.tld has address 192.168.10.253} }
     end
-    describe command("host -4 google-public-dns-b.google.com localhost") do
-      its(:stdout) {should match /google-public-dns-b.google.com has address 8.8.4.4/}
+    describe command('host -4 google-public-dns-b.google.com localhost') do
+      its(:stdout) { is_expected.to match %r{google-public-dns-b.google.com has address 8.8.4.4} }
     end
-
-
   end
 end
