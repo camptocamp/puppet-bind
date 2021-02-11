@@ -5,6 +5,7 @@
 # Arguments:
 #  *$zone_type*: String. Specify if the zone is master/slave/forward. Default master
 #  *$transfer_source*: IPv4 address. Source IP to bind to when requesting a transfer (slave only)
+#  *$is_slave*: Boolean. Is your zone a slave or a master? Default false
 #  *$zone_ttl*: Time period. Time to live for your zonefile (master only)
 #  *$zone_contact*: Valid contact record (master only)
 #  *$zone_serial*: Integer. Zone serial (master only)
@@ -38,6 +39,9 @@ define bind::zone (
   $zone_origin     = undef,
   $zone_notify     = undef,
   $is_slave        = false,
+  $allow_query     = true,
+  $slave_path      = false,
+  $company         = false,
 ) {
 
   include ::bind::params
@@ -80,24 +84,38 @@ define bind::zone (
     fail "Zone '${name}': transfer_source can be set only for slave zones!"
   }
 
+  if $company {
+    $zone_dir = [ "${bind::params::pri_directory}/${company}",  "${bind::params::pri_directory}/${company}/${view}" ]
+    $full_zone_dir = $zone_dir[1]
+  } else {
+    $zone_dir = [ "${bind::params::pri_directory}/${view}" ]
+    $full_zone_dir = $zone_dir[0]
+  }
+
   case $ensure {
-    'present': {
-      concat::fragment {"${_view}.zone.${name}":
-        target  => "${bind::params::views_directory}/${_view}.zones",
-        content => "include \"${bind::params::zones_directory}/${name}.conf\";\n",
-        notify  => Exec['reload bind9'],
-        require => Package['bind9'],
+    present: {
+      if ! defined(File[$full_zone_dir]) {
+        file { $full_zone_dir:
+          ensure => directory,
+          owner  => bind,
+          group  => bind,
+        }
       }
-      concat {"${bind::params::zones_directory}/${name}.conf":
-        owner  => root,
-        group  => root,
-        mode   => '0644',
-        notify => Exec['reload bind9'],
+
+      if ! defined(Concat["${bind::params::zones_directory}/named.conf.${company}_${view}"]) {
+        concat {"${bind::params::zones_directory}/named.conf.${company}_${view}":
+          owner   => root,
+          group   => root,
+          mode    => '0644',
+          force   => true,
+          require => File[$full_zone_dir],
+        }
       }
-      concat::fragment {"bind.zones.${name}":
-        target  => "${bind::params::zones_directory}/${name}.conf",
+
+      concat::fragment {"bind.zones_${company}_${view}.${zone_origin}":
+        target  => "${bind::params::zones_directory}/named.conf.${company}_${view}",
         notify  => Exec['reload bind9'],
-        require => Package['bind9'],
+        require => [ Package['bind9'], File[$full_zone_dir] ],
       }
 
       case $int_zone_type {
@@ -109,7 +127,7 @@ define bind::zone (
 
           $conf_file = $is_dynamic? {
             true    => "${bind::params::dynamic_directory}/${name}.conf",
-            default => "${bind::params::pri_directory}/${name}.conf",
+            default => "${full_zone_dir}/${zone_origin}.conf",
           }
 
           $require = $is_dynamic? {
@@ -128,7 +146,7 @@ define bind::zone (
               require => [Package['bind9'], $require],
             }
           } else {
-            concat {$conf_file:
+            concat { $conf_file:
               owner   => root,
               group   => $bind::params::bind_group,
               mode    => '0664',
@@ -136,14 +154,14 @@ define bind::zone (
               require => Package['bind9'],
             }
 
-            concat::fragment {"00.bind.${name}":
+            concat::fragment {"00.bind_${company}_${view}.${zone_origin}":
               target  => $conf_file,
               order   => '01',
               content => template('bind/zone-header.erb'),
             }
           }
 
-          Concat::Fragment["bind.zones.${name}"] {
+          Concat::Fragment["bind.zones_${company}_${view}.${zone_origin}"] {
             content => template('bind/zone-master.erb'),
           }
 
@@ -152,13 +170,13 @@ define bind::zone (
           }
         }
         'slave': {
-          Concat::Fragment["bind.zones.${name}"] {
+          Concat::Fragment["bind.zones_${company}_${view}.${zone_origin}"] {
             content => template('bind/zone-slave.erb'),
           }
 
         }
         'forward': {
-          Concat::Fragment["bind.zones.${name}"] {
+          Concat::Fragment["bind.zones_${company}_${view}.${zone_origin}"] {
             content => template('bind/zone-forward.erb'),
           }
         }

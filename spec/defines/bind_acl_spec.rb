@@ -7,11 +7,8 @@ describe 'bind::acl' do
 
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-
       let(:facts) do
-        facts.merge({
-          :concat_basedir => '/var/lib/puppet/concat',
-        })
+        facts.merge(concat_basedir: '/var/lib/puppet/concat')
       end
 
       let(:confdir) do
@@ -24,44 +21,48 @@ describe 'bind::acl' do
       end
 
       context 'when using a wrong ensure value' do
-        let (:title) {'wrong acl'}
-        let (:params) {{
-          :ensure => 'foo',
-          :acls   => ['any'],
-        }}
+        let(:title) { 'wrong acl' }
+        let(:params) do
+          {
+            ensure: 'foo',
+            acls: ['any'],
+          }
+        end
 
-        it 'should fail' do
-          expect { should contain_file('wrong acl') }.to raise_error(Puppet::Error, /does not match/)
+        it 'fails' do
+          expect { is_expected.to contain_file('wrong acl') }.to raise_error(Puppet::Error, %r{does not match})
         end
       end
 
       context 'when passing wrong acls type' do
-        let (:title) {'wrong acl'}
-        let (:params) {{
-          :ensure => 'present',
-          :acls   => 1,
-        }}
+        let(:title) { 'wrong acl' }
+        let(:params) do
+          {
+            ensure: 'present',
+            acls: 1,
+          }
+        end
 
-        it 'should fail' do
-          expect { should contain_file('wrong acl') }.to raise_error(Puppet::Error, /is not an Array/)
+        it 'fails' do
+          expect { is_expected.to contain_file('wrong acl') }.to raise_error(Puppet::Error, %r{is not an Array})
         end
       end
 
       context 'correct acl' do
-        let (:title) {'good acl'}
-        let (:params) {{
-          :ensure => 'present',
-          :acls   => ['!192.168.10.0/24', 'any'],
-        }}
+        let(:title) { 'good acl' }
+        let(:params) do
+          {
+            ensure: 'present',
+            acls: ['!192.168.10.0/24', 'any'],
+          }
+        end
 
-        it { should contain_file('good acl').with({
-          :content => "acl good-acl {\n  !192.168.10.0/24;\n  any;\n};\n",
-          :ensure  => 'file',
-          :path    => "#{confdir}/acls/good-acl",
-        }) }
+        it {
+          is_expected.to contain_file('good acl').with(content: "acl good-acl {\n  !192.168.10.0/24;\n  any;\n};\n",
+                                                       ensure: 'file',
+                                                       path: "#{confdir}/acls/good-acl")
+        }
       end
-
-
     end
   end
 end

@@ -1,19 +1,18 @@
 <%- 
 @hash_data.sort.each do |host, datas|
-  raise(Puppet::ParseError, "'#{host}' is NOT a valid name") unless scope.function_bind_check_hostname([host, @record_type])
   if  @record_type == 'PTR'
     if host != '@'
       if datas.fetch('ptr',true) 
         scope.function_validate_re([@ptr_zone, '^\S+$'])
 -%>
-<%= require 'ipaddr'; IPAddr.new(datas.fetch('owner')).reverse %>. <%= datas.fetch('ttl', '') %> IN PTR <%= host %>.<%= @ptr_zone %>.
+<%= require 'ipaddr'; IPAddr.new(datas.fetch('owner')).to_range.begin.to_s.split('.')[3]%>.<%= @rev_subnet %>.in-addr.arpa. <%= datas.fetch('ttl', '') %> IN PTR <%= host %>.<%= @ptr_zone %>.
 <%- 
       end
     end
   else 
     raise(Puppet::ParseError, "#{datas.fetch('owner')} is NOT a valid IP") unless (scope.function_is_ip_address([datas.fetch('owner')]) or @record_type != 'A' or @record_type != 'AAAA')
 -%>
-<%= host %> <%= datas.fetch('ttl', '') %> <%=datas.fetch('record_class', 'IN')%> <%= @record_type %> <%= datas.fetch('owner') %>
+<%= host %> <%= " "*(50-host.size) %><%= datas.fetch('ttl', '') %> <%=datas.fetch('record_class', 'IN')%> <%= @record_type %> <%= datas.fetch('owner') %>
 <%- 
   end
 end -%>

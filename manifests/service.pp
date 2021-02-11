@@ -1,3 +1,4 @@
+#class bind::service
 class bind::service {
   include ::bind::params
 

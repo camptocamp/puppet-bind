@@ -1,3 +1,4 @@
+#Bind acl class
 define bind::acl(
   $ensure=present,
   $acls = [],

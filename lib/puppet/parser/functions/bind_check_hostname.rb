@@ -8,10 +8,10 @@ if present. *is_domain_name()* doesn't want any wildcard, which makes sense in
 most cases.
 Usage: bind_check_hostname(hostname, type)
     EOS
-  ) do |arguments|
+             ) do |arguments|
 
-    if (arguments.size != 2) then
-      raise(Puppet::ParseError, "bind_check_hostname(): Wrong number of arguments "+
+    if arguments.size != 2
+      raise(Puppet::ParseError, 'bind_check_hostname(): Wrong number of arguments ' \
         "given #{arguments.size} for 2")
     end
 
@@ -20,7 +20,7 @@ Usage: bind_check_hostname(hostname, type)
 
     # Allows '@'
     return true if record == '@'
-    
+
     # All is allowed for SRV and TXT record types
     return true if type == 'SRV'
     return true if type == 'TXT'

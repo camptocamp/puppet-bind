@@ -1,14 +1,12 @@
 ; File managed by puppet
 $TTL <%= @zone_ttl %>
-@ IN SOA <%= @zone_ns[0] %>. <%= @zone_contact %>. (
+@ IN SOA <%= @zone_origin %>. <%= @zone_contact %>. (
       <%= @zone_serial %>  ; serial
       <%= @zone_refresh %> ; refresh
       <%= @zone_retry %>   ; retry
       <%= @zone_expiracy %>; expiracy
       <%= @zone_ttl %> )   ; TTL
-<% @zone_ns.each do |ns| -
-  raise(Puppet::ParseError, "Wrong ns value: '#{ns}'") unless ( ns =~ Regexp.compile('^\S+$'))
--%>
+<% Array(@zone_ns).each do |ns| -%>
       IN NS <%= ns %>.
 <% end -%>
 <% if @zone_origin -%>
